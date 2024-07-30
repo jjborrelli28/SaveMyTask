@@ -23,7 +23,7 @@ export type UserUpdate = Updateable<UserTable>;
 export interface TaskTable {
   id: Generated<number>;
   description: string;
-  state: "Pending" | "In process" | "Done";
+  state: "To do" | "In process" | "Done";
   user_id: number;
   created_at: ColumnType<Date, string | undefined, never>;
   updated_at: ColumnType<Date, Date | undefined, Date>;
