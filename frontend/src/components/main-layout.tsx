@@ -3,11 +3,10 @@ import Footer from "./footer";
 import Header from "./header";
 
 const MainLayout = ({ children }: { children: ReactNode }) => (
-  <main>
+  <div>
     <Header />
-    {children}
+    <main>{children}</main>
     <Footer />
-  </main>
+  </div>
 );
-
 export default MainLayout;
