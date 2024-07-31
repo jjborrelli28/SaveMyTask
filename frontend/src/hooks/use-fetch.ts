@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from 'react';
 
 export const useFetch = (
   url: string | URL | globalThis.Request,
@@ -8,11 +8,11 @@ export const useFetch = (
 
   useEffect(() => {
     fetch(url, req)
-      .then((resp) => resp.json())
-      .then((res) => {
+      .then(resp => resp.json())
+      .then(res => {
         setResult(res);
       })
-      .catch((error) => {
+      .catch(error => {
         setResult(error);
       });
   }, [url]);
