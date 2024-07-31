@@ -8,7 +8,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("password", "varchar(255)", (col) => col.notNull())
     .addColumn("name", "varchar(255)", (col) => col.notNull())
     .addColumn("created_at", "timestamp", (col) =>
-      col.defaultTo(sql`now()`).notNull()
+      col.defaultTo(sql`now()`).notNull(),
     )
     .execute();
 
@@ -18,13 +18,13 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("description", "varchar(255)", (col) => col.notNull())
     .addColumn("state", "varchar(255)", (col) => col.notNull())
     .addColumn("user_id", "integer", (col) =>
-      col.references("user.id").onDelete("cascade").notNull()
+      col.references("user.id").onDelete("cascade").notNull(),
     )
     .addColumn("created_at", "timestamp", (col) =>
-      col.defaultTo(sql`now()`).notNull()
+      col.defaultTo(sql`now()`).notNull(),
     )
     .addColumn("updated_at", "timestamp", (col) =>
-      col.defaultTo(sql`now()`).notNull()
+      col.defaultTo(sql`now()`).notNull(),
     )
     .execute();
 }
