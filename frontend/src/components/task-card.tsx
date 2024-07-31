@@ -1,11 +1,10 @@
 import clsx from 'clsx';
-import { useEffect, useRef, useState } from 'react';
-import {
-  FaEdit,
-  FaTrashAlt
-} from 'react-icons/fa';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { MdCircle } from 'react-icons/md';
+import { deleteTask, updateTask } from '../services';
 import { Task } from '../types';
+import { TaskList } from '../contexts/task-list';
 
 const TaskCard = ({ data }: { data: Task }) => {
   const [input, setInput] = useState<{
@@ -16,13 +15,14 @@ const TaskCard = ({ data }: { data: Task }) => {
     disabled: true
   });
   const refInputDisabled = useRef(input.disabled);
+  const { setTasks } = useContext(TaskList);
 
   useEffect(() => {
     if (
       !refInputDisabled.current &&
       refInputDisabled.current !== input.disabled
     ) {
-      alert('Execute service to update task');
+      updateTask(data.id, { description: input.value });
     }
 
     refInputDisabled.current = input.disabled;
@@ -37,7 +37,7 @@ const TaskCard = ({ data }: { data: Task }) => {
   return (
     <li
       className={clsx(
-        'hover:bg-light-gray relative flex items-center justify-between gap-3 bg-gray p-3 shadow-md transition-[background,transform] hover:scale-[1.01]',
+        'relative flex items-center justify-between gap-3 bg-gray p-3 shadow-md transition-[background,transform] hover:scale-[1.01] hover:bg-light-gray',
         !input.disabled && 'animate-blink-background-gray'
       )}
     >
@@ -80,7 +80,11 @@ const TaskCard = ({ data }: { data: Task }) => {
         type="button"
         onClick={e => {
           e.preventDefault();
-          alert('Execute service to delete task');
+          deleteTask(data.id);
+          setTasks &&
+            setTasks(previousTasks =>
+              previousTasks?.filter(previousTask => previousTask.id !== data.id)
+            );
         }}
         className="transition-[transform] hover:scale-110"
       >
