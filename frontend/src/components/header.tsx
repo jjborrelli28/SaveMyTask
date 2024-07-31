@@ -9,16 +9,16 @@ const Header = () => (
         <ul className="flex gap-3">
           <li>
             <a
-              href="/"
+              href="/" // TODO: User page for when we have users
               className="text-md text-text underline-animate font-bold"
             >
               My account
             </a>
           </li>
-          <span className="bg-lilac w-0.5"/>
+          <span className="w-0.5 bg-lilac" />
           <li>
             <a
-              href="/"
+              href="/" // TODO: Function for when we have authentication
               className="text-md text-text underline-animate font-bold"
             >
               Log out

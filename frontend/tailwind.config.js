@@ -35,6 +35,7 @@ export default {
         black: '#000',
         black: '#333333',
         background: '#f0d9d1',
+        'light-lilac': '#cfbcea',
         lilac: '#bba8d6',
         green: '#2ecc71',
         yellow: '#f6ce7c',

@@ -1,9 +1,9 @@
-import { TaskListContext } from './contexts/task-list';
+import TasksContext from './contexts/tasks';
 import Router from './router';
 
 const TodoApp = () => (
-  <TaskListContext>
+  <TasksContext>
     <Router />
-  </TaskListContext>
+  </TasksContext>
 );
 export default TodoApp;

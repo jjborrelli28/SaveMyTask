@@ -1,4 +1,4 @@
-import { Task, TaskStates } from '../types';
+import { Task, TaskCreationBody, TaskUpdateBody } from '../types';
 
 const baseURL = import.meta.env.VITE_TODO_APP_TASK_API;
 
@@ -24,10 +24,35 @@ export const getAllTasks = async () => {
   }
 };
 
-export const updateTask = async (
-  id: number,
-  body: { description?: string; state?: TaskStates }
-) => {
+export const createTask = async (body: TaskCreationBody) => {
+  try {
+    const response = await fetch(`${baseURL}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ...body, state: 'To do' })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+
+      throw new Error(
+        `Error: ${errorData.message || 'An unknown error occurred'}`
+      );
+    }
+
+    const data = await response.json();
+
+    console.log('Task created successfully:', data);
+
+    return data;
+  } catch (error) {
+    console.error('Error creating task:', error);
+  }
+};
+
+export const updateTask = async (id: number, body: TaskUpdateBody) => {
   try {
     const response = await fetch(`${baseURL}/${id}`, {
       method: 'PATCH',
@@ -55,7 +80,7 @@ export const updateTask = async (
   }
 };
 
-export const deleteTask = async (id: number) => {
+export const removeTask = async (id: number) => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_TODO_APP_TASK_API}/${id}`,

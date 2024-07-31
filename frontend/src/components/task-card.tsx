@@ -1,10 +1,9 @@
 import clsx from 'clsx';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useContext, useEffect, useRef, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { MdCircle } from 'react-icons/md';
-import { deleteTask, updateTask } from '../services';
+import { Tasks } from '../contexts/tasks';
 import { Task } from '../types';
-import { TaskList } from '../contexts/task-list';
 
 const TaskCard = ({ data }: { data: Task }) => {
   const [input, setInput] = useState<{
@@ -15,18 +14,34 @@ const TaskCard = ({ data }: { data: Task }) => {
     disabled: true
   });
   const refInputDisabled = useRef(input.disabled);
-  const { setTasks } = useContext(TaskList);
+  const { removeTask, updateTask } = useContext(Tasks);
 
   useEffect(() => {
     if (
       !refInputDisabled.current &&
       refInputDisabled.current !== input.disabled
     ) {
-      updateTask(data.id, { description: input.value });
+      updateTask && updateTask(data.id, { description: input.value });
     }
-
     refInputDisabled.current = input.disabled;
   }, [input.disabled]);
+
+  const handleUpdateTask = (
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => {
+    e.preventDefault();
+    setInput(previousInput => ({
+      ...previousInput,
+      disabled: !previousInput.disabled
+    }));
+  };
+
+  const handleDeleteTask = (
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => {
+    e.preventDefault();
+    removeTask && removeTask(data.id);
+  };
 
   const states = {
     'To do': 'text-orange',
@@ -58,13 +73,7 @@ const TaskCard = ({ data }: { data: Task }) => {
           />
           <button
             type="submit"
-            onClick={e => {
-              e.preventDefault();
-              setInput(previousInput => ({
-                ...previousInput,
-                disabled: !previousInput.disabled
-              }));
-            }}
+            onClick={e => handleUpdateTask(e)}
             className="transition-[transform] hover:scale-110"
           >
             <FaEdit
@@ -78,14 +87,7 @@ const TaskCard = ({ data }: { data: Task }) => {
       </div>
       <button
         type="button"
-        onClick={e => {
-          e.preventDefault();
-          deleteTask(data.id);
-          setTasks &&
-            setTasks(previousTasks =>
-              previousTasks?.filter(previousTask => previousTask.id !== data.id)
-            );
-        }}
+        onClick={e => handleDeleteTask(e)}
         className="transition-[transform] hover:scale-110"
       >
         <FaTrashAlt size={20} className="text-black" />
