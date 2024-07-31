@@ -14,7 +14,7 @@ const Dashboard = () => {
           <h2 className="text-2xl font-semibold underline decoration-lilac decoration-2 underline-offset-8">
             Task list
           </h2>
-          <ul className="flex flex-col gap-5">
+          <ul className="flex flex-col gap-5 p-5">
             {tasks && tasks?.map((task, i) => <TaskCard key={i} data={task} />)}
           </ul>
         </div>

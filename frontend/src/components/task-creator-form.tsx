@@ -11,12 +11,13 @@ const TaskCreatorForm = () => {
     e.preventDefault();
 
     createTask && createTask({ description: value, user_id });
+    setValue('');
   };
 
   return (
     <form
       onSubmit={handleCreateTask}
-      className="flex flex-1 flex-col justify-center gap-5 p-5"
+      className="flex flex-1 flex-col gap-5 px-5 py-16"
     >
       <input
         type="text"

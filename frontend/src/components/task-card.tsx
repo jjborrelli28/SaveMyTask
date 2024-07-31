@@ -14,6 +14,7 @@ const TaskCard = ({ data }: { data: Task }) => {
     disabled: true
   });
   const refInputDisabled = useRef(input.disabled);
+  const refTaskState = useRef(data.state);
   const { removeTask, updateTask } = useContext(Tasks);
 
   useEffect(() => {
@@ -34,6 +35,22 @@ const TaskCard = ({ data }: { data: Task }) => {
       ...previousInput,
       disabled: !previousInput.disabled
     }));
+  };
+
+  const handleUpdateTaskState = (
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    if (refTaskState.current === 'To do') {
+      refTaskState.current = 'In progress';
+    } else if (refTaskState.current === 'In progress') {
+      refTaskState.current = 'Done';
+    } else if (refTaskState.current === 'Done') {
+      refTaskState.current = 'To do';
+    }
+
+    updateTask && updateTask(data.id, { state: refTaskState.current });
   };
 
   const handleDeleteTask = (
@@ -57,11 +74,16 @@ const TaskCard = ({ data }: { data: Task }) => {
       )}
     >
       <div className="flex flex-1 items-center gap-3">
-        <MdCircle size={20} className={clsx(states[data.state])} />
+        <button type="button" onClick={e => handleUpdateTaskState(e)}>
+          <MdCircle size={20} className={clsx(states[data.state])} />
+        </button>
         <form className="text-overflow-ellipsis flex flex-1 gap-3">
           <input
             type="text"
-            className="flex-1 overflow-hidden text-ellipsis bg-transparent text-xl outline-none focus:outline-none focus:ring-0"
+            className={clsx(
+              'flex-1 overflow-hidden text-ellipsis bg-transparent text-xl outline-none focus:outline-none focus:ring-0',
+              data.state === 'Done' && 'line-through'
+            )}
             value={input.value}
             onChange={e =>
               setInput(previousInput => ({
