@@ -82,7 +82,8 @@ const TaskCard = ({ data }: { data: Task }) => {
             type="text"
             className={clsx(
               'flex-1 overflow-hidden text-ellipsis bg-transparent text-xl outline-none focus:outline-none focus:ring-0',
-              data.state === 'Done' && 'line-through'
+              data.state === 'Done' && 'line-through',
+              !input.disabled && 'border-b-2 border-dark-gray'
             )}
             value={input.value}
             onChange={e =>

@@ -17,7 +17,7 @@ const TaskCreatorForm = () => {
   return (
     <form
       onSubmit={handleCreateTask}
-      className="flex flex-1 flex-col gap-5 px-5 py-16"
+      className="flex flex-1 flex-col gap-5 py-6"
     >
       <input
         type="text"
@@ -29,7 +29,7 @@ const TaskCreatorForm = () => {
       <button
         type="submit"
         onClick={e => handleCreateTask(e)}
-        className="hover:bg-light-lilac bg-lilac py-3 font-bold text-black transition-colors"
+        className="bg-lilac py-3 font-bold text-black transition-colors hover:bg-light-lilac"
       >
         Add Task
       </button>

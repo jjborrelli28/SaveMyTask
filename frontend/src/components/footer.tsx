@@ -52,7 +52,9 @@ const Footer = () => {
           </ul>
         </nav>
         <p className="text-center">Juan Jose Borrelli © {currentYear}</p>
-        <p className="text-end text-sm">Made with ❤️ by me</p>
+        <p className="mt-4 text-center text-sm lg:text-end">
+          Made with ❤️ by me
+        </p>
       </div>
     </footer>
   );

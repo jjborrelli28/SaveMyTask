@@ -1,5 +1,5 @@
 const Header = () => (
-  <header className="p-5">
+  <header className="sticky top-0 z-10 py-5 backdrop-blur-md">
     <div className="container flex items-center justify-between">
       <div className="flex items-center gap-2">
         <img src="src/assets/logo.png" className="h-8" />

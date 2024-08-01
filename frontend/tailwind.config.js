@@ -5,6 +5,7 @@ export default {
     extend: {
       container: {
         center: true,
+        padding: '1.25rem',
         screens: {
           sm: '640px',
           md: '768px',
@@ -31,7 +32,7 @@ export default {
         white: '#f5f5f5',
         'light-gray': '#efefef',
         gray: '#e0e0e0',
-        'dark-gray': 'cfcfcf',
+        'dark-gray': '#c0c0c0',
         black: '#000',
         black: '#333333',
         background: '#f0d9d1',
@@ -68,8 +69,8 @@ export default {
         '50%': { backgroundColor: 'rgba(224, 224, 224, 1)' }
       },
       'blink-text-black': {
-        '0%, 100%': { color: 'rgba(51, 51, 51, 1)' },
-        '50%': { color: 'rgba(51, 51, 51, 0.5)' }
+        '0%, 100%': { color: 'rgba(51, 51, 51, 0.5)' },
+        '50%': { color: 'rgba(51, 51, 51, 1)' }
       },
       'draw-border-black': {
         '0%': {
