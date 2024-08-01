@@ -52,7 +52,7 @@ const Footer = () => {
           </ul>
         </nav>
         <p className="text-center">Juan Jose Borrelli © {currentYear}</p>
-        <p className="mt-4 text-center text-sm lg:text-end">
+        <p className="mt-4 text-center text-xs lg:text-end">
           Made with ❤️ by me
         </p>
       </div>

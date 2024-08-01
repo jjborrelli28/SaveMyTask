@@ -18,3 +18,5 @@ export type TaskUpdateBody = {
   description?: string;
   state?: TaskStates;
 };
+
+export type AccordionStates = 'Opened' | 'Closed';
