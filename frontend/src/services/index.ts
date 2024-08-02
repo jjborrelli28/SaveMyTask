@@ -16,7 +16,8 @@ export const getAllTasks = async () => {
 
     const data = (await response.json()) as Task[];
 
-    console.log('Tasks obtanied successfully:', data);
+    if (import.meta.env.VITE_ENV === 'development')
+      console.log('Tasks obtanied successfully:', data);
 
     return data;
   } catch (error) {
@@ -44,7 +45,8 @@ export const createTask = async (body: TaskCreationBody) => {
 
     const data = await response.json();
 
-    console.log('Task created successfully:', data);
+    if (import.meta.env.VITE_ENV === 'development')
+      console.log('Task created successfully:', data);
 
     return data;
   } catch (error) {
@@ -72,7 +74,8 @@ export const updateTask = async (id: number, body: TaskUpdateBody) => {
 
     const data = await response.json();
 
-    console.log('Task updated successfully:', data);
+    if (import.meta.env.VITE_ENV === 'development')
+      console.log('Task updated successfully:', data);
 
     return data;
   } catch (error) {
@@ -99,7 +102,8 @@ export const removeTask = async (id: number) => {
 
     const data = await response.json();
 
-    console.log('Task deleted successfully:', data);
+    if (import.meta.env.VITE_ENV === 'development')
+      console.log('Task deleted successfully:', data);
 
     return data;
   } catch (error) {

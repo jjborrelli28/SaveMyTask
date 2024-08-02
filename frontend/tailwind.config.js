@@ -81,12 +81,17 @@ export default {
           'border-bottom-width': '100px',
           'border-bottom-color': '#333333'
         }
+      },
+      spin: {
+        '0%': { transform: 'rotate(0deg)' },
+        '100%': { transform: 'rotate(360deg)' }
       }
     },
     animation: {
       'blink-background-gray': 'blink-background-gray 1s infinite',
       'blink-text-black': 'blink-text-black 1s infinite',
-      'draw-border-black': 'draw-border-black 1s ease-out forwards'
+      'draw-border-black': 'draw-border-black 1s ease-out forwards',
+      spin: 'spin 1s linear infinite'
     }
   },
   plugins: []

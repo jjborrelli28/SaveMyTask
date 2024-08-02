@@ -17,6 +17,7 @@ import { Task, TaskCreationBody, TaskUpdateBody } from '../types';
 export const Tasks = createContext<{
   tasks?: Task[] | undefined;
   setTasks?: Dispatch<SetStateAction<Task[] | undefined>>;
+  areLoadingTasks?: boolean;
   createTask?: (taskBody: TaskCreationBody) => Promise<void>;
   updateTask?: (id: number, body: TaskUpdateBody) => Promise<void>;
   removeTask?: (id: number) => Promise<void>;
@@ -24,11 +25,20 @@ export const Tasks = createContext<{
 
 const TasksContext = ({ children }: { children: ReactNode }) => {
   const [tasks, setTasks] = useState<Task[] | undefined>(undefined);
+  const [areLoadingTasks, setAreLoadingTasks] = useState<boolean>(false);
 
   useEffect(() => {
     const getTaskList = async () => {
-      const taskList = await getAllTasks();
-      setTasks(taskList);
+      setAreLoadingTasks(true);
+
+      try {
+        const taskList = await getAllTasks();
+        setTasks(taskList);
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      } finally {
+        setAreLoadingTasks(false);
+      }
     };
 
     getTaskList();
@@ -54,7 +64,14 @@ const TasksContext = ({ children }: { children: ReactNode }) => {
 
   return (
     <Tasks.Provider
-      value={{ tasks, setTasks, createTask, updateTask, removeTask }}
+      value={{
+        tasks,
+        setTasks,
+        areLoadingTasks,
+        createTask,
+        updateTask,
+        removeTask
+      }}
     >
       {children}
     </Tasks.Provider>
