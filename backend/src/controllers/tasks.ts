@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import db from "../database/db";
+import { Task } from "../types";
+import { broadcast } from "../web-socket";
 
-export const getAllTasks = async (req: Request, res: Response) => {
+export const getTaskList = async (req: Request, res: Response) => {
   try {
-    const allTasks = await db.selectFrom("task").selectAll().execute();
+    const taskList = await db.selectFrom("task").selectAll().execute();
 
-    res.json(allTasks);
+    res.json(taskList);
   } catch (error) {
-    res.status(500).json({ error: "Error trying to get the all tasks" });
+    res.status(500).json({ error: "Error trying to get the task list" });
   }
 };
 
@@ -36,7 +38,7 @@ export const getTaskById = async (req: Request, res: Response) => {
 };
 
 export const createTask = async (req: Request, res: Response) => {
-  const { description, state, user_id } = req.body;
+  const { description, state, user_id } = req.body as Task;
 
   if (!description || !state || !user_id) {
     return res
@@ -54,19 +56,22 @@ export const createTask = async (req: Request, res: Response) => {
       })
       .executeTakeFirstOrThrow();
 
-    const task = await db
+    const taskList = await db.selectFrom("task").selectAll().execute();
+    broadcast({ type: "TASK_LIST_UPDATE", taskList });
+
+    const newTask = await db
       .selectFrom("task")
       .selectAll()
       .where("id", "=", Number(result.insertId))
       .executeTakeFirstOrThrow();
 
-    res.status(201).json(task);
+    res.status(201).json(newTask);
   } catch (error) {
     res.status(500).json({ error: "Failed to create task" });
   }
 };
 
-export const editTask = async (req: Request, res: Response) => {
+export const updateTask = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10);
 
   if (isNaN(id)) {
@@ -94,6 +99,9 @@ export const editTask = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Task not found" });
     }
 
+    const taskList = await db.selectFrom("task").selectAll().execute();
+    broadcast({ type: "TASK_LIST_UPDATE", taskList });
+
     const updatedTask = await db
       .selectFrom("task")
       .selectAll()
@@ -107,18 +115,24 @@ export const editTask = async (req: Request, res: Response) => {
 };
 
 export const deleteTask = async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id, 10);
+  const taskId = parseInt(req.params.id, 10);
 
-  if (isNaN(id)) {
+  if (isNaN(taskId)) {
     return res.status(400).json({ error: "Invalid task id" });
   }
 
   try {
-    const result = await db.deleteFrom("task").where("id", "=", id).execute();
+    const result = await db
+      .deleteFrom("task")
+      .where("id", "=", taskId)
+      .execute();
 
     if (result[0].numDeletedRows === BigInt(0)) {
       return res.status(404).json({ error: "Task not found" });
     }
+
+    const taskList = await db.selectFrom("task").selectAll().execute();
+    broadcast({ type: "TASK_LIST_UPDATE", taskList });
 
     res.status(200).json({ message: "Task deleted successfully" });
   } catch (error) {
