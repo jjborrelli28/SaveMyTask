@@ -1,9 +1,4 @@
-import TasksContext from './contexts/tasks';
 import Router from './router';
 
-const TodoApp = () => (
-  <TasksContext>
-    <Router />
-  </TasksContext>
-);
+const TodoApp = () => <Router />;
 export default TodoApp;

@@ -2,7 +2,7 @@ import { Task, TaskCreationBody, TaskUpdateBody } from '../types';
 
 const baseURL = import.meta.env.VITE_TODO_APP_TASK_API;
 
-export const getAllTasks = async () => {
+export const getTasks = async () => {
   try {
     const response = await fetch(baseURL);
 
@@ -83,7 +83,7 @@ export const updateTask = async (id: number, body: TaskUpdateBody) => {
   }
 };
 
-export const removeTask = async (id: number) => {
+export const deleteTask = async (id: number) => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_TODO_APP_TASK_API}/${id}`,

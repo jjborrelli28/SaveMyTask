@@ -1,23 +1,35 @@
-import { useContext } from 'react';
-import { Tasks } from '../contexts/tasks';
-import Spinner from './spinner';
+import Spinner from '../../../components/spinner';
+import useGetTaskList from '../../../hooks/use-get-task-list';
+import useWebSocket from '../../../hooks/use-web-socket';
 import TaskCard from './task-card';
 
 const TaskList = () => {
-  const { tasks, areLoadingTasks } = useContext(Tasks);
+  const { isLoading, taskList, setTaskList } = useGetTaskList();
+
+  const handleWebSocketMessage = (message: any) => {
+    switch (message.type) {
+      case 'TASK_LIST_UPDATE':
+        setTaskList(message.taskList);
+        break;
+      default:
+        break;
+    }
+  };
+
+  useWebSocket(handleWebSocketMessage);
 
   return (
     <div className="flex flex-col gap-5 border-b-2 border-gray pb-5 lg:border-b-0 lg:border-r-2 lg:px-10 lg:pb-10">
       <h2 className="text-2xl font-semibold underline decoration-lilac decoration-2 underline-offset-8">
         Task list
       </h2>
-      {areLoadingTasks ? (
+      {isLoading ? (
         <div className="flex flex-1 items-center justify-center">
           <Spinner />
         </div>
-      ) : tasks ? (
+      ) : taskList ? (
         <ul className="flex flex-col gap-5">
-          {tasks.map((task, i) => (
+          {taskList.map((task, i) => (
             <TaskCard key={i} data={task} />
           ))}
         </ul>

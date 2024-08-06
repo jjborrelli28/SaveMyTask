@@ -1,15 +1,14 @@
-import { FormEvent, useContext, useState } from 'react';
-import { Tasks } from '../contexts/tasks';
+import { FormEvent, useState } from 'react';
+import { createTask } from '../../../services';
 
 const TaskCreatorForm = () => {
   const [value, setValue] = useState('');
-  const { createTask } = useContext(Tasks);
 
   const user_id = 1; // TODO: Modify when we have authentication and user accounts
 
   const handleCreateTask = async (e: FormEvent) => {
     e.preventDefault();
-    createTask && createTask({ description: value, user_id });
+    createTask({ description: value, user_id });
     setValue('');
   };
 
