@@ -13,7 +13,7 @@ const TaskCreatorForm = () => {
   };
 
   return (
-    <div className="flex flex-col py-10 lg:px-10">
+    <div className="order-0 flex flex-col pb-10 lg:order-1 lg:px-10 lg:pt-10">
       <form
         onSubmit={handleCreateTask}
         className="flex flex-1 flex-col gap-5 py-6"

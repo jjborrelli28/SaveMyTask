@@ -9,7 +9,7 @@ const useGetTaskList = () => {
   const getTaskList = async () => {
     setIsLoading(true);
     try {
-      const tasks = (await getTasks()) || null;
+      const tasks = (await getTasks())?.reverse() || null;
       setTaskList(tasks);
     } catch (error) {
       if (import.meta.env.VITE_ENV === 'development')

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdCircle } from 'react-icons/md';
@@ -16,13 +16,17 @@ export const taskStates = {
 const TaskCard = ({ data }: { data: Task }) => {
   const [input, setInput] = useState<{
     value: string;
-    state: boolean;
+    isEditing: boolean;
   }>({
     value: data.description,
-    state: true
+    isEditing: false
   });
   const [accordionState, setAccordionState] =
     useState<AccordionStates>('Closed');
+
+  useEffect(() => {
+    setInput(previousState => ({ ...previousState, value: data.description }));
+  }, [data]);
 
   const handleUpdateTask = (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
@@ -47,8 +51,11 @@ const TaskCard = ({ data }: { data: Task }) => {
     } else if (action === 'update-description') {
       setInput(previousInput => ({
         ...previousInput,
-        state: !previousInput.state
+        isEditing: !previousInput.isEditing
       }));
+
+      if (!input.isEditing) return;
+
       updateTask(data.id, { description: input.value });
     }
   };
@@ -64,7 +71,7 @@ const TaskCard = ({ data }: { data: Task }) => {
     <li
       className={clsx(
         'flex flex-col bg-gray p-3 shadow-md transition-[background,transform] hover:scale-[1.01] hover:bg-light-gray',
-        !input.state && 'animate-blink-background-gray'
+        input.isEditing && 'animate-blink-background-gray'
       )}
     >
       <div className="flex items-center justify-between gap-3">
@@ -88,7 +95,7 @@ const TaskCard = ({ data }: { data: Task }) => {
               className={clsx(
                 'flex-1 overflow-hidden text-ellipsis bg-transparent text-xl outline-none focus:outline-none',
                 data.state === 'Done' && 'line-through',
-                !input.state && 'border-b-2 border-dark-gray'
+                input.isEditing && 'border-b-2 border-dark-gray'
               )}
               value={input.value}
               onChange={e =>
@@ -97,7 +104,7 @@ const TaskCard = ({ data }: { data: Task }) => {
                   value: e.target.value
                 }))
               }
-              disabled={input.state}
+              disabled={!input.isEditing}
             />
             <button
               type="submit"
@@ -108,7 +115,7 @@ const TaskCard = ({ data }: { data: Task }) => {
               <FaEdit
                 size={22}
                 className={clsx(
-                  !input.state ? 'animate-blink-text-black' : 'text-black'
+                  input.isEditing ? 'animate-blink-text-black' : 'text-black'
                 )}
               />
             </button>

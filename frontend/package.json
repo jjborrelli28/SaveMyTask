@@ -9,7 +9,6 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
-  "proxy": "http://localhost:4000",
   "dependencies": {
     "clsx": "^2.1.1",
     "moment": "^2.30.1",

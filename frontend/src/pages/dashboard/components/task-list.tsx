@@ -1,25 +1,30 @@
+import { useCallback } from 'react';
 import Spinner from '../../../components/spinner';
 import useGetTaskList from '../../../hooks/use-get-task-list';
 import useWebSocket from '../../../hooks/use-web-socket';
+import { WebSocketMessage } from '../../../types';
 import TaskCard from './task-card';
 
 const TaskList = () => {
   const { isLoading, taskList, setTaskList } = useGetTaskList();
 
-  const handleWebSocketMessage = (message: any) => {
-    switch (message.type) {
-      case 'TASK_LIST_UPDATE':
-        setTaskList(message.taskList);
-        break;
-      default:
-        break;
-    }
-  };
+  const handleWebSocketMessage = useCallback(
+    (message: WebSocketMessage) => {
+      switch (message.type) {
+        case 'TASK_LIST_UPDATE':
+          setTaskList(message.taskList.reverse());
+          break;
+        default:
+          break;
+      }
+    },
+    [setTaskList]
+  );
 
   useWebSocket(handleWebSocketMessage);
 
   return (
-    <div className="flex flex-col gap-5 border-b-2 border-gray pb-5 lg:border-b-0 lg:border-r-2 lg:px-10 lg:pb-10">
+    <div className="lg:order-0 order-1 flex flex-col gap-5 border-b-2 border-gray pb-5 lg:border-b-0 lg:border-r-2 lg:px-10 lg:pb-10">
       <h2 className="text-2xl font-semibold underline decoration-lilac decoration-2 underline-offset-8">
         Task list
       </h2>
