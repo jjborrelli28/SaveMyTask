@@ -9,7 +9,9 @@ export const getTaskList = async (req: Request, res: Response) => {
 
     res.json(taskList);
   } catch (error) {
-    res.status(500).json({ error: "Error trying to get the task list" });
+    res
+      .status(500)
+      .json({ error: "Error trying to get the task list", description: error });
   }
 };
 
@@ -33,7 +35,9 @@ export const getTaskById = async (req: Request, res: Response) => {
 
     res.json(task);
   } catch (error) {
-    res.status(500).json({ error: "Error trying to get the task" });
+    res
+      .status(500)
+      .json({ error: "Error trying to get the task", description: error });
   }
 };
 
@@ -67,7 +71,9 @@ export const createTask = async (req: Request, res: Response) => {
 
     res.status(201).json(newTask);
   } catch (error) {
-    res.status(500).json({ error: "Failed to create task" });
+    res
+      .status(500)
+      .json({ error: "Failed to create task", description: error });
   }
 };
 
@@ -110,7 +116,10 @@ export const updateTask = async (req: Request, res: Response) => {
 
     res.json(updatedTask);
   } catch (error) {
-    res.status(500).json({ error: "Error while trying to update the task" });
+    res.status(500).json({
+      error: "Error while trying to update the task",
+      description: error,
+    });
   }
 };
 
@@ -136,7 +145,9 @@ export const deleteTask = async (req: Request, res: Response) => {
 
     res.status(200).json({ message: "Task deleted successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error while trying to delete the task" });
+    res.status(500).json({
+      error: "Error while trying to delete the task",
+      description: error,
+    });
   }
 };
