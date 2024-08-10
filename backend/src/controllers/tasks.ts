@@ -4,8 +4,17 @@ import { Task } from "../types";
 import { broadcast } from "../web-socket";
 
 export const getTaskList = async (req: Request, res: Response) => {
+  const search = req.query?.search as string | undefined;
+
   try {
-    const taskList = await db.selectFrom("task").selectAll().execute();
+    let taskList = await db.selectFrom("task").selectAll().execute();
+
+    if (search !== undefined) {
+      taskList = taskList.filter((task) =>
+        task.description.toLowerCase().includes(search.toLowerCase())
+      );
+      broadcast({ type: "TASK_LIST_UPDATE", taskList });
+    }
 
     res.json(taskList);
   } catch (error) {
