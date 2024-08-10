@@ -13,6 +13,16 @@ export const taskStates = {
   Done: 'text-green'
 };
 
+const switchTaskState = (state: TaskStates): TaskStates => {
+  const stateMap: Record<TaskStates, TaskStates> = {
+    'To do': 'In progress',
+    'In progress': 'Done',
+    Done: 'To do'
+  };
+
+  return stateMap[state];
+};
+
 const TaskCard = ({ data }: { data: Task }) => {
   const [input, setInput] = useState<{
     value: string;
@@ -36,17 +46,7 @@ const TaskCard = ({ data }: { data: Task }) => {
     const action = e.currentTarget.getAttribute('data-action');
 
     if (action === 'update-state') {
-      const taskState = data.state;
-      let newState: TaskStates | undefined;
-
-      if (taskState === 'To do') {
-        newState = 'In progress';
-      } else if (taskState === 'In progress') {
-        newState = 'Done';
-      } else if (taskState === 'Done') {
-        newState = 'To do';
-      }
-
+      const newState = switchTaskState(data.state);
       updateTask(data.id, { state: newState });
     } else if (action === 'update-description') {
       setInput(previousInput => ({
@@ -93,7 +93,7 @@ const TaskCard = ({ data }: { data: Task }) => {
             <input
               type="text"
               className={clsx(
-                'flex-1 overflow-hidden text-ellipsis bg-transparent text-xl outline-none focus:outline-none',
+                'w-[calc(100%_-_42px)] flex-1 overflow-hidden text-ellipsis bg-transparent text-xl outline-none focus:outline-none',
                 data.state === 'Done' && 'line-through',
                 input.isEditing && 'border-b-2 border-dark-gray'
               )}

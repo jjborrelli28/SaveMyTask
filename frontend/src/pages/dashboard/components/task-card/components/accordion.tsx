@@ -4,15 +4,12 @@ import { taskStates } from '..';
 import { AccordionStates, Task } from '../../../../../types';
 
 const Accordion = ({ data, state }: { data: Task; state: AccordionStates }) => {
-  const createdAtDate = data.created_at;
-  const updatedAtDate = data.updated_at;
+  const { created_at: createdAtDate, updated_at: updatedAtDate } = data;
 
-  const formattedCreatedAtDate = moment(createdAtDate).format(
-    'DD MMMM YYYY, HH:mm:ss'
-  );
-  const formattedUpdatedAtDate = moment(updatedAtDate).format(
-    'DD MMMM YYYY, HH:mm:ss'
-  );
+  const [formattedCreatedAtDate, formattedUpdatedAtDate] = [
+    createdAtDate,
+    updatedAtDate
+  ].map(date => moment(date).format('DD MMMM YYYY, HH:mm:ss'));
 
   return (
     <div

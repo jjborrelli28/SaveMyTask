@@ -1,9 +1,11 @@
 import { useCallback } from 'react';
-import Spinner from '../../../components/spinner';
-import useGetTaskList from '../../../hooks/use-get-task-list';
-import useWebSocket from '../../../hooks/use-web-socket';
-import { WebSocketMessage } from '../../../types';
-import TaskCard from './task-card';
+import { FaListUl } from 'react-icons/fa';
+import Spinner from '../../../../components/spinner';
+import useGetTaskList from '../../../../hooks/use-get-task-list';
+import useWebSocket from '../../../../hooks/use-web-socket';
+import { WebSocketMessage } from '../../../../types';
+import TaskCard from '../task-card';
+import Search from './components/search';
 
 const TaskList = () => {
   const { isLoading, taskList, setTaskList } = useGetTaskList();
@@ -25,9 +27,13 @@ const TaskList = () => {
 
   return (
     <div className="lg:order-0 order-1 flex flex-col gap-5 border-b-2 border-gray pb-5 lg:border-b-0 lg:border-r-2 lg:px-10 lg:pb-10">
-      <h2 className="text-2xl font-semibold underline decoration-lilac decoration-2 underline-offset-8">
-        Task list
-      </h2>
+      <div className="flex items-center justify-between gap-5">
+        <h2 className="flex items-center gap-2 text-nowrap text-2xl font-semibold">
+          <FaListUl />
+          Task list
+        </h2>
+        {taskList && <Search />}
+      </div>
       {isLoading ? (
         <div className="flex flex-1 items-center justify-center">
           <Spinner />

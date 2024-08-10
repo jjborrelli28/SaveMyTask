@@ -2,9 +2,9 @@ import { Task, TaskCreationBody, TaskUpdateBody } from '../types';
 
 const baseURL = import.meta.env.VITE_TODO_APP_TASK_API;
 
-export const getTasks = async () => {
+export const getTasks = async (url?: string) => {
   try {
-    const response = await fetch(baseURL);
+    const response = await fetch(url || baseURL);
 
     if (!response.ok) {
       const errorData = await response.json();
