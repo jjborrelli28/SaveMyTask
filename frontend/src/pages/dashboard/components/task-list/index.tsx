@@ -1,26 +1,27 @@
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { FaListUl } from 'react-icons/fa';
 import Spinner from '../../../../components/spinner';
-import useGetTaskList from '../../../../hooks/use-get-task-list';
+import TaskContext from '../../../../context/task';
 import useWebSocket from '../../../../hooks/use-web-socket';
 import { WebSocketMessage } from '../../../../types';
 import TaskCard from '../task-card';
 import Search from './components/search';
 
 const TaskList = () => {
-  const { isLoading, taskList, setTaskList } = useGetTaskList();
+  const { task, setTask } = useContext(TaskContext);
 
   const handleWebSocketMessage = useCallback(
     (message: WebSocketMessage) => {
       switch (message.type) {
-        case 'TASK_LIST_UPDATE':
-          setTaskList(message.taskList.reverse());
+        case 'UPDATE_TASK_LIST':
+          console.log(message.list);
+          setTask(prevState => ({ ...prevState, list: message.list }));
           break;
         default:
           break;
       }
     },
-    [setTaskList]
+    [setTask]
   );
 
   useWebSocket(handleWebSocketMessage);
@@ -32,15 +33,15 @@ const TaskList = () => {
           <FaListUl />
           Task list
         </h2>
-        {taskList && <Search />}
+        {task.list && <Search />}
       </div>
-      {isLoading ? (
+      {task.isLoading ? (
         <div className="flex flex-1 items-center justify-center">
           <Spinner />
         </div>
-      ) : taskList ? (
+      ) : task.list ? (
         <ul className="flex flex-col gap-5">
-          {taskList.map((task, i) => (
+          {task.list.map((task, i) => (
             <TaskCard key={i} data={task} />
           ))}
         </ul>

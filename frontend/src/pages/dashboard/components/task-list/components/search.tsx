@@ -1,32 +1,29 @@
 import debounce from 'lodash/debounce';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, useCallback, useContext, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import useGetTaskList from '../../../../../hooks/use-get-task-list';
-import { getTasks } from '../../../../../services';
-
-const baseURL = import.meta.env.VITE_TODO_APP_TASK_API;
+import TaskContext from '../../../../../context/task';
+import { getTaskList as getTaskListService } from '../../../../../services';
 
 const Search = () => {
   const [value, setValue] = useState('');
-  const { setIsLoading, setTaskList } = useGetTaskList();
+  const { task, setTask } = useContext(TaskContext);
 
   const getTaskListFiltered = useCallback(
     debounce(async (searchValue: string) => {
-      setIsLoading(true);
-
+      const { page, limit } = task;
+      setTask(prevState => ({ ...prevState, isLoading: true }));
       try {
-        const tasks =
-          (
-            await getTasks(
-              `${baseURL}?search=${encodeURIComponent(searchValue)}`
-            )
-          )?.reverse() || null;
-        setTaskList(tasks);
+        const { list } = await getTaskListService({
+          search: searchValue,
+          page,
+          limit
+        });
+        setTask(prevState => ({ ...prevState, search: searchValue, list }));
       } catch (error) {
         if (import.meta.env.VITE_ENV === 'development')
           console.error('Error getting task list:', error);
       } finally {
-        setIsLoading(false);
+        setTask(prevState => ({ ...prevState, isLoading: false }));
       }
     }, 300),
     []

@@ -1,11 +1,12 @@
 import clsx from 'clsx';
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useContext, useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdCircle } from 'react-icons/md';
 import { deleteTask, updateTask } from '../../../../services';
 import { AccordionStates, Task, TaskStates } from '../../../../types';
 import Accordion from './components/accordion';
+import TaskContext from '../../../../context/task';
 
 export const taskStates = {
   'To do': 'text-orange',
@@ -33,10 +34,13 @@ const TaskCard = ({ data }: { data: Task }) => {
   });
   const [accordionState, setAccordionState] =
     useState<AccordionStates>('Closed');
+  const { task } = useContext(TaskContext);
 
   useEffect(() => {
     setInput(previousState => ({ ...previousState, value: data.description }));
   }, [data]);
+
+  const { search, page, limit } = task;
 
   const handleUpdateTask = (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
@@ -47,7 +51,10 @@ const TaskCard = ({ data }: { data: Task }) => {
 
     if (action === 'update-state') {
       const newState = switchTaskState(data.state);
-      updateTask(data.id, { state: newState });
+      updateTask({
+        body: { id: data.id, state: newState },
+        queries: { search, page, limit }
+      });
     } else if (action === 'update-description') {
       setInput(previousInput => ({
         ...previousInput,
@@ -56,7 +63,10 @@ const TaskCard = ({ data }: { data: Task }) => {
 
       if (!input.isEditing) return;
 
-      updateTask(data.id, { description: input.value });
+      updateTask({
+        body: { id: data.id, description: input.value },
+        queries: { search, page, limit }
+      });
     }
   };
 
@@ -64,7 +74,7 @@ const TaskCard = ({ data }: { data: Task }) => {
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
-    deleteTask(data.id);
+    deleteTask({ id: data.id, queries: { search, page, limit } });
   };
 
   return (

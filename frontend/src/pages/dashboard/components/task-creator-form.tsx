@@ -1,15 +1,22 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { createTask } from '../../../services';
+import TaskContext from '../../../context/task';
 
 const user_id = 1; // TODO: Modify when we have authentication and user accounts
 
 const TaskCreatorForm = () => {
   const [value, setValue] = useState('');
+  const { task } = useContext(TaskContext);
+
+  const { search, page, limit } = task;
 
   const handleCreateTask = async (e: FormEvent) => {
     e.preventDefault();
-    createTask({ description: value, user_id });
+    createTask({
+      body: { description: value, user_id },
+      queries: { search, page, limit }
+    });
     setValue('');
   };
 

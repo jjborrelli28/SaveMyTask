@@ -1,20 +1,27 @@
-import { Task, TaskCreationBody, TaskUpdateBody } from '../types';
+import {
+  Queries,
+  Task,
+  TaskCreationBody,
+  TaskListData,
+  TaskUpdatingBody
+} from '../types';
 
 const baseURL = import.meta.env.VITE_TODO_APP_TASK_API;
 
-export const getTasks = async (url?: string) => {
+export const getTaskList = async ({ search, page, limit }: Queries) => {
+  const url = `${baseURL}?${search && `${`search=${search}`}`}${page && limit && `${`&page=${page}&limit=${limit}`}`}`;
+
   try {
-    const response = await fetch(url || baseURL);
+    const response = await fetch(url);
 
     if (!response.ok) {
       const errorData = await response.json();
-
       throw new Error(
         `Error: ${errorData.message || 'An unknown error occurred'}`
       );
     }
 
-    const data = (await response.json()) as Task[];
+    const data = (await response.json()) as TaskListData;
 
     if (import.meta.env.VITE_ENV === 'development')
       console.log('Tasks obtanied successfully:', data);
@@ -22,12 +29,22 @@ export const getTasks = async (url?: string) => {
     return data;
   } catch (error) {
     console.error('Error obtaning tasks:', error);
+    return { list: [] } as { list: Task[] };
   }
 };
 
-export const createTask = async (body: TaskCreationBody) => {
+export const createTask = async ({
+  body,
+  queries
+}: {
+  body: TaskCreationBody;
+  queries: Queries;
+}) => {
+  const { search, page, limit } = queries;
+  const url = `${baseURL}?${search && `${`search=${search}`}`}${page && limit && `${`&page=${page}&limit=${limit}`}`}`;
+
   try {
-    const response = await fetch(`${baseURL}`, {
+    const response = await fetch(`${url}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -37,7 +54,6 @@ export const createTask = async (body: TaskCreationBody) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-
       throw new Error(
         `Error: ${errorData.message || 'An unknown error occurred'}`
       );
@@ -54,19 +70,28 @@ export const createTask = async (body: TaskCreationBody) => {
   }
 };
 
-export const updateTask = async (id: number, body: TaskUpdateBody) => {
+export const updateTask = async ({
+  body,
+  queries
+}: {
+  body: TaskUpdatingBody;
+  queries: Queries;
+}) => {
+  const { search, page, limit } = queries;
+  const { id, ...update } = body;
+  const url = `${baseURL}/${id}?${search && `${`search=${search}`}`}${page && limit && `${`&page=${page}&limit=${limit}`}`}`;
+
   try {
-    const response = await fetch(`${baseURL}/${id}`, {
+    const response = await fetch(url, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(update)
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-
       throw new Error(
         `Error: ${errorData.message || 'An unknown error occurred'}`
       );
@@ -83,18 +108,23 @@ export const updateTask = async (id: number, body: TaskUpdateBody) => {
   }
 };
 
-export const deleteTask = async (id: number) => {
+export const deleteTask = async ({
+  id,
+  queries
+}: {
+  id: number;
+  queries: Queries;
+}) => {
+  const { search, page, limit } = queries;
+  const url = `${baseURL}/${id}?${search && `${`search=${search}`}`}${page && limit && `${`&page=${page}&limit=${limit}`}`}`;
+
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_TODO_APP_TASK_API}/${id}`,
-      {
-        method: 'DELETE'
-      }
-    );
+    const response = await fetch(url, {
+      method: 'DELETE'
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
-
       throw new Error(
         `Error: ${errorData.message || 'An unknown error occurred'}`
       );
