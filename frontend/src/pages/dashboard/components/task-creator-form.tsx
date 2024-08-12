@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useCallback, useContext, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { createTask } from '../../../services';
 import TaskContext from '../../../context/task';
@@ -9,22 +9,25 @@ const TaskCreatorForm = () => {
   const [value, setValue] = useState('');
   const { task } = useContext(TaskContext);
 
-  const { search, page, limit } = task;
+  const { search, currentPage, tasksPerPage } = task;
 
-  const handleCreateTask = async (e: FormEvent) => {
-    e.preventDefault();
-    createTask({
-      body: { description: value, user_id },
-      queries: { search, page, limit }
-    });
-    setValue('');
-  };
+  const handleCreateTask = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
+      createTask({
+        body: { description: value, user_id },
+        queries: { search, currentPage, tasksPerPage }
+      });
+      setValue('');
+    },
+    [value]
+  );
 
   return (
-    <div className="order-0 flex flex-col pb-10 lg:order-1 lg:px-10 lg:pt-10">
+    <div className="order-0 relative flex flex-col pb-10 lg:order-1 lg:px-10 lg:pt-10">
       <form
         onSubmit={handleCreateTask}
-        className="flex flex-1 flex-col gap-5 py-6"
+        className="top-1/2 flex flex-col gap-5 py-6 transition-transform duration-300 ease-in-out lg:sticky lg:-translate-y-1/2"
       >
         <input
           type="text"
@@ -36,7 +39,7 @@ const TaskCreatorForm = () => {
         <button
           type="submit"
           onClick={handleCreateTask}
-          className="flex items-center justify-center gap-2 bg-lilac py-3 text-xl font-bold text-black transition-colors hover:bg-light-lilac"
+          className="flex items-center justify-center gap-2 bg-lilac py-3 text-xl font-bold text-white transition-colors hover:bg-light-lilac"
         >
           <FaPlus />
           Add Task

@@ -1,6 +1,5 @@
 import {
   Queries,
-  Task,
   TaskCreationBody,
   TaskListData,
   TaskUpdatingBody
@@ -8,8 +7,12 @@ import {
 
 const baseURL = import.meta.env.VITE_TODO_APP_TASK_API;
 
-export const getTaskList = async ({ search, page, limit }: Queries) => {
-  const url = `${baseURL}?${search && `${`search=${search}`}`}${page && limit && `${`&page=${page}&limit=${limit}`}`}`;
+export const getTaskList = async ({
+  search,
+  currentPage,
+  tasksPerPage
+}: Queries) => {
+  const url = `${baseURL}?${search && `${`search=${search}`}`}${currentPage && tasksPerPage && `${`&page=${currentPage}&limit=${tasksPerPage}`}`}`;
 
   try {
     const response = await fetch(url);
@@ -29,7 +32,12 @@ export const getTaskList = async ({ search, page, limit }: Queries) => {
     return data;
   } catch (error) {
     console.error('Error obtaning tasks:', error);
-    return { list: [] } as { list: Task[] };
+    return {
+      list: [],
+      currentPage: 1,
+      tasksPerPage: 20,
+      hasNextPage: false
+    } as TaskListData;
   }
 };
 
@@ -40,8 +48,8 @@ export const createTask = async ({
   body: TaskCreationBody;
   queries: Queries;
 }) => {
-  const { search, page, limit } = queries;
-  const url = `${baseURL}?${search && `${`search=${search}`}`}${page && limit && `${`&page=${page}&limit=${limit}`}`}`;
+  const { search, currentPage, tasksPerPage } = queries;
+  const url = `${baseURL}?${search && `${`search=${search}`}`}${currentPage && tasksPerPage && `${`&page=${currentPage}&limit=${tasksPerPage}`}`}`;
 
   try {
     const response = await fetch(`${url}`, {
@@ -77,9 +85,9 @@ export const updateTask = async ({
   body: TaskUpdatingBody;
   queries: Queries;
 }) => {
-  const { search, page, limit } = queries;
+  const { search, currentPage, tasksPerPage } = queries;
   const { id, ...update } = body;
-  const url = `${baseURL}/${id}?${search && `${`search=${search}`}`}${page && limit && `${`&page=${page}&limit=${limit}`}`}`;
+  const url = `${baseURL}/${id}?${search && `${`search=${search}`}`}${currentPage && tasksPerPage && `${`&page=${currentPage}&limit=${tasksPerPage}`}`}`;
 
   try {
     const response = await fetch(url, {
@@ -115,8 +123,8 @@ export const deleteTask = async ({
   id: number;
   queries: Queries;
 }) => {
-  const { search, page, limit } = queries;
-  const url = `${baseURL}/${id}?${search && `${`search=${search}`}`}${page && limit && `${`&page=${page}&limit=${limit}`}`}`;
+  const { search, currentPage, tasksPerPage } = queries;
+  const url = `${baseURL}/${id}?${search && `${`search=${search}`}`}${currentPage && tasksPerPage && `${`&page=${currentPage}&limit=${tasksPerPage}`}`}`;
 
   try {
     const response = await fetch(url, {

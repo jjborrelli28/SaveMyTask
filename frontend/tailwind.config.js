@@ -36,12 +36,12 @@ export default {
         black: '#000',
         black: '#333333',
         background: '#f0d9d1',
-        'light-lilac': '#cfbcea',
-        lilac: '#bba8d6',
-        green: '#2ecc71',
-        yellow: '#f6ce7c',
-        orange: '#f39c12',
-        red: '#e74c3c'
+        'light-lilac': '#b4a6d8',
+        lilac: '#a28ac8',
+        green: '#388e3c',
+        yellow: '#fbc02d',
+        orange: '#f57c00',
+        red: '#c62828'
       },
       spacing: {
         1: '0.25rem',

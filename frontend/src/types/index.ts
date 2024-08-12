@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, RefObject, SetStateAction } from 'react';
 
 export type Task = {
   id: number;
@@ -15,8 +15,10 @@ type TaskContext = {
   isLoading: boolean;
   search: string;
   list: Task[];
-  page: number;
-  limit: number;
+  currentPage: number;
+  tasksPerPage: number;
+  hasNextPage: boolean;
+  isLoadingNextPage: boolean;
 };
 
 export type TaskContextProps = {
@@ -31,11 +33,16 @@ export type WebSocketMessage = {
 
 export type Queries = {
   search?: string;
-  page?: number;
-  limit?: number;
+  currentPage?: number;
+  tasksPerPage?: number;
 };
 
-export type TaskListData = { list: Task[]; page?: number; limit?: number };
+export type TaskListData = {
+  list: Task[];
+  currentPage: number;
+  tasksPerPage: number;
+  hasNextPage: boolean;
+};
 
 export type TaskCreationBody = {
   description: string;
@@ -48,4 +55,11 @@ export type TaskUpdatingBody = {
   state?: TaskStates;
 };
 
-export type AccordionStates = 'Opened' | 'Closed';
+export type TaskCardAccordionStates = 'Opened' | 'Closed';
+
+export type TaskCardAccordion = { data: Task; state: TaskCardAccordionStates };
+
+export type UseIntersectionObserver = (options?: IntersectionObserverInit) => {
+  ref: RefObject<HTMLLIElement>;
+  isVisible: boolean;
+};

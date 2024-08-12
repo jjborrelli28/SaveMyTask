@@ -10,13 +10,13 @@ const Search = () => {
 
   const getTaskListFiltered = useCallback(
     debounce(async (searchValue: string) => {
-      const { page, limit } = task;
+      const { currentPage, tasksPerPage } = task;
       setTask(prevState => ({ ...prevState, isLoading: true }));
       try {
         const { list } = await getTaskListService({
           search: searchValue,
-          page,
-          limit
+          currentPage,
+          tasksPerPage
         });
         setTask(prevState => ({ ...prevState, search: searchValue, list }));
       } catch (error) {

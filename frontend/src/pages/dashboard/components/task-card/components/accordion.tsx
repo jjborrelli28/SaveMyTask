@@ -1,10 +1,15 @@
 import clsx from 'clsx';
 import moment from 'moment';
-import { taskStates } from '..';
-import { AccordionStates, Task } from '../../../../../types';
+import React from 'react';
+import { getStateTask } from '..';
+import { TaskCardAccordion } from '../../../../../types';
 
-const Accordion = ({ data, state }: { data: Task; state: AccordionStates }) => {
-  const { created_at: createdAtDate, updated_at: updatedAtDate } = data;
+const Accordion = React.memo(({ data, state }: TaskCardAccordion) => {
+  const {
+    state: taskState,
+    created_at: createdAtDate,
+    updated_at: updatedAtDate
+  } = data;
 
   const [formattedCreatedAtDate, formattedUpdatedAtDate] = [
     createdAtDate,
@@ -23,11 +28,16 @@ const Accordion = ({ data, state }: { data: Task; state: AccordionStates }) => {
       <div className="overflow-hidden">
         <div className="flex justify-between bg-light-gray p-3">
           <div className="flex items-center justify-center">
-            <p className={clsx('font-bold italic', taskStates[data.state])}>
+            <p
+              className={clsx(
+                'text-nowrap pl-3 pr-6 font-bold italic',
+                getStateTask(taskState, createdAtDate, updatedAtDate)
+              )}
+            >
               {data.state}
             </p>
           </div>
-          <ul className="border-l-2 border-gray px-3">
+          <ul className="flex flex-col gap-1.5 border-l-2 border-gray px-3">
             <li>
               <p className="text-xs">Created at: {formattedCreatedAtDate}</p>
             </li>
@@ -41,6 +51,6 @@ const Accordion = ({ data, state }: { data: Task; state: AccordionStates }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Accordion;
