@@ -15,6 +15,7 @@ type TaskContext = {
   isLoading: boolean;
   search: string;
   list: Task[];
+  totalTasks: number;
   currentPage: number;
   tasksPerPage: number;
   hasNextPage: boolean;
@@ -39,6 +40,7 @@ export type Queries = {
 
 export type TaskListData = {
   list: Task[];
+  totalTasks: number;
   currentPage: number;
   tasksPerPage: number;
   hasNextPage: boolean;

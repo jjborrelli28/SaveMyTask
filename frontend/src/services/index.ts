@@ -34,6 +34,7 @@ export const getTaskList = async ({
     console.error('Error obtaning tasks:', error);
     return {
       list: [],
+      totalTasks: 0,
       currentPage: 1,
       tasksPerPage: 20,
       hasNextPage: false

@@ -13,12 +13,17 @@ const Search = () => {
       const { currentPage, tasksPerPage } = task;
       setTask(prevState => ({ ...prevState, isLoading: true }));
       try {
-        const { list } = await getTaskListService({
+        const { list, hasNextPage } = await getTaskListService({
           search: searchValue,
           currentPage,
           tasksPerPage
         });
-        setTask(prevState => ({ ...prevState, search: searchValue, list }));
+        setTask(prevState => ({
+          ...prevState,
+          search: searchValue,
+          list,
+          hasNextPage
+        }));
       } catch (error) {
         if (import.meta.env.VITE_ENV === 'development')
           console.error('Error getting task list:', error);

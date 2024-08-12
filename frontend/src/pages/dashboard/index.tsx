@@ -11,7 +11,7 @@ const Dashboard = () => {
           <MdDashboard />
           Dashboard
         </h1>
-        <div className="grid grid-cols-1 grid-rows-[auto,_1fr] gap-8 lg:grid-cols-2 lg:grid-rows-1 lg:gap-0">
+        <div className="grid grid-cols-1 grid-rows-[auto,_1fr] gap-8 pt-5 lg:grid-cols-2 lg:grid-rows-1 lg:gap-0 lg:pt-0">
           <TaskLisk />
           <TaskCreatorForm />
         </div>

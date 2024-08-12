@@ -6,6 +6,7 @@ export const initialTaskState = {
   isLoading: false,
   search: '',
   list: [] as Task[],
+  totalTasks: 0,
   currentPage: 1,
   tasksPerPage: 20,
   hasNextPage: false,
@@ -26,12 +27,12 @@ export const TaskContextProvider = ({ children }: { children: ReactNode }) => {
     setTask(prevState => ({ ...prevState, isLoading: true }));
 
     try {
-      const { list, hasNextPage } = await getTaskListService({
+      const { list, totalTasks, hasNextPage } = await getTaskListService({
         search,
         currentPage,
         tasksPerPage
       });
-      setTask(prevState => ({ ...prevState, list, hasNextPage }));
+      setTask(prevState => ({ ...prevState, list, totalTasks, hasNextPage }));
     } catch (error) {
       if (import.meta.env.VITE_ENV === 'development')
         console.error('Error getting task list:', error);

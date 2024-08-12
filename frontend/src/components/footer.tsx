@@ -5,8 +5,8 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="container">
-      <div className="flex flex-col gap-4 border-t-2 border-lilac pb-16 pt-12">
+    <footer className="bg-lilac">
+      <div className="container flex flex-col gap-4 border-t-2 border-lilac pb-16 pt-12">
         <nav>
           <ul className="flex justify-center gap-4">
             <li>
@@ -16,7 +16,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreelnoopener noreferrer"
               >
-                <FaLinkedin size={24} className="text-black" />
+                <FaLinkedin size={24} className="text-white" />
               </a>
             </li>
             <li>
@@ -26,7 +26,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreelnoopener noreferrer"
               >
-                <FaGithub size={24} className="text-black" />
+                <FaGithub size={24} className="text-white" />
               </a>
             </li>
             <li>
@@ -36,7 +36,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreelnoopener noreferrer"
               >
-                <FaPerson size={24} className="text-black" />
+                <FaPerson size={24} className="text-white" />
               </a>
             </li>
             <li>
@@ -46,13 +46,15 @@ const Footer = () => {
                 target="_blank"
                 rel="noreelnoopener noreferrer"
               >
-                <FaWhatsapp size={24} className="text-black" />
+                <FaWhatsapp size={24} className="text-white" />
               </a>
             </li>
           </ul>
         </nav>
-        <p className="text-center">Juan Jose Borrelli © {currentYear}</p>
-        <p className="mt-4 text-center text-xs lg:text-end">
+        <p className="text-center text-white">
+          Juan Jose Borrelli © {currentYear}
+        </p>
+        <p className="mt-4 text-center text-xs text-white lg:text-end">
           Made with ❤️ by me
         </p>
       </div>
