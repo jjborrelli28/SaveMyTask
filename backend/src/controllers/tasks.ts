@@ -25,9 +25,11 @@ export async function getUpdatedTaskList({
     .select([db.fn.count("id").as("totalCount")])
     .execute();
 
-  const totalPages = Math.ceil(Number(totalCount) / tasksPerPage);
+  const totalTasks = Number(totalCount);
 
-  return { list, totalPages };
+  const totalPages = Math.ceil(totalTasks / tasksPerPage);
+
+  return { list, totalTasks, totalPages };
 }
 
 export const getTaskList = async (req: Request, res: Response) => {
@@ -47,16 +49,18 @@ export const getTaskList = async (req: Request, res: Response) => {
   }
 
   try {
-    const { list, totalPages } = await getUpdatedTaskList({
+    const { list, totalTasks, totalPages } = await getUpdatedTaskList({
       search,
       currentPage,
       tasksPerPage,
     });
 
-    const hasNextPage = currentPage < totalPages;
+    const hasNextPage =
+      currentPage < totalPages && !(list.length < tasksPerPage);
 
     res.json({
       list,
+      totalTasks,
       currentPage,
       tasksPerPage,
       totalPages,
