@@ -3,27 +3,32 @@ import db from "../database/db";
 import { Task } from "../types";
 import { broadcast } from "../web-socket";
 
-const getUpdatedTaskList = async ({
+export async function getUpdatedTaskList({
   search,
-  page,
-  limit,
+  currentPage,
+  tasksPerPage,
 }: {
   search: string;
-  page: number;
-  limit: number;
-}) => {
-  const offset = (page - 1) * limit;
-
+  currentPage: number;
+  tasksPerPage: number;
+}) {
   const list = await db
     .selectFrom("task")
     .selectAll()
     .where("description", "like", `%${search}%`)
-    .limit(limit)
-    .offset(offset)
+    .limit(currentPage * tasksPerPage)
     .orderBy("created_at", "desc")
     .execute();
-  return { list, total: list.length + 1 };
-};
+
+  const [{ totalCount }] = await db
+    .selectFrom("task")
+    .select([db.fn.count("id").as("totalCount")])
+    .execute();
+
+  const totalPages = Math.ceil(Number(totalCount) / tasksPerPage);
+
+  return { list, totalPages };
+}
 
 export const getTaskList = async (req: Request, res: Response) => {
   const {
@@ -31,24 +36,32 @@ export const getTaskList = async (req: Request, res: Response) => {
     limit = "20",
     search = "",
   } = req.query as { page: string; limit: string; search: string };
-  const pageNumber = parseInt(page, 10);
-  const limitNumber = parseInt(limit, 10);
+  const currentPage = parseInt(page, 10);
+  const tasksPerPage = parseInt(limit, 10);
 
-  if (isNaN(pageNumber) || pageNumber <= 0) {
+  if (isNaN(currentPage) || currentPage <= 0) {
     return res.status(400).json({ error: "Invalid page number" });
   }
-  if (isNaN(limitNumber) || limitNumber <= 0) {
+  if (isNaN(tasksPerPage) || tasksPerPage <= 0) {
     return res.status(400).json({ error: "Invalid limit number" });
   }
 
   try {
-    const { list, total } = await getUpdatedTaskList({
+    const { list, totalPages } = await getUpdatedTaskList({
       search,
-      page: pageNumber,
-      limit: limitNumber,
+      currentPage,
+      tasksPerPage,
     });
 
-    res.json({ list, total, page: pageNumber, limit: limitNumber });
+    const hasNextPage = currentPage < totalPages;
+
+    res.json({
+      list,
+      currentPage,
+      tasksPerPage,
+      totalPages,
+      hasNextPage,
+    });
   } catch (error) {
     res
       .status(500)
@@ -89,8 +102,8 @@ export const createTask = async (req: Request, res: Response) => {
     limit = "20",
     search = "",
   } = req.query as { page: string; limit: string; search: string };
-  const pageNumber = parseInt(page, 10);
-  const limitNumber = parseInt(limit, 10);
+  const currentPage = parseInt(page, 10);
+  const tasksPerPage = parseInt(limit, 10);
 
   if (!description || !state || !user_id) {
     return res
@@ -110,8 +123,8 @@ export const createTask = async (req: Request, res: Response) => {
 
     const { list } = await getUpdatedTaskList({
       search,
-      page: pageNumber,
-      limit: limitNumber,
+      currentPage,
+      tasksPerPage,
     });
 
     broadcast({ type: "UPDATE_TASK_LIST", list });
@@ -137,8 +150,8 @@ export const updateTask = async (req: Request, res: Response) => {
     limit = "20",
     search = "",
   } = req.query as { page: string; limit: string; search: string };
-  const pageNumber = parseInt(page, 10);
-  const limitNumber = parseInt(limit, 10);
+  const currentPage = parseInt(page, 10);
+  const tasksPerPage = parseInt(limit, 10);
 
   if (isNaN(id)) {
     return res.status(400).json({ error: "Invalid task id" });
@@ -167,8 +180,8 @@ export const updateTask = async (req: Request, res: Response) => {
 
     const { list } = await getUpdatedTaskList({
       search,
-      page: pageNumber,
-      limit: limitNumber,
+      currentPage,
+      tasksPerPage,
     });
 
     broadcast({ type: "UPDATE_TASK_LIST", list });
@@ -195,8 +208,8 @@ export const deleteTask = async (req: Request, res: Response) => {
     limit = "20",
     search = "",
   } = req.query as { page: string; limit: string; search: string };
-  const pageNumber = parseInt(page, 10);
-  const limitNumber = parseInt(limit, 10);
+  const currentPage = parseInt(page, 10);
+  const tasksPerPage = parseInt(limit, 10);
 
   if (isNaN(taskId)) {
     return res.status(400).json({ error: "Invalid task id" });
@@ -214,8 +227,8 @@ export const deleteTask = async (req: Request, res: Response) => {
 
     const { list } = await getUpdatedTaskList({
       search,
-      page: pageNumber,
-      limit: limitNumber,
+      currentPage,
+      tasksPerPage,
     });
 
     broadcast({ type: "UPDATE_TASK_LIST", list });

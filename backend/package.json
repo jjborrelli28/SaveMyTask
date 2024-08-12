@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev src/server.ts",
-    "migrations": "ts-node src/database/migrations/run-migrations.ts"
+    "migrations": "ts-node src/database/migrations/run-migrations.ts",
+    "create-multiple-tasks": "ts-node src/database/seeders/create-multiple-tasks.ts",
+    "delete-all-tasks": "ts-node src/database/seeders/delete-all-tasks.ts"
   },
   "keywords": [],
   "author": "",
