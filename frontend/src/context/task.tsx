@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
-import { getTaskList as getTaskListService } from '../services';
-import { Task, TaskContextProps } from '../types';
+import { getTaskList as getTaskListService } from '../services/tasks';
+import { Task, TaskContextProps, TaskStateContext } from '../types';
 
 export const initialTaskState = {
   isLoading: false,
@@ -11,7 +11,7 @@ export const initialTaskState = {
   tasksPerPage: 20,
   hasNextPage: false,
   isLoadingNextPage: false
-};
+} as TaskStateContext;
 
 const TaskContext = createContext<TaskContextProps>({
   task: initialTaskState,

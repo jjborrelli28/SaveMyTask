@@ -1,4 +1,9 @@
-import { Dispatch, RefObject, SetStateAction } from 'react';
+import {
+  Dispatch,
+  HTMLInputTypeAttribute,
+  RefObject,
+  SetStateAction
+} from 'react';
 
 export type Task = {
   id: number;
@@ -11,7 +16,7 @@ export type Task = {
 
 export type TaskStates = 'To do' | 'In progress' | 'Done';
 
-type TaskContext = {
+export type TaskStateContext = {
   isLoading: boolean;
   search: string;
   list: Task[];
@@ -23,8 +28,8 @@ type TaskContext = {
 };
 
 export type TaskContextProps = {
-  task: TaskContext;
-  setTask: Dispatch<SetStateAction<TaskContext>>;
+  task: TaskStateContext;
+  setTask: Dispatch<SetStateAction<TaskStateContext>>;
 };
 
 export type WebSocketMessage = {
@@ -64,4 +69,28 @@ export type TaskCardAccordion = { data: Task; state: TaskCardAccordionStates };
 export type UseIntersectionObserver = (options?: IntersectionObserverInit) => {
   ref: RefObject<HTMLLIElement>;
   isVisible: boolean;
+};
+
+export type NewUserStateContext = {
+  username: string | undefined;
+  password: string | undefined;
+  name: string | undefined;
+};
+
+export type NewUserContextProps = {
+  newUser: NewUserStateContext;
+  setNewUser: Dispatch<SetStateAction<NewUserStateContext>>;
+};
+
+export type NewUserField = {
+  label: string;
+  type: string;
+  validate: (value: string) => boolean;
+  validationRequirements: string[];
+};
+
+export type NewUser = {
+  username: string;
+  password: string;
+  name: string;
 };

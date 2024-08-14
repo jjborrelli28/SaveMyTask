@@ -1,6 +1,6 @@
 import { FormEvent, useCallback, useContext, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { createTask } from '../../../services';
+import { createTask } from '../../../services/tasks';
 import TaskContext from '../../../context/task';
 
 const user_id = 1; // TODO: Modify when we have authentication and user accounts
@@ -14,6 +14,7 @@ const TaskCreatorForm = () => {
   const handleCreateTask = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
+
       createTask({
         body: { description: value, user_id },
         queries: { search, currentPage, tasksPerPage }

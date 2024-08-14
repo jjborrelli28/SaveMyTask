@@ -11,7 +11,7 @@ import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdCircle } from 'react-icons/md';
 import TaskContext from '../../../../context/task';
-import { deleteTask, updateTask } from '../../../../services';
+import { deleteTask, updateTask } from '../../../../services/tasks';
 import { Task, TaskCardAccordionStates, TaskStates } from '../../../../types';
 import Accordion from './components/accordion';
 import moment from 'moment';
@@ -107,6 +107,7 @@ const TaskCard = React.memo(
         e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
       ) => {
         e.preventDefault();
+
         deleteTask({
           id,
           queries: { search, currentPage, tasksPerPage }

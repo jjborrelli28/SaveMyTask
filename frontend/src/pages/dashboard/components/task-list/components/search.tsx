@@ -2,7 +2,7 @@ import debounce from 'lodash/debounce';
 import { ChangeEvent, useCallback, useContext, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import TaskContext from '../../../../../context/task';
-import { getTaskList as getTaskListService } from '../../../../../services';
+import { getTaskList as getTaskListService } from '../../../../../services/tasks';
 
 const Search = () => {
   const [value, setValue] = useState('');
@@ -34,7 +34,7 @@ const Search = () => {
     []
   );
 
-  const handleSearchOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setValue(newValue);
     getTaskListFiltered(newValue);
@@ -45,7 +45,7 @@ const Search = () => {
       <input
         type="text"
         value={value}
-        onChange={handleSearchOnChange}
+        onChange={handleChange}
         placeholder="Search for a task"
         className="w-[calc(100%_-_20px)] bg-transparent pr-1 text-xl placeholder:text-dark-gray focus:outline-none"
       />

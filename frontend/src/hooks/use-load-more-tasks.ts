@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import TaskContext from '../context/task';
-import { getTaskList } from '../services';
+import { getTaskList } from '../services/tasks';
 
 const useLoadMoreTasks = () => {
   const { task, setTask } = useContext(TaskContext);

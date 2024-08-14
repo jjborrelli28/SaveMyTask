@@ -43,6 +43,9 @@ export default {
         orange: '#f57c00',
         red: '#c62828'
       },
+      minHeight: { 'screen-with-navbar': 'calc(100vh - 72px)' },
+      height: { 'screen-with-navbar': 'calc(100vh - 72px)' },
+      maxHeight: { 'screen-with-navbar': 'calc(100vh - 72px)' },
       spacing: {
         1: '0.25rem',
         2: '0.5rem',
