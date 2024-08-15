@@ -75,7 +75,8 @@ export type NewUserStateContext = {
   username: string | undefined;
   password: string | undefined;
   name: string | undefined;
-  formState: 'Is sending' | 'Successful' | 'Error' | 'Awaiting submit';
+  formState: 'Idle' | 'IsSending' | 'Successful' | 'Error';
+  messageToShow: string | undefined;
 };
 
 export type NewUserContextProps = {

@@ -1,17 +1,23 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import Confetti from 'react-confetti';
+import NewUserContext from '../../context/new-user';
+import CreateUserForm from './components/sing-up/components/create-user-form';
 
 const Homepage = () => {
-  const navigate = useNavigate();
+  const { newUser } = useContext(NewUserContext);
 
-  useEffect(() => {
-    navigate('/dashboard');
-  }, [navigate]);
+  const { formState } = newUser;
 
   return (
-    <div className="flex flex-col gap-8 pt-16">
-      <h1 className="text-4xl font-bold">Homepage</h1>
-    </div>
+    <>
+      <div className="relative flex min-h-screen-with-navbar flex-col items-center justify-center gap-8 py-8 lg:gap-16 lg:pb-20 lg:pt-16">
+        <div className="flex w-96 flex-col gap-12 border-2 border-gray p-10 shadow-lg">
+          <h2 className="text-3xl font-bold">Sign up</h2>
+          <CreateUserForm />
+        </div>
+      </div>
+      {formState === 'Successful' && <Confetti />}
+    </>
   );
 };
 

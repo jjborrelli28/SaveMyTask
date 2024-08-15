@@ -1,4 +1,4 @@
-import { NewUserField } from '../../../types';
+import { NewUserField } from '../../../../types';
 
 export const fields = [
   {

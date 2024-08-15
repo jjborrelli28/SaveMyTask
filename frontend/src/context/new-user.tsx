@@ -5,7 +5,8 @@ export const initialNewUserState = {
   username: undefined,
   password: undefined,
   name: undefined,
-  formState: 'Awaiting submit'
+  formState: 'Idle',
+  messageToShow: undefined
 } as NewUserStateContext;
 
 const NewUserContext = createContext<NewUserContextProps>({

@@ -1,28 +1,24 @@
 import clsx from 'clsx';
-import React, {
-  ChangeEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useState
-} from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import NewUserContext from '../../../context/new-user';
-import { NewUserField } from '../../../types';
+import NewUserContext from '../../../../../context/new-user';
+import { NewUserField } from '../../../../../types';
+
+const initialInputState = {
+  value: '',
+  isOnFocus: false,
+  isValid: undefined as boolean | undefined,
+  showPassword: false
+};
 
 const Field = React.memo(({ content }: { content: NewUserField }) => {
-  const [input, setInput] = useState({
-    value: '',
-    isOnFocus: false,
-    isValid: undefined as boolean | undefined,
-    showPassword: false
-  });
+  const [input, setInput] = useState(initialInputState);
   const { newUser, setNewUser } = useContext(NewUserContext);
 
   const { value, isOnFocus, isValid, showPassword } = input;
   const { label, type, validate, validationRequirements } = content;
   const { formState } = newUser;
-
+  console.log({ value, isValid });
   useEffect(() => {
     if (isValid) {
       setNewUser(prevState => ({ ...prevState, [label.toLowerCase()]: value }));
@@ -37,49 +33,37 @@ const Field = React.memo(({ content }: { content: NewUserField }) => {
   useEffect(() => {
     if (formState === 'Successful') {
       setTimeout(() => {
-        setInput(prevState => ({
-          ...prevState,
-          value: '',
-          isValid: undefined
-        }));
+        setInput(initialInputState);
       }, 5000);
     }
   }, [formState]);
 
-  const validateWhileTyping = () => {
-    const isValid = validate(value);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const currentValue = e.target.value;
+    const isValid = validate(currentValue);
+
     setInput(prevState => ({
       ...prevState,
+      value: e.target.value,
       isValid
     }));
   };
 
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setInput(prevState => ({
-        ...prevState,
-        value: e.target.value
-      }));
-      validateWhileTyping();
-    },
-    [validateWhileTyping]
-  );
-
-  const handleFocus = useCallback(() => {
+  const handleFocus = () => {
     setInput(prevState => ({
       ...prevState,
       isOnFocus: true
     }));
-  }, []);
+  };
 
-  const handleBlur = useCallback(() => {
+  const handleBlur = () => {
     if (value === '')
       return setInput(prevState => ({
         ...prevState,
         isOnFocus: false,
         isValid: undefined
       }));
-  }, [value]);
+  };
 
   return (
     <fieldset className="relative flex flex-col">
@@ -117,7 +101,7 @@ const Field = React.memo(({ content }: { content: NewUserField }) => {
                   ? 'border-green'
                   : 'border-red'
           )}
-        />{' '}
+        />
         {type === 'password' && (
           <button
             type="button"
