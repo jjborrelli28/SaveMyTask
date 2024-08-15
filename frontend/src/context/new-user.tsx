@@ -4,7 +4,8 @@ import { NewUserContextProps, NewUserStateContext } from '../types/index';
 export const initialNewUserState = {
   username: undefined,
   password: undefined,
-  name: undefined
+  name: undefined,
+  formState: 'Awaiting submit'
 } as NewUserStateContext;
 
 const NewUserContext = createContext<NewUserContextProps>({

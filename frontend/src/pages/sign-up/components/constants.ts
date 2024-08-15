@@ -34,7 +34,7 @@ export const fields = [
       return nameRegex.test(value);
     },
     validationRequirements: [
-      'Must be between 1 and 50 characters.',
+      'Must be between 2 and 40 characters.',
       'It can only contain letters and spaces.'
     ]
   }

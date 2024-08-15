@@ -75,6 +75,7 @@ export type NewUserStateContext = {
   username: string | undefined;
   password: string | undefined;
   name: string | undefined;
+  formState: 'Is sending' | 'Successful' | 'Error' | 'Awaiting submit';
 };
 
 export type NewUserContextProps = {

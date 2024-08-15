@@ -1,21 +1,27 @@
 import clsx from 'clsx';
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import NewUserContext from '../../../context/new-user';
 import { NewUserField } from '../../../types';
 
-const Field = ({ content }: { content: NewUserField }) => {
+const Field = React.memo(({ content }: { content: NewUserField }) => {
   const [input, setInput] = useState({
     value: '',
     isOnFocus: false,
     isValid: undefined as boolean | undefined,
     showPassword: false
   });
-  const { setNewUser } = useContext(NewUserContext);
+  const { newUser, setNewUser } = useContext(NewUserContext);
 
   const { value, isOnFocus, isValid, showPassword } = input;
-
   const { label, type, validate, validationRequirements } = content;
+  const { formState } = newUser;
 
   useEffect(() => {
     if (isValid) {
@@ -26,7 +32,19 @@ const Field = ({ content }: { content: NewUserField }) => {
         [label.toLowerCase()]: undefined
       }));
     }
-  }, [isValid]);
+  }, [value]);
+
+  useEffect(() => {
+    if (formState === 'Successful') {
+      setTimeout(() => {
+        setInput(prevState => ({
+          ...prevState,
+          value: '',
+          isValid: undefined
+        }));
+      }, 5000);
+    }
+  }, [formState]);
 
   const validateWhileTyping = () => {
     const isValid = validate(value);
@@ -36,33 +54,35 @@ const Field = ({ content }: { content: NewUserField }) => {
     }));
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(prevState => ({
-      ...prevState,
-      value: e.target.value
-    }));
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setInput(prevState => ({
+        ...prevState,
+        value: e.target.value
+      }));
+      validateWhileTyping();
+    },
+    [validateWhileTyping]
+  );
 
-    validateWhileTyping();
-  };
-
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     setInput(prevState => ({
       ...prevState,
       isOnFocus: true
     }));
-  };
+  }, []);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     if (value === '')
       return setInput(prevState => ({
         ...prevState,
         isOnFocus: false,
         isValid: undefined
       }));
-  };
+  }, [value]);
 
   return (
-    <div className="relative flex flex-col">
+    <fieldset className="relative flex flex-col">
       <label
         className={clsx(
           'absolute left-0 transform font-semibold transition-all duration-200 ease-in-out',
@@ -97,10 +117,11 @@ const Field = ({ content }: { content: NewUserField }) => {
                   ? 'border-green'
                   : 'border-red'
           )}
-        />
+        />{' '}
         {type === 'password' && (
           <button
             type="button"
+            tabIndex={-1}
             onClick={() =>
               setInput(prevState => ({
                 ...prevState,
@@ -109,7 +130,7 @@ const Field = ({ content }: { content: NewUserField }) => {
             }
             className="z-10 cursor-pointer"
           >
-            {input.showPassword ? (
+            {showPassword ? (
               <FaEye
                 size={20}
                 className={clsx(
@@ -146,36 +167,40 @@ const Field = ({ content }: { content: NewUserField }) => {
         isValid={isValid}
         validationRequirements={validationRequirements}
       />
-    </div>
+    </fieldset>
   );
-};
+});
 
 export default Field;
 
-const ErrorMessage = ({
-  label,
-  isValid,
-  validationRequirements
-}: {
-  label: string;
-  isValid: boolean | undefined;
-  validationRequirements: string[];
-}) => (
-  <div
-    className={clsx(
-      'grid-rows-auto grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity]',
-      isValid === false && 'grid-rows-[1fr] opacity-100'
-    )}
-  >
-    <div className="flex flex-col gap-2 overflow-hidden">
-      <p className="text-end text-xs text-red">Invalid {label.toLowerCase()}</p>
-      <ul className="flex list-inside list-disc flex-col gap-1 bg-gray p-2 text-xs">
-        {validationRequirements.map((validationRequirement, i) => (
-          <li key={i}>
-            <span className="-m-2">{validationRequirement}</span>
-          </li>
-        ))}
-      </ul>
+const ErrorMessage = React.memo(
+  ({
+    label,
+    isValid,
+    validationRequirements
+  }: {
+    label: string;
+    isValid: boolean | undefined;
+    validationRequirements: string[];
+  }) => (
+    <div
+      className={clsx(
+        'grid-rows-auto grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity]',
+        isValid === false && 'grid-rows-[1fr] opacity-100'
+      )}
+    >
+      <div className="flex flex-col gap-2 overflow-hidden">
+        <p className="text-end text-xs text-red">
+          Invalid {label.toLowerCase()}
+        </p>
+        <ul className="flex list-inside list-disc flex-col gap-1 bg-gray p-2 text-xs">
+          {validationRequirements.map((validationRequirement, i) => (
+            <li key={i}>
+              <span className="-m-2">{validationRequirement}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
+  )
 );
