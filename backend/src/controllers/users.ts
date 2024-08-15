@@ -8,10 +8,20 @@ export const createUser = async (req: Request, res: Response) => {
   if (!username || !password || !name) {
     return res
       .status(400)
-      .json({ error: "Username, password, and name are required" });
+      .json({ message: "Username, password, and name are required" });
   }
 
   try {
+    const existingUser = await db
+      .selectFrom("user")
+      .selectAll()
+      .where("username", "=", username)
+      .executeTakeFirst();
+
+    if (existingUser) {
+      return res.status(409).json({ message: "Username already exists" });
+    }
+
     const result = await db
       .insertInto("user")
       .values({
@@ -21,16 +31,8 @@ export const createUser = async (req: Request, res: Response) => {
       })
       .executeTakeFirstOrThrow();
 
-    const newUser = await db
-      .selectFrom("user")
-      .selectAll()
-      .where("id", "=", Number(result.insertId))
-      .executeTakeFirstOrThrow();
-
-    res.status(201).json(newUser);
+    res.status(201).json({ message: "User successfully created!" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Failed to create task", description: error });
+    res.status(500).json({ message: "Failed to create user", error });
   }
 };
