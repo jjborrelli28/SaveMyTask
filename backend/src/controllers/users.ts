@@ -22,15 +22,6 @@ export const createUser = async (req: Request, res: Response) => {
       return res.status(409).json({ message: "Username already exists" });
     }
 
-    const result = await db
-      .insertInto("user")
-      .values({
-        username,
-        password,
-        name,
-      })
-      .executeTakeFirstOrThrow();
-
     res.status(201).json({ message: "User successfully created!" });
   } catch (error) {
     res.status(500).json({ message: "Failed to create user", error });
