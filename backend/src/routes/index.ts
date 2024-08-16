@@ -2,22 +2,20 @@ import express from "express";
 import {
   createTask,
   deleteTask,
-  getTaskById,
-  getTaskList,
+  getTasks,
   updateTask,
-} from "../controllers/tasks";
-import { createUser } from "../controllers/users";
+} from "../controllers/task";
+import { createUser } from "../controllers/user";
 
 const router = express.Router();
 
-// Tasks routes
-router.get("/tasks", getTaskList);
-router.get("/tasks/:id", getTaskById);
-router.post("/tasks", createTask);
-router.patch("/tasks/:id", updateTask);
-router.delete("/tasks/:id", deleteTask);
+// User routes
+router.post("/user", createUser);
 
-// Users routes
-router.post("/users", createUser);
+// Task routes
+router.get("/task", getTasks);
+router.post("/task", createTask);
+router.patch("/task/:id", updateTask);
+router.delete("/task/:id", deleteTask);
 
 export default router;

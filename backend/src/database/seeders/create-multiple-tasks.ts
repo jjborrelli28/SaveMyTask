@@ -1,35 +1,40 @@
 import { TaskTable } from "../../types";
-import db from "../db";
+import db from "../database";
 
-async function createMultipleTasks(count: number) {
-  const tasks = Array(count)
+const createMultipleTasks = async (count: number) => {
+  const numberOfTasks = Array(count)
     .fill(null)
     .map((_, n) => ({
-      description: `Task ${n + 1}`,
+      title: `Task ${n + 1}`,
       state: "To do" as TaskTable["state"],
       user_id: 1,
     }));
 
-  await db.insertInto("task").values(tasks).execute();
-}
+  return await db.insertInto("task").values(numberOfTasks).execute();
+};
+
+const createTasksAndExit = async (count: number) => {
+  try {
+    await createMultipleTasks(count);
+    console.log(`${count} tasks created successfully.`);
+  } catch (error) {
+    console.error("Error creating tasks:", error);
+  } finally {
+    try {
+      await db.destroy();
+      process.exit(0);
+    } catch (destroyError) {
+      console.error("Error destroying database connection:", destroyError);
+      process.exit(1);
+    }
+  }
+};
 
 const count = parseInt(process.argv[2], 10);
 
 if (!isNaN(count) && count > 0) {
-  createMultipleTasks(count)
-    .then(async () => {
-      if (process.env.NODE_ENV === "development")
-        console.log(`${count} tasks created successfully.`);
-      await db.destroy();
-      process.exit(0);
-    })
-    .catch(async (error) => {
-      console.error(error);
-      await db.destroy();
-      process.exit(1);
-    });
+  createTasksAndExit(count);
 } else {
-  if (process.env.NODE_ENV === "development")
-    console.error("Please provide a valid number of tasks to create.");
+  console.error("Please provide a valid number of tasks to create.");
   process.exit(1);
 }

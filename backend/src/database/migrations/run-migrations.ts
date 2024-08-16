@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import { FileMigrationProvider, Migrator } from "kysely";
 import * as path from "path";
-import db from "../db";
+import db from "../database";
 
 async function migrateToLatest() {
   const migrator = new Migrator({
@@ -13,11 +13,11 @@ async function migrateToLatest() {
     }),
   });
 
-  const { error, results } = await migrator.migrateToLatest();
+  const { results, error } = await migrator.migrateToLatest();
 
   results?.forEach((it) => {
     if (it.status === "Success") {
-      console.log(`migration "${it.migrationName}" Was executed successfully`);
+      console.log(`Migration "${it.migrationName}" was executed successfully`);
     } else if (it.status === "Error") {
       console.error(`Failed to execute migration "${it.migrationName}"`);
     }

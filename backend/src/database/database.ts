@@ -1,8 +1,8 @@
 import { Kysely } from "kysely";
-import { TodoAppDB } from "../types";
+import { SaveMyTaskDatabase } from "../types";
 import kyselyInstance from "./kysely-instance";
 
-const db = new Kysely<TodoAppDB>({
+const db = new Kysely<SaveMyTaskDatabase>({
   dialect: kyselyInstance,
 });
 

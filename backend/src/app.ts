@@ -9,14 +9,12 @@ const app = express();
 app.use(
   cors({
     origin: process.env.FRONTEND_HOST,
-    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+    methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 if (process.env.NODE_ENV === "development")
   app.use((req, res, next) => delay(req, res, next, 500));
-
-
 
 app.use(express.json());
 app.use("/api", router);
