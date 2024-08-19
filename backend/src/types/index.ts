@@ -42,3 +42,24 @@ export type QueryParams = {
   page?: string;
   limit?: string;
 };
+
+export type TableNames = "user" | "task";
+
+export type UserKeys = keyof User;
+
+export type TaskKeys = keyof Task;
+
+export type CreateUserData = {
+  username: string;
+  password: string;
+  email: string;
+  full_name: string;
+};
+
+export type CreateTaskData = {
+  title: string;
+  state: "To do";
+  user_id: number;
+};
+
+export type TaskStates = Task["state"];

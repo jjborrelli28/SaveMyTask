@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import { FileMigrationProvider, Migrator } from "kysely";
 import * as path from "path";
+import { showByConsole } from "../../helpers/show-by-console";
 import db from "../database";
 
 async function migrateToLatest() {
@@ -17,9 +18,11 @@ async function migrateToLatest() {
 
   results?.forEach((it) => {
     if (it.status === "Success") {
-      console.log(`Migration "${it.migrationName}" was executed successfully`);
+      showByConsole(
+        `Migration "${it.migrationName}" was executed successfully`
+      );
     } else if (it.status === "Error") {
-      console.error(`Failed to execute migration "${it.migrationName}"`);
+      showByConsole(`Failed to execute migration "${it.migrationName}"`);
     }
   });
 

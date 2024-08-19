@@ -1,3 +1,4 @@
+import { showByConsole } from "../../helpers/show-by-console";
 import { TaskTable } from "../../types";
 import db from "../database";
 
@@ -16,15 +17,15 @@ const createMultipleTasks = async (count: number) => {
 const createTasksAndExit = async (count: number) => {
   try {
     await createMultipleTasks(count);
-    console.log(`${count} tasks created successfully.`);
+    showByConsole(`${count} tasks created successfully.`);
   } catch (error) {
-    console.error("Error creating tasks:", error);
+    showByConsole(`Error creating tasks: ${error}`);
   } finally {
     try {
       await db.destroy();
       process.exit(0);
     } catch (destroyError) {
-      console.error("Error destroying database connection:", destroyError);
+      showByConsole(`Error destroying database connection: ${destroyError}`);
       process.exit(1);
     }
   }

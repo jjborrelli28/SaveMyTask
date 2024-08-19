@@ -27,7 +27,6 @@ export const queryParamsSchema = z.object({
 
 export const createTaskSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
-  state: z.enum(["To do", "In progress", "Done"]),
   user_id: z
     .number()
     .int()

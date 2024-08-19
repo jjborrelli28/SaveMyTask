@@ -1,53 +1,45 @@
 import { Request, Response } from "express";
-import db from "../database/database";
-import userSchema from "../validations/user";
+import { getItem, insertItem } from "../helpers/database";
 import hashPassword from "../helpers/hash-password";
+import { createUserSchema } from "../validations/user";
 
 export const createUser = async (req: Request, res: Response) => {
-  const bodyValidation = userSchema.safeParse(req.body);
+  const createUserValidation = createUserSchema.safeParse(req.body);
 
-  if (!bodyValidation.success) {
+  if (!createUserValidation.success) {
     return res.status(400).json({
-      message: "Field validation failed",
-      error: bodyValidation.error.issues.map((issue) => issue.message),
+      message: `${createUserValidation.error.issues.map((issue) => issue.message)}`,
     });
   }
 
-  const { username, password, email, full_name } = bodyValidation.data;
+  const { username, password, email, full_name } = createUserValidation.data;
 
   try {
     const hashedPassword = await hashPassword(password);
 
-    const existingUser = await db
-      .selectFrom("user")
-      .selectAll()
-      .where("username", "=", username)
-      .executeTakeFirst();
+    const existingUser = await getItem("user", "username", username);
 
     if (existingUser)
       res.status(409).json({ message: "Username already exists" });
 
-    const result = await db
-      .insertInto("user")
-      .values({
-        username,
-        password: hashedPassword,
-        email,
-        full_name,
-      })
-      .executeTakeFirstOrThrow();
+    const existingEmail = await getItem("user", "email", email);
 
-    const newUser = await db
-      .selectFrom("user")
-      .selectAll()
-      .where("id", "=", Number(result.insertId))
-      .executeTakeFirstOrThrow();
+    if (existingEmail)
+      res.status(409).json({ message: "Email already registered" });
+
+    const result = await insertItem("user", {
+      username,
+      password: hashedPassword,
+      email,
+      full_name,
+    });
+
+    const newUser = await getItem("user", "id", Number(result.insertId));
 
     res.status(201).json({ message: "User created successfully!", newUser });
   } catch (error) {
     res.status(500).json({
       message: "Failed to create user",
-      error: error instanceof Error ? error.message : "Unknown error occurred",
     });
   }
 };
