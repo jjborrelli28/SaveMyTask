@@ -1,12 +1,12 @@
 import { MdDashboard } from 'react-icons/md';
-import { TaskContextProvider } from '../../context/task';
+import { TaskQueriesContextProvider } from '@context/task-queries';
 import TaskCreatorForm from './components/task-creator-form';
 import TaskLisk from './components/task-list';
 
 const Dashboard = () => {
   return (
-    <TaskContextProvider>
-      <div className="min-h-screen-with-navbar flex flex-col gap-8 py-8 lg:gap-16 lg:pb-20 lg:pt-16">
+    <TaskQueriesContextProvider>
+      <div className="flex min-h-screen-with-navbar flex-col gap-8 py-8 lg:gap-16 lg:pb-20 lg:pt-16">
         <h1 className="flex items-center gap-2 text-4xl font-bold">
           <MdDashboard />
           Dashboard
@@ -16,7 +16,7 @@ const Dashboard = () => {
           <TaskCreatorForm />
         </div>
       </div>
-    </TaskContextProvider>
+    </TaskQueriesContextProvider>
   );
 };
 

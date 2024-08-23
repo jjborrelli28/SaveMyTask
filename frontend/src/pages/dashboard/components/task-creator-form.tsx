@@ -1,33 +1,31 @@
-import { FormEvent, useCallback, useContext, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { FormEvent, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { createTask } from '../../../services/tasks';
-import TaskContext from '../../../context/task';
+import { createTask } from '@services/task';
 
 const user_id = 1; // TODO: Modify when we have authentication and user accounts
 
 const TaskCreatorForm = () => {
   const [value, setValue] = useState('');
-  const { task } = useContext(TaskContext);
+  const queryClient = useQueryClient();
+  const mutationCreateTask = useMutation({
+    mutationFn: createTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    }
+  });
 
-  const { search, currentPage, tasksPerPage } = task;
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
 
-  const handleCreateTask = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault();
-
-      createTask({
-        body: { description: value, user_id },
-        queries: { search, currentPage, tasksPerPage }
-      });
-      setValue('');
-    },
-    [value]
-  );
+    mutationCreateTask.mutate({ title: value, user_id });
+    setValue('');
+  };
 
   return (
     <div className="order-0 relative flex flex-col pb-10 lg:order-1 lg:px-10 lg:pt-10">
       <form
-        onSubmit={handleCreateTask}
+        onSubmit={handleSubmit}
         className="top-1/2 flex flex-col gap-5 py-6 transition-transform duration-300 ease-in-out lg:sticky lg:-translate-y-1/2"
       >
         <input
@@ -39,7 +37,7 @@ const TaskCreatorForm = () => {
         />
         <button
           type="submit"
-          onClick={handleCreateTask}
+          onClick={handleSubmit}
           className="flex items-center justify-center gap-2 bg-lilac py-3 text-xl font-bold text-white transition-colors hover:bg-light-lilac"
         >
           <FaPlus />

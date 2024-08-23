@@ -1,8 +1,9 @@
-import { NewUserField } from '../../../../types';
+import { NewUserField } from '@types';
 
-export const fields = [
+export const fields: NewUserField[] = [
   {
     label: 'Username',
+    id: 'username',
     type: 'text',
     validate: (value: string) => {
       const usernameRegex = /^[a-zA-Z0-9._]{3,15}$/;
@@ -15,6 +16,7 @@ export const fields = [
   },
   {
     label: 'Password',
+    id: 'password',
     type: 'password',
     validate: (value: string) => {
       const passwordRegex =
@@ -27,7 +29,18 @@ export const fields = [
     ]
   },
   {
-    label: 'Name',
+    label: 'Email',
+    id: 'email',
+    type: 'email',
+    validate: (value: string) => {
+      const passwordRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return passwordRegex.test(value);
+    },
+    validationRequirements: ['Must be valid email.']
+  },
+  {
+    label: 'Full Name',
+    id: 'fullName',
     type: 'text',
     validate: (value: string) => {
       const nameRegex = /^[a-zA-Z\s]{2,40}$/;
@@ -38,4 +51,4 @@ export const fields = [
       'It can only contain letters and spaces.'
     ]
   }
-] as NewUserField[];
+];

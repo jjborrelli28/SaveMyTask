@@ -11,6 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.52.0",
+    "axios": "^1.7.4",
     "clsx": "^2.1.1",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",

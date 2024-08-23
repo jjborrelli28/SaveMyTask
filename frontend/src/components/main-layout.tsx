@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import Footer from './footer';
 import Header from './header';
-import { NewUserContextProvider } from '../context/new-user';
+import { NewUserContextProvider } from '@context/new-user';
 
 const MainLayout = ({ children }: { children: ReactNode }) => (
   <NewUserContextProvider>

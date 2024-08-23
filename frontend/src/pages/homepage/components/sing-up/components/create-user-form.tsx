@@ -1,71 +1,75 @@
+import Field from '@components/field';
+import NewUserContext, { initialNewUserState } from '@context/new-user';
+import { createUser } from '@services/user';
+import { NewUser } from '@types';
 import clsx from 'clsx';
-import { FormEvent, useCallback, useContext } from 'react';
+import { FormEvent, useContext } from 'react';
 import { MdOutlineCheck, MdOutlineErrorOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import NewUserContext, {
-  initialNewUserState
-} from '../../../../../context/new-user';
-import { createUser } from '../../../../../services/users';
-import { NewUser } from '../../../../../types';
 import { fields } from '../constants';
-import Field from './field';
 
 const CreateUserForm = () => {
   const { newUser, setNewUser } = useContext(NewUserContext);
   const navigate = useNavigate();
 
-  const { username, password, name, formState, messageToShow } = newUser;
-  const isSendable = formState === 'Idle' && !!username && !!password && !!name;
+  const { username, password, email, fullName, formState, messageToShow } =
+    newUser;
+  const isSendable =
+    formState === 'Idle' && !!username && !!password && !!email && !!fullName;
+  console.log(newUser);
+  const handleCreateUser = async (
+    e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
 
-  const handleCreateUser = useCallback(
-    async (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>) => {
-      e.preventDefault();
+    if (username && password && email && fullName) {
+      setNewUser(prevState => ({ ...prevState, formState: 'IsSending' }));
 
-      if (username && password && name) {
-        setNewUser(prevState => ({ ...prevState, formState: 'IsSending' }));
+      const newUser: NewUser = {
+        username,
+        password,
+        email,
+        full_name: fullName
+      };
 
-        const body = { username, password, name } as NewUser;
+      try {
+        const res = await createUser(newUser);
+        console.log(res);
+        setNewUser(prevState => ({
+          ...prevState,
+          formState: 'Successful',
+          messageToShow: res.message
+        }));
 
-        try {
-          const res = await createUser(body);
-
+        setTimeout(() => {
+          navigate('/dashboard');
+          setNewUser(initialNewUserState);
+        }, 5000);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
           setNewUser(prevState => ({
             ...prevState,
-            formState: 'Successful',
-            messageToShow: res.message
+            formState: 'Error',
+            messageToShow: error.message
           }));
-
-          setTimeout(() => {
-            navigate('/dashboard');
-            setNewUser(initialNewUserState);
-          }, 5000);
-        } catch (error: unknown) {
-          if (error instanceof Error) {
-            setNewUser(prevState => ({
-              ...prevState,
-              formState: 'Error',
-              messageToShow: error.message
-            }));
-          } else {
-            setNewUser(prevState => ({
-              ...prevState,
-              formState: 'Error',
-              messageToShow: 'An unexpected error occurred'
-            }));
-          }
-
-          setTimeout(() => {
-            setNewUser(prevState => ({
-              ...prevState,
-              formState: 'Idle',
-              messageToShow: undefined
-            }));
-          }, 5000);
+        } else {
+          setNewUser(prevState => ({
+            ...prevState,
+            formState: 'Error',
+            messageToShow: 'An unexpected error occurred'
+          }));
         }
+
+        setTimeout(() => {
+          setNewUser(prevState => ({
+            ...prevState,
+            formState: 'Idle',
+            messageToShow: undefined
+          }));
+        }, 5000);
       }
-    },
-    [username, password, name]
-  );
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3">

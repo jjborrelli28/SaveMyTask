@@ -1,10 +1,11 @@
 import { createContext, ReactNode, useState } from 'react';
-import { NewUserContextProps, NewUserStateContext } from '../types/index';
+import { NewUserContextProps, NewUserStateContext } from '@types';
 
 export const initialNewUserState = {
   username: undefined,
   password: undefined,
-  name: undefined,
+  email: undefined,
+  fullName: undefined,
   formState: 'Idle',
   messageToShow: undefined
 } as NewUserStateContext;

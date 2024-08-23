@@ -1,6 +1,6 @@
+import NewUserContext from '@context/new-user';
 import { useContext } from 'react';
 import Confetti from 'react-confetti';
-import NewUserContext from '../../context/new-user';
 import CreateUserForm from './components/sing-up/components/create-user-form';
 
 const Homepage = () => {

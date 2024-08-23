@@ -1,55 +1,42 @@
 import debounce from 'lodash/debounce';
 import { ChangeEvent, useCallback, useContext, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import TaskContext from '../../../../../context/task';
-import { getTaskList as getTaskListService } from '../../../../../services/tasks';
+import { TaskQueriesContext } from '@context/task-queries';
 
 const Search = () => {
-  const [value, setValue] = useState('');
-  const { task, setTask } = useContext(TaskContext);
+  const { taskQueries, setTaskQueries } = useContext(TaskQueriesContext);
+  const [value, setValue] = useState(taskQueries.search);
 
-  const getTaskListFiltered = useCallback(
-    debounce(async (searchValue: string) => {
-      const { currentPage, tasksPerPage } = task;
-      setTask(prevState => ({ ...prevState, isLoading: true }));
-      try {
-        const { list, hasNextPage } = await getTaskListService({
-          search: searchValue,
-          currentPage,
-          tasksPerPage
-        });
-        setTask(prevState => ({
-          ...prevState,
-          search: searchValue,
-          list,
-          hasNextPage
-        }));
-      } catch (error) {
-        if (import.meta.env.VITE_ENV === 'development')
-          console.error('Error getting task list:', error);
-      } finally {
-        setTask(prevState => ({ ...prevState, isLoading: false }));
-      }
+  const debouncedSetTaskQueries = useCallback(
+    debounce((newValue: string) => {
+      setTaskQueries(prevState => ({
+        ...prevState,
+        search: newValue,
+        page: 1
+      }));
     }, 300),
-    []
+    [setTaskQueries]
   );
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setValue(newValue);
-    getTaskListFiltered(newValue);
-  };
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      setValue(newValue);
+      debouncedSetTaskQueries(newValue);
+    },
+    [debouncedSetTaskQueries]
+  );
 
   return (
-    <form className="flex w-1/2 items-center border-b-2 border-lilac px-1">
+    <form className="flex w-full items-center rounded-full border-2 border-b-2 border-lilac px-3 py-1 sm:w-1/2">
       <input
         type="text"
         value={value}
         onChange={handleChange}
         placeholder="Search for a task"
-        className="w-[calc(100%_-_20px)] bg-transparent pr-1 text-xl placeholder:text-dark-gray focus:outline-none"
+        className="w-[calc(100%_-_20px)] bg-transparent pr-3 text-lg placeholder:text-dark-gray focus:outline-none"
       />
-      <FaSearch className="text-lilac" size={20} />
+      <FaSearch className="text-lilac" size={18} />
     </form>
   );
 };

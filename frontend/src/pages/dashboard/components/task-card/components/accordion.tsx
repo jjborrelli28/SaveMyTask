@@ -1,10 +1,9 @@
 import clsx from 'clsx';
 import moment from 'moment';
-import React from 'react';
-import { getStateTask } from '..';
-import { TaskCardAccordion } from '../../../../../types';
+import { getStateTask } from '@helpers/task';
+import { TaskCardAccordion } from '@types';
 
-const Accordion = React.memo(({ data, state }: TaskCardAccordion) => {
+const Accordion = ({ data, state }: TaskCardAccordion) => {
   const {
     state: taskState,
     created_at: createdAtDate,
@@ -51,6 +50,6 @@ const Accordion = React.memo(({ data, state }: TaskCardAccordion) => {
       </div>
     </div>
   );
-});
+};
 
 export default Accordion;

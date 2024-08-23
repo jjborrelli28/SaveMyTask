@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import NewUserContext from '../../../../../context/new-user';
-import { NewUserField } from '../../../../../types';
+import NewUserContext from '@context/new-user';
+import { NewUserField } from '@types';
 
 const initialInputState = {
   value: '',
@@ -11,17 +11,17 @@ const initialInputState = {
   showPassword: false
 };
 
-const Field = React.memo(({ content }: { content: NewUserField }) => {
+const Field = ({ content }: { content: NewUserField }) => {
   const [input, setInput] = useState(initialInputState);
   const { newUser, setNewUser } = useContext(NewUserContext);
 
   const { value, isOnFocus, isValid, showPassword } = input;
-  const { label, type, validate, validationRequirements } = content;
+  const { id, label, type, validate, validationRequirements } = content;
   const { formState } = newUser;
-  console.log({ value, isValid });
+
   useEffect(() => {
     if (isValid) {
-      setNewUser(prevState => ({ ...prevState, [label.toLowerCase()]: value }));
+      setNewUser(prevState => ({ ...prevState, [id]: value }));
     } else {
       setNewUser(prevState => ({
         ...prevState,
@@ -153,38 +153,34 @@ const Field = React.memo(({ content }: { content: NewUserField }) => {
       />
     </fieldset>
   );
-});
+};
 
 export default Field;
 
-const ErrorMessage = React.memo(
-  ({
-    label,
-    isValid,
-    validationRequirements
-  }: {
-    label: string;
-    isValid: boolean | undefined;
-    validationRequirements: string[];
-  }) => (
-    <div
-      className={clsx(
-        'grid-rows-auto grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity]',
-        isValid === false && 'grid-rows-[1fr] opacity-100'
-      )}
-    >
-      <div className="flex flex-col gap-2 overflow-hidden">
-        <p className="text-end text-xs text-red">
-          Invalid {label.toLowerCase()}
-        </p>
-        <ul className="flex list-inside list-disc flex-col gap-1 bg-gray p-2 text-xs">
-          {validationRequirements.map((validationRequirement, i) => (
-            <li key={i}>
-              <span className="-m-2">{validationRequirement}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+const ErrorMessage = ({
+  label,
+  isValid,
+  validationRequirements
+}: {
+  label: string;
+  isValid: boolean | undefined;
+  validationRequirements: string[];
+}) => (
+  <div
+    className={clsx(
+      'grid-rows-auto grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity]',
+      isValid === false && 'grid-rows-[1fr] opacity-100'
+    )}
+  >
+    <div className="flex flex-col gap-2 overflow-hidden">
+      <p className="text-end text-xs text-red">Invalid {label.toLowerCase()}</p>
+      <ul className="flex list-inside list-disc flex-col gap-1 bg-gray p-2 text-xs">
+        {validationRequirements.map((validationRequirement, i) => (
+          <li key={i}>
+            <span className="-m-2">{validationRequirement}</span>
+          </li>
+        ))}
+      </ul>
     </div>
-  )
+  </div>
 );
