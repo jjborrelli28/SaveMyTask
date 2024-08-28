@@ -8,7 +8,7 @@ export const createUser = async (req: Request, res: Response) => {
 
   if (!createUserValidation.success) {
     return res.status(400).json({
-      message: `${createUserValidation.error.issues.map((issue) => issue.message)}`,
+      message: `${createUserValidation.error.issues.map((issue) => issue.message).join(", ")}`,
     });
   }
 
@@ -18,14 +18,14 @@ export const createUser = async (req: Request, res: Response) => {
     const hashedPassword = await hashPassword(password);
 
     const existingUser = await getItem("user", "username", username);
-
-    if (existingUser)
-      res.status(409).json({ message: "Username already exists" });
+    if (existingUser) {
+      return res.status(409).json({ message: "Username already exists" });
+    }
 
     const existingEmail = await getItem("user", "email", email);
-
-    if (existingEmail)
-      res.status(409).json({ message: "Email already registered" });
+    if (existingEmail) {
+      return res.status(409).json({ message: "Email already registered" });
+    }
 
     const result = await insertItem("user", {
       username,
@@ -36,9 +36,11 @@ export const createUser = async (req: Request, res: Response) => {
 
     const newUser = await getItem("user", "id", Number(result.insertId));
 
-    res.status(201).json({ message: "User created successfully!", newUser });
+    return res
+      .status(201)
+      .json({ message: "User created successfully!", newUser });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       message: "Failed to create user",
     });
   }
