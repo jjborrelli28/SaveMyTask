@@ -1,21 +1,29 @@
+import { FieldApi, ValidationError, Validator } from '@tanstack/react-form';
 import { MutationFunction } from '@tanstack/react-query';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from 'react';
+import { ZodType, ZodTypeDef } from 'zod';
 
 // User
 
-export type NewUserStateContext = {
-  username: string | undefined;
-  password: string | undefined;
-  email: string | undefined;
-  fullName: string | undefined;
-  formState: 'Idle' | 'IsSending' | 'Successful' | 'Error';
-  messageToShow: string | undefined;
+export type User = {
+  id: number;
+  username: string;
+  password: string;
+  email: string;
+  full_name: string;
+  created_at: Date;
 };
 
-export type NewUserContextProps = {
-  newUser: NewUserStateContext;
-  setNewUser: Dispatch<SetStateAction<NewUserStateContext>>;
+export type NewUserData = {
+  username: string;
+  password: string;
+  email: string;
+  full_name: string;
 };
+
+export type CreateUser = (
+  data: NewUserData
+) => Promise<{ newUser: User; message: string } | undefined>;
 
 export type NewUserField = {
   label: string;
@@ -23,13 +31,6 @@ export type NewUserField = {
   type: string;
   validate: (value: string) => boolean;
   validationRequirements: string[];
-};
-
-export type NewUser = {
-  username: string;
-  password: string;
-  email: string;
-  full_name: string;
 };
 
 // Task
@@ -105,4 +106,51 @@ export type TaskCardAccordion = { data: Task; state: TaskCardAccordionStates };
 export type TaskQueriesContextProps = {
   taskQueries: TaskQueries;
   setTaskQueries: Dispatch<SetStateAction<TaskQueries>>;
+};
+
+// Components
+
+export type InputStates =
+  | 'initialState'
+  | 'isHighlighted'
+  | 'notValid'
+  | 'isValid';
+
+export type FieldLabel = {
+  children: string;
+  onFocus: boolean;
+  value: string;
+  inputState: InputStates;
+};
+
+export type FieldErrorMessage = {
+  name: string;
+  errors: ValidationError[];
+};
+
+export type Field = {
+  type: HTMLInputTypeAttribute | undefined;
+  data: FieldApi<
+    {
+      username: string;
+      password: string;
+      email: string;
+      full_name: string;
+    },
+    'username' | 'password' | 'email' | 'full_name',
+    Validator<unknown, ZodType<any, ZodTypeDef, any>>,
+    Validator<{
+      username: string;
+      password: string;
+      email: string;
+      full_name: string;
+    }>,
+    string
+  >;
+};
+export type SubmitButton = { isSendeable: boolean; isSubmitting: boolean };
+
+export type NewUserCreatedContextProps = {
+  newUserCreated: boolean;
+  setNewUserCreated: Dispatch<SetStateAction<boolean>>;
 };

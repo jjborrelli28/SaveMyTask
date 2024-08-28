@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState } from 'react';
-import { TaskQueries, TaskQueriesContextProps } from '@types';
+import { TaskQueries, TaskQueriesContextProps } from '../types';
 
 const initialTaskQueriesState = {
   search: '',

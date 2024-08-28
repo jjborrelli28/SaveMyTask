@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import moment from 'moment';
 import { getStateTask } from '@helpers/task';
-import { TaskCardAccordion } from '@types';
+import { TaskCardAccordion } from '../../../../../types';
 
 const Accordion = ({ data, state }: TaskCardAccordion) => {
   const {

@@ -13,7 +13,8 @@ export default defineConfig({
       '@helpers': path.resolve(__dirname, 'src/helpers'),
       '@pages': path.resolve(__dirname, 'src/pages'),
       '@services': path.resolve(__dirname, 'src/services'),
-      '@types': path.resolve(__dirname, 'src/types')
+      '@types': path.resolve(__dirname, 'src/types'),
+      '@validations': path.resolve(__dirname, 'src/validations'),
     }
   }
 });

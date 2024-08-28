@@ -6,7 +6,7 @@ import {
   TaskCardAccordionStates,
   TaskCardInputStates,
   UpdateTaskParams
-} from '@types';
+} from '../../../../types';
 import clsx from 'clsx';
 import React, { MouseEvent, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
@@ -29,13 +29,13 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
         data: params.data
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['task'] });
     }
   });
   const mutationDeleteTask = useMutation({
     mutationFn: deleteTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['task'] });
     }
   });
 

@@ -1,11 +1,11 @@
 import { userApi } from '@apis/index';
-import { showByConsole } from '@helpers/show-by-console';
-import { NewUser } from '@types';
 import { handleError } from '@helpers/handle-error';
+import { showByConsole } from '@helpers/show-by-console';
+import { CreateUser } from '../types';
 
-export const createUser = async (newUserData: NewUser) => {
+export const createUser: CreateUser = async data => {
   try {
-    const { data: newUser } = await userApi.post('', newUserData);
+    const { data: newUser } = await userApi.post('', data);
 
     showByConsole({
       message: 'User created successfully',

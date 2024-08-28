@@ -11,7 +11,7 @@ const TaskCreatorForm = () => {
   const mutationCreateTask = useMutation({
     mutationFn: createTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['task'] });
     }
   });
 

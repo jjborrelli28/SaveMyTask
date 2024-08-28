@@ -1,4 +1,4 @@
-import { taskApi } from '@apis';
+import { taskApi } from '@apis/index';
 import { handleError } from '@helpers/handle-error';
 import { showByConsole } from '@helpers/show-by-console';
 import {
@@ -8,7 +8,7 @@ import {
   TaskData,
   TasksData,
   UpdateTask
-} from '@types';
+} from '../types';
 
 export const getTasks: GetTasks = async queries => {
   try {

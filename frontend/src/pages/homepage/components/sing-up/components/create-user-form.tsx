@@ -1,131 +1,123 @@
 import Field from '@components/field';
-import NewUserContext, { initialNewUserState } from '@context/new-user';
+import SubmitButton from '@components/submit-button';
+import SubmitMessage from '@components/submit-message';
+import { NewUserCreated } from '@context/new-user-created';
 import { createUser } from '@services/user';
-import { NewUser } from '@types';
-import clsx from 'clsx';
-import { FormEvent, useContext } from 'react';
-import { MdOutlineCheck, MdOutlineErrorOutline } from 'react-icons/md';
+import { useForm } from '@tanstack/react-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { zodValidator } from '@tanstack/zod-form-adapter';
+import { createUserSchema } from '@validations/user';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fields } from '../constants';
+
+const defaultValues = {
+  username: '',
+  password: '',
+  email: '',
+  full_name: ''
+};
+
+const fields = [
+  { name: 'username', type: 'text' },
+  { name: 'password', type: 'password' },
+  { name: 'email', type: 'email' },
+  { name: 'full_name', type: 'text' }
+] as const;
 
 const CreateUserForm = () => {
-  const { newUser, setNewUser } = useContext(NewUserContext);
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+  const { setNewUserCreated } = useContext(NewUserCreated);
+
+  const queryClient = useQueryClient();
+  const mutationCreateUser = useMutation({
+    mutationFn: createUser,
+    onSuccess: data => {
+      data?.message && setSubmitMessage(data.message);
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+    },
+    onError: error => {
+      setSubmitMessage(error.message);
+    }
+  });
+
+  const form = useForm({
+    defaultValues,
+    validatorAdapter: zodValidator(),
+    onSubmit: async ({ value }) => {
+      mutationCreateUser.mutate(value);
+    }
+  });
+
   const navigate = useNavigate();
 
-  const { username, password, email, fullName, formState, messageToShow } =
-    newUser;
-  const isSendable =
-    formState === 'Idle' && !!username && !!password && !!email && !!fullName;
-  console.log(newUser);
-  const handleCreateUser = async (
-    e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
+  const { isSuccess, isError, isPending, reset } = mutationCreateUser;
 
-    if (username && password && email && fullName) {
-      setNewUser(prevState => ({ ...prevState, formState: 'IsSending' }));
+  if (isError) reset();
 
-      const newUser: NewUser = {
-        username,
-        password,
-        email,
-        full_name: fullName
-      };
-
-      try {
-        const res = await createUser(newUser);
-        console.log(res);
-        setNewUser(prevState => ({
-          ...prevState,
-          formState: 'Successful',
-          messageToShow: res.message
-        }));
-
-        setTimeout(() => {
-          navigate('/dashboard');
-          setNewUser(initialNewUserState);
-        }, 5000);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          setNewUser(prevState => ({
-            ...prevState,
-            formState: 'Error',
-            messageToShow: error.message
-          }));
-        } else {
-          setNewUser(prevState => ({
-            ...prevState,
-            formState: 'Error',
-            messageToShow: 'An unexpected error occurred'
-          }));
-        }
-
-        setTimeout(() => {
-          setNewUser(prevState => ({
-            ...prevState,
-            formState: 'Idle',
-            messageToShow: undefined
-          }));
-        }, 5000);
-      }
-    }
-  };
+  if (isSuccess) {
+    setNewUserCreated(true);
+    setTimeout(() => {
+      navigate('/dashboard');
+      setNewUserCreated(false);
+    }, 5000);
+  }
 
   return (
-    <div className="flex flex-col gap-3">
-      <form onSubmit={handleCreateUser} className="flex flex-col gap-6">
-        {fields.map((field, i) => (
-          <Field key={i} content={field} />
+    <>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
+        }}
+        className="flex flex-col gap-6"
+      >
+        {fields.map(field => (
+          <form.Field
+            key={field.name}
+            name={field.name}
+            validatorAdapter={zodValidator()}
+            validators={{
+              onChange: createUserSchema[field.name],
+              onChangeAsyncDebounceMs: 300
+            }}
+            children={data => {
+              return <Field type={field.type} data={data} />;
+            }}
+          />
         ))}
-        <div
-          className={clsx(
-            'grid transition-[grid-template-rows,opacity]',
-            messageToShow
-              ? 'grid-rows-[1fr] opacity-100'
-              : 'grid-rows-[0fr] opacity-0'
-          )}
-        >
-          <div className="overflow-hidden">
-            <p
-              className={clsx(
-                'flex items-center justify-center gap-1 text-xl font-semibold',
-                formState === 'Successful'
-                  ? 'text-green'
-                  : formState === 'Error'
-                    ? 'text-red'
-                    : 'text-transparent'
-              )}
+        <form.Subscribe
+          selector={state => [
+            state.isDirty,
+            state.isFieldsValid,
+            state.isSubmitting,
+            state.isSubmitted
+          ]}
+          children={([isDirty, isFieldsValid, isSubmitting]) => (
+            <SubmitButton
+              isSendeable={
+                isDirty &&
+                isFieldsValid &&
+                !isSubmitting &&
+                !isSuccess &&
+                !isError
+              }
             >
-              {messageToShow}{' '}
-              {formState === 'Successful' ? (
-                <MdOutlineCheck size={24} />
-              ) : (
-                <MdOutlineErrorOutline size={24} />
-              )}
-            </p>
-          </div>
-        </div>
-        <button
-          type="submit"
-          onSubmit={handleCreateUser}
-          disabled={!isSendable}
-          className={clsx(
-            'flex items-center justify-center gap-2 py-3 text-xl font-bold transition-[background-color,color,padding,height] transition-colors duration-500',
-            isSendable
-              ? 'bg-lilac text-white hover:bg-light-lilac'
-              : 'bg-dark-gray text-white'
+              {isPending
+                ? 'Creating user...'
+                : isSuccess
+                  ? 'You got it'
+                  : 'Create user'}
+            </SubmitButton>
           )}
-        >
-          {'Create account'}
-        </button>
+        />
       </form>
-      <p className="text-xs">
-        <span className="font-semibold text-lilac">SaveMyTasks</span> collects
-        your username, password and name only to create your account and allow
-        you to save your tasks. This data will not be used for any other
-        purpose.
-      </p>
-    </div>
+      <SubmitMessage
+        type={isSuccess ? 'Success' : isError ? 'Error' : undefined}
+      >
+        {submitMessage}
+      </SubmitMessage>
+    </>
   );
 };
 
