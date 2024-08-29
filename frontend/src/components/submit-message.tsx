@@ -10,8 +10,8 @@ const SubmitMessage = React.memo(
   }>) => (
     <div
       className={clsx(
-        'grid-rows-auto mb-2 grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity]',
-        children && 'grid-rows-[1fr] opacity-100'
+        'grid-rows-auto grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-300',
+        children && 'mb-2 grid-rows-[1fr] opacity-100'
       )}
     >
       <div className="flex flex-col gap-2 overflow-hidden">

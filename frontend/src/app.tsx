@@ -3,6 +3,7 @@ import PrivateRoute from '@components/private-route';
 import { AuthenticationContextProvider } from '@context/authentication';
 import Dashboard from '@pages/dashboard';
 import Homepage from '@pages/homepage';
+import Login from '@pages/login';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -16,6 +17,7 @@ const SaveMyTask = () => {
           <MainLayout>
             <Routes>
               <Route path="/" element={<Homepage />} />
+              <Route path="/login" element={<Login />} />
               <Route
                 path="/dashboard"
                 element={

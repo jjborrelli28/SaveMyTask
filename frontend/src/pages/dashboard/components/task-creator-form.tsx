@@ -24,7 +24,7 @@ const TaskCreatorForm = () => {
     <div className="order-0 relative flex flex-col pb-10 lg:order-1 lg:px-10 lg:pt-10">
       <form
         onSubmit={handleSubmit}
-        className="top-1/2 flex flex-col gap-5 py-6 transition-transform duration-300 ease-in-out lg:sticky lg:-translate-y-1/2"
+        className="top-1/2 flex flex-col gap-5 py-6 transition-transform duration-300 lg:sticky lg:-translate-y-1/2"
       >
         <input
           type="text"
@@ -36,7 +36,7 @@ const TaskCreatorForm = () => {
         <button
           type="submit"
           onClick={handleSubmit}
-          className="flex items-center justify-center gap-2 bg-lilac py-3 text-xl font-bold text-white transition-colors hover:bg-light-lilac"
+          className="flex items-center justify-center gap-2 bg-lilac py-3 text-xl font-bold text-white transition-colors duration-300 hover:bg-light-lilac"
         >
           <FaPlus />
           Add Task

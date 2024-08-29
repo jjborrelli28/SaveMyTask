@@ -15,7 +15,7 @@ const Header = () => {
       <div className="container flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img src="src/assets/logo.png" className="h-8" />
-          <span className="text-text text-lg font-bold">TodoApp</span>
+          <span className="text-text text-lg font-bold">SaveMyTask</span>
         </div>
         <nav>
           <ul className="flex gap-3">

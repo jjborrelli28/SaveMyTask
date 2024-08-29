@@ -8,7 +8,7 @@ const Label = React.memo(
     <label
       htmlFor={children}
       className={clsx(
-        'absolute left-0 transform font-semibold capitalize transition-all duration-200 ease-in-out',
+        'absolute left-0 transform font-semibold capitalize transition-all duration-300',
         onFocus || value ? '-translate-y-5 text-sm' : 'translate-y-0 text-lg',
         colors.texts[inputState]
       )}

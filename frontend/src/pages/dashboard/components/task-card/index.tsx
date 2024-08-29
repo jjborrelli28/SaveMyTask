@@ -85,7 +85,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
   return (
     <li
       className={clsx(
-        'flex flex-col bg-gray p-3 shadow-md transition-[background,transform] hover:scale-[1.01] hover:bg-light-gray',
+        'flex flex-col bg-gray p-3 shadow-md transition-[background,transform] duration-300 hover:scale-[1.01] hover:bg-light-gray',
         isEditing && 'animate-blink-background-gray'
       )}
     >
@@ -125,7 +125,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
               type="submit"
               data-action="update-title"
               onClick={handleUpdate}
-              className="transition-[transform] hover:scale-110"
+              className="transition-[transform] duration-300 hover:scale-110"
             >
               <FaEdit
                 size={22}
@@ -139,13 +139,13 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
         <button
           type="button"
           onClick={toggleAccordion}
-          className="transition-[transform] hover:scale-110"
+          className="transition-[transform] duration-300 hover:scale-110"
         >
           <IoIosArrowDropdownCircle
             type="button"
             size={22}
             className={clsx(
-              'text-black duration-300',
+              'text-black',
               accordionState === 'Opened' && 'rotate-180'
             )}
           />
@@ -153,7 +153,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
         <button
           type="button"
           onClick={handleDelete}
-          className="transition-[transform] hover:scale-110"
+          className="transition-[transform] duration-300 hover:scale-110"
         >
           <FaTrashAlt size={20} className="text-black" />
         </button>

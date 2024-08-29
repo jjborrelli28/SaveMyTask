@@ -25,7 +25,9 @@ export default {
         '2xl': '1.5rem',
         '3xl': '1.875rem',
         '4xl': '2.25rem',
-        '5xl': '3rem'
+        '5xl': '3rem',
+        '6xl': '3.75rem',
+        '7xl': '5rem'
       },
       colors: {
         white: '#fff',
@@ -83,6 +85,10 @@ export default {
         '100%': {
           'border-bottom-width': '100px',
           'border-bottom-color': '#333333'
+        },
+        'slide-in': {
+          '0%': { backgroundPosition: '100% 0' },
+          '100%': { backgroundPosition: '0 0' }
         }
       },
       spin: {
@@ -94,7 +100,8 @@ export default {
       'blink-background-gray': 'blink-background-gray 1s infinite',
       'blink-text-black': 'blink-text-black 1s infinite',
       'draw-border-black': 'draw-border-black 1s ease-out forwards',
-      spin: 'spin 1s linear infinite'
+      spin: 'spin 1s linear infinite',
+      'slide-in': 'slideIn 0.3s ease-out forwards'
     }
   },
   plugins: []

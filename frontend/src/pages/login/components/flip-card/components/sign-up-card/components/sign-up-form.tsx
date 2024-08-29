@@ -11,7 +11,7 @@ import { createUserSchema } from '@validations/user';
 import { useState } from 'react';
 import Confetti from 'react-confetti';
 import { useNavigate } from 'react-router-dom';
-import { CreateUserFieldNames, Fields } from '../../../../../types';
+import { CreateUserFieldNames, Fields } from '../../../../../../../types';
 
 const defaultValues = {
   username: '',
@@ -27,7 +27,7 @@ const fields: Fields<CreateUserFieldNames> = [
   { name: 'full_name' }
 ];
 
-const CreateUserForm = () => {
+const SignUpForm = () => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const { login } = useAuthentication();
   const navigate = useNavigate();
@@ -122,4 +122,4 @@ const CreateUserForm = () => {
   );
 };
 
-export default CreateUserForm;
+export default SignUpForm;

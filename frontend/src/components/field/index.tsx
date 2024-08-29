@@ -57,7 +57,7 @@ const Field = ({ type = 'text', data }: FieldProps) => {
           />
         )}
       </div>
-      {inputState === 'notValid' && <ErrorMessage {...{ name, errors }} />}
+      <ErrorMessage {...{ name, errors }} />
     </fieldset>
   );
 };

@@ -7,7 +7,7 @@ const SubmitButton = React.memo(
       type="submit"
       disabled={!isSendeable}
       className={clsx(
-        'flex items-center justify-center gap-2 py-3 text-xl font-bold transition-[background-color,color,padding,height] transition-colors duration-500',
+        'flex items-center justify-center gap-2 py-3 text-xl font-bold transition-[background-color,color,padding,height] duration-300',
         isSendeable
           ? 'bg-lilac text-white hover:bg-light-lilac'
           : 'bg-dark-gray text-white'

@@ -10,7 +10,7 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { loginSchema } from '@validations/user';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Fields, LoginFieldNames } from '../../../../../types';
+import { Fields, LoginFieldNames } from '../../../../../../../types';
 
 const defaultValues = {
   username: '',
@@ -22,7 +22,7 @@ const fields: Fields<LoginFieldNames> = [
   { name: 'password', type: 'password' }
 ];
 
-const LoginForm = () => {
+const SignInForm = () => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const { login } = useAuthentication();
   const navigate = useNavigate();
@@ -114,4 +114,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignInForm;
