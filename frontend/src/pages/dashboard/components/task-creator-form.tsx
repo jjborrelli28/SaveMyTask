@@ -3,8 +3,6 @@ import { FormEvent, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { createTask } from '@services/task';
 
-const user_id = 1; // TODO: Modify when we have authentication and user accounts
-
 const TaskCreatorForm = () => {
   const [value, setValue] = useState('');
   const queryClient = useQueryClient();
@@ -18,7 +16,7 @@ const TaskCreatorForm = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    mutationCreateTask.mutate({ title: value, user_id });
+    mutationCreateTask.mutate({ title: value });
     setValue('');
   };
 

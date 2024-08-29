@@ -1,4 +1,6 @@
 import MainLayout from '@components/main-layout';
+import PrivateRoute from '@components/private-route';
+import { AuthenticationContextProvider } from '@context/authentication';
 import Dashboard from '@pages/dashboard';
 import Homepage from '@pages/homepage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -9,14 +11,23 @@ const SaveMyTask = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <MainLayout>
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Routes>
-        </MainLayout>
-      </BrowserRouter>
+      <AuthenticationContextProvider>
+        <BrowserRouter>
+          <MainLayout>
+            <Routes>
+              <Route path="/" element={<Homepage />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
+          </MainLayout>
+        </BrowserRouter>
+      </AuthenticationContextProvider>
     </QueryClientProvider>
   );
 };

@@ -1,4 +1,5 @@
 import { taskApi } from '@apis/index';
+import getAuthenticationHeaders from '@helpers/get-authentication-headers';
 import { handleError } from '@helpers/handle-error';
 import { showByConsole } from '@helpers/show-by-console';
 import {
@@ -11,9 +12,12 @@ import {
 } from '../types';
 
 export const getTasks: GetTasks = async queries => {
+  const headers = getAuthenticationHeaders();
+
   try {
     const { data }: TasksData = await taskApi.get('', {
-      params: queries
+      params: queries,
+      headers
     });
 
     showByConsole({
@@ -28,8 +32,13 @@ export const getTasks: GetTasks = async queries => {
 };
 
 export const createTask: CreateTask = async data => {
+  const headers = getAuthenticationHeaders();
+
   try {
-    const { data: newTask }: TaskData = await taskApi.post('', data);
+    const { data: newTask }: TaskData = await taskApi.post('', data, {
+      headers
+    });
+
     showByConsole({
       message: 'Task created successfully!',
       newTask
@@ -42,8 +51,12 @@ export const createTask: CreateTask = async data => {
 };
 
 export const updateTask: UpdateTask = async ({ id, data }) => {
+  const headers = getAuthenticationHeaders();
+
   try {
-    const { data: updatedTask } = await taskApi.patch(`/${id}`, data);
+    const { data: updatedTask } = await taskApi.patch(`/${id}`, data, {
+      headers
+    });
 
     showByConsole({
       message: 'Tasks updated successfully',
@@ -57,9 +70,13 @@ export const updateTask: UpdateTask = async ({ id, data }) => {
 };
 
 export const deleteTask: DeleteTask = async id => {
+  const headers = getAuthenticationHeaders();
+
   try {
     const { data: deletedTask }: { data: number | undefined } =
-      await taskApi.delete(`/${id}`);
+      await taskApi.delete(`/${id}`, {
+        headers
+      });
 
     showByConsole({
       message: 'Tasks updated successfully',

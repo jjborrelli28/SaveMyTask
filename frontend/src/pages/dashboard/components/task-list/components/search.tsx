@@ -1,10 +1,10 @@
+import { useTaskQueries } from '@context/task-queries';
 import debounce from 'lodash/debounce';
-import { ChangeEvent, useCallback, useContext, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import { TaskQueriesContext } from '@context/task-queries';
 
 const Search = () => {
-  const { taskQueries, setTaskQueries } = useContext(TaskQueriesContext);
+  const { taskQueries, setTaskQueries } = useTaskQueries();
   const [value, setValue] = useState(taskQueries.search);
 
   const debouncedSetTaskQueries = useCallback(

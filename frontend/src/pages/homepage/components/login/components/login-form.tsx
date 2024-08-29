@@ -3,46 +3,41 @@ import Spinner from '@components/spinner';
 import SubmitButton from '@components/submit-button';
 import SubmitMessage from '@components/submit-message';
 import { useAuthentication } from '@context/authentication';
-import { createUser } from '@services/user';
+import { loginUser } from '@services/user';
 import { useForm } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { createUserSchema } from '@validations/user';
+import { loginSchema } from '@validations/user';
 import { useState } from 'react';
-import Confetti from 'react-confetti';
 import { useNavigate } from 'react-router-dom';
-import { CreateUserFieldNames, Fields } from '../../../../../types';
+import { Fields, LoginFieldNames } from '../../../../../types';
 
 const defaultValues = {
   username: '',
-  password: '',
-  email: '',
-  full_name: ''
+  password: ''
 };
 
-const fields: Fields<CreateUserFieldNames> = [
+const fields: Fields<LoginFieldNames> = [
   { name: 'username' },
-  { name: 'password', type: 'password' },
-  { name: 'email', type: 'email' },
-  { name: 'full_name' }
+  { name: 'password', type: 'password' }
 ];
 
-const CreateUserForm = () => {
+const LoginForm = () => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const { login } = useAuthentication();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
   const mutationCreateUser = useMutation({
-    mutationFn: createUser,
+    mutationFn: loginUser,
     onSuccess: data => {
       data?.message && setSubmitMessage(data.message);
       data?.token && login(data.token);
       setTimeout(() => {
         navigate('/dashboard');
         reset();
-      }, 5000);
-      queryClient.invalidateQueries({ queryKey: ['user'] });
+      }, 1000);
+      queryClient.invalidateQueries({ queryKey: ['logged-user'] });
     },
     onError: error => {
       setSubmitMessage(error.message);
@@ -76,7 +71,7 @@ const CreateUserForm = () => {
             name={field.name}
             validatorAdapter={zodValidator()}
             validators={{
-              onChange: createUserSchema[field.name],
+              onChange: loginSchema[field.name],
               onChangeAsyncDebounceMs: 300
             }}
             children={data => {
@@ -103,10 +98,8 @@ const CreateUserForm = () => {
             >
               {isPending ? (
                 <Spinner className="!border-3 h-[30px] w-[30px] !border-white" />
-              ) : isSuccess ? (
-                'You got it!'
               ) : (
-                'Create user'
+                'Sign in'
               )}
             </SubmitButton>
           )}
@@ -117,9 +110,8 @@ const CreateUserForm = () => {
       >
         {submitMessage}
       </SubmitMessage>
-      {isSuccess && <Confetti className="l-0 t-0 absolute w-screen" />}
     </>
   );
 };
 
-export default CreateUserForm;
+export default LoginForm;

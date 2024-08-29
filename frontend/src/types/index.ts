@@ -23,7 +23,7 @@ export type NewUserData = {
 
 export type CreateUser = (
   data: NewUserData
-) => Promise<{ newUser: User; message: string } | undefined>;
+) => Promise<{ message: string; token: string; newUser: User } | undefined>;
 
 export type NewUserField = {
   label: string;
@@ -32,6 +32,12 @@ export type NewUserField = {
   validate: (value: string) => boolean;
   validationRequirements: string[];
 };
+
+export type LoginUserData = { username: string; password: string };
+
+export type LoginUser = (
+  data: LoginUserData
+) => Promise<{ message: string; userId: number; token: string } | undefined>;
 
 // Task
 export type TaskStates = 'To do' | 'In progress' | 'Done';
@@ -66,7 +72,6 @@ export type TaskQueries = {
 
 export type NewTaskData = {
   title: string;
-  user_id: number;
 };
 
 export type GetTasks = (queries?: TaskQueries) => Promise<Tasks | undefined>;
@@ -123,34 +128,73 @@ export type FieldLabel = {
   inputState: InputStates;
 };
 
+export type FieldEyeButton = {
+  inputState: InputStates;
+  passwordIsVisible: boolean;
+  setPasswordIsVisible: Dispatch<SetStateAction<boolean>>;
+};
+
 export type FieldErrorMessage = {
   name: string;
   errors: ValidationError[];
 };
 
-export type Field = {
-  type: HTMLInputTypeAttribute | undefined;
-  data: FieldApi<
-    {
-      username: string;
-      password: string;
-      email: string;
-      full_name: string;
-    },
-    'username' | 'password' | 'email' | 'full_name',
-    Validator<unknown, ZodType<any, ZodTypeDef, any>>,
-    Validator<{
-      username: string;
-      password: string;
-      email: string;
-      full_name: string;
-    }>,
-    string
-  >;
+export type Fields<T extends string> = {
+  name: T;
+  type?: HTMLInputTypeAttribute;
+}[];
+
+export type CreateUserFieldNames =
+  | 'username'
+  | 'password'
+  | 'email'
+  | 'full_name';
+
+type CreateUserFields = {
+  username: string;
+  password: string;
+  email: string;
+  full_name: string;
 };
+
+export type LoginFieldNames = 'username' | 'password';
+
+type LoginFields = {
+  username: string;
+  password: string;
+};
+
+export type Field = {
+  type?: HTMLInputTypeAttribute;
+  data:
+    | FieldApi<
+        CreateUserFields,
+        CreateUserFieldNames,
+        Validator<unknown, ZodType<any, ZodTypeDef, any>>,
+        Validator<CreateUserFields>,
+        string
+      >
+    | FieldApi<
+        LoginFields,
+        LoginFieldNames,
+        Validator<unknown, ZodType<any, ZodTypeDef, any>>,
+        Validator<LoginFields>,
+        string
+      >;
+};
+
 export type SubmitButton = { isSendeable: boolean; isSubmitting: boolean };
 
 export type NewUserCreatedContextProps = {
   newUserCreated: boolean;
   setNewUserCreated: Dispatch<SetStateAction<boolean>>;
 };
+
+export type AuthenticationContextProps =
+  | {
+      isAuthenticated: boolean;
+      token: string | undefined;
+      login: (token: string) => void;
+      logout: () => void;
+    }
+  | undefined;

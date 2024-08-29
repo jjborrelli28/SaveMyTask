@@ -6,8 +6,9 @@ import EyeButton from './components/eye-button';
 import Label from './components/label';
 import { colors } from './constants';
 
-const Field = ({ type, data }: FieldProps) => {
+const Field = ({ type = 'text', data }: FieldProps) => {
   const [onFocus, setOnFocus] = useState(false);
+  const [passwordIsVisible, setPasswordIsVisible] = useState(false);
 
   const name = data.name;
   const { value } = data.state;
@@ -37,7 +38,9 @@ const Field = ({ type, data }: FieldProps) => {
       <div className="relative flex">
         <input
           id={name}
-          type={type}
+          type={
+            type === 'password' ? (passwordIsVisible ? 'text' : type) : type
+          }
           name={name}
           value={value}
           onFocus={handleFocus}
@@ -48,7 +51,11 @@ const Field = ({ type, data }: FieldProps) => {
             colors.borders[inputState]
           )}
         />
-        {type === 'password' && <EyeButton inputState={inputState} />}
+        {type === 'password' && (
+          <EyeButton
+            {...{ inputState, passwordIsVisible, setPasswordIsVisible }}
+          />
+        )}
       </div>
       {inputState === 'notValid' && <ErrorMessage {...{ name, errors }} />}
     </fieldset>

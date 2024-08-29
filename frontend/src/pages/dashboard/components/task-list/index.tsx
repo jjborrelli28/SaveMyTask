@@ -1,18 +1,20 @@
 import Spinner from '@components/spinner';
-import { TaskQueriesContext } from '@context/task-queries';
+import { useTaskQueries } from '@context/task-queries';
 import { getTasks } from '@services/task';
 import { useQuery } from '@tanstack/react-query';
-import { useContext } from 'react';
 import { FaListUl } from 'react-icons/fa';
 import TaskCard from '../task-card';
 import Search from './components/search';
+import { useAuthentication } from '@context/authentication';
 
 const TaskList = () => {
-  const { taskQueries } = useContext(TaskQueriesContext);
+  const { isAuthenticated } = useAuthentication();
+  const { taskQueries } = useTaskQueries();
   const { data, isLoading } = useQuery({
     queryKey: ['task', taskQueries],
     queryFn: () => getTasks(taskQueries),
-    retry: 10
+    retry: 10,
+    enabled: isAuthenticated
   });
 
   return (
