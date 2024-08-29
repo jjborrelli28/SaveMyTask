@@ -1,3 +1,4 @@
+import { Request } from "express";
 import {
   ColumnType,
   Generated,
@@ -63,3 +64,7 @@ export type CreateTaskData = {
 };
 
 export type TaskStates = Task["state"];
+
+export interface AuthenticatedRequest extends Request {
+  userId?: number;
+}

@@ -28,6 +28,7 @@ export const getItem = async (
 
 export const getItems = async (
   tableName: TableNames,
+  userId: number,
   search: {
     key: UserKeys | TaskKeys;
     comparator?: ComparisonOperatorExpression;
@@ -43,6 +44,7 @@ export const getItems = async (
   await db
     .selectFrom(tableName)
     .selectAll()
+    .where("user_id", "=", userId)
     .where(search.key, search.comparator || "like", `%${search.value}%`)
     .limit(limit)
     .offset(offset)
@@ -51,10 +53,12 @@ export const getItems = async (
 
 export const getNumberOfTotalItems = async (
   tableName: TableNames,
+  userId: number,
   key: UserKeys | TaskKeys
 ) =>
   await db
     .selectFrom(tableName)
+    .where("user_id", "=", userId)
     .select([db.fn.count(key).as("totalCount")])
     .execute();
 

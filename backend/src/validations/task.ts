@@ -27,10 +27,6 @@ export const queryParamsSchema = z.object({
 
 export const createTaskSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
-  user_id: z
-    .number()
-    .int()
-    .positive({ message: "User ID must be a positive integer" }),
 });
 
 export const updateTaskSchema = z

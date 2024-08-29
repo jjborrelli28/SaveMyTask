@@ -7,7 +7,8 @@ import {
   insertItem,
   updateItem,
 } from "../helpers/database";
-import { QueryParams } from "../types";
+import getUserId from "../helpers/get-user-id";
+import { AuthenticatedRequest } from "../types";
 import {
   createTaskSchema,
   paramsSchema,
@@ -15,31 +16,35 @@ import {
   updateTaskSchema,
 } from "../validations/task";
 
-export const getTasks = async (
-  req: Request<{}, {}, {}, QueryParams>,
-  res: Response
-) => {
+export const getTasks = async (req: AuthenticatedRequest, res: Response) => {
+  const userId = await getUserId(req?.userId);
+
+  if (!userId) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const queryParams = queryParamsSchema.safeParse(req.query);
+
+  if (!queryParams.success) {
+    return res.status(400).json({
+      message: `${queryParams.error.issues.map((issue) => issue.message).join(", ")}`,
+    });
+  }
+
+  const { search, page, limit } = queryParams.data;
+  const offset = (page - 1) * limit;
+
   try {
-    const queryParams = queryParamsSchema.safeParse(req.query);
-
-    if (!queryParams.success) {
-      return res.status(400).json({
-        message: `${queryParams.error.issues.map((issue) => issue.message).join(", ")}`,
-      });
-    }
-
-    const { search, page, limit } = queryParams.data;
-    const offset = (page - 1) * limit;
-
     const tasks = await getItems(
       "task",
+      userId,
       { key: "title", value: search },
       limit,
       offset,
       { key: "created_at" }
     );
 
-    const [{ totalCount }] = await getNumberOfTotalItems("task", "id");
+    const [{ totalCount }] = await getNumberOfTotalItems("task", userId, "id");
 
     const totalTasks = Number(totalCount);
     const totalPages = Math.ceil(totalTasks / limit);
@@ -60,7 +65,12 @@ export const getTasks = async (
   }
 };
 
-export const createTask = async (req: Request, res: Response) => {
+export const createTask = async (req: AuthenticatedRequest, res: Response) => {
+  const user_id = await getUserId(req?.userId);
+  if (!user_id) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
   const createTaskValidation = createTaskSchema.safeParse(req.body);
 
   if (!createTaskValidation.success) {
@@ -69,7 +79,7 @@ export const createTask = async (req: Request, res: Response) => {
     });
   }
 
-  const { title, user_id } = createTaskValidation.data;
+  const { title } = createTaskValidation.data;
 
   try {
     const result = await insertItem("task", {
