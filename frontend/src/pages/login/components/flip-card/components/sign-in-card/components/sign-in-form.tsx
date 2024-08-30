@@ -1,6 +1,5 @@
+import Button from '@components/button';
 import Field from '@components/field';
-import Spinner from '@components/spinner';
-import SubmitButton from '@components/submit-button';
 import SubmitMessage from '@components/submit-message';
 import { useAuthentication } from '@context/authentication';
 import { loginUser } from '@services/user';
@@ -71,37 +70,27 @@ const SignInForm = () => {
             name={field.name}
             validatorAdapter={zodValidator()}
             validators={{
-              onChange: loginSchema[field.name],
+              onChange: loginSchema.shape[field.name],
               onChangeAsyncDebounceMs: 300
             }}
             children={data => {
-              return <Field type={field?.type} data={data} />;
+              return <Field type={field?.type} data={data} requerid />;
             }}
           />
         ))}
         <form.Subscribe
-          selector={state => [
-            state.isDirty,
-            state.isFieldsValid,
-            state.isSubmitting,
-            state.isSubmitted
-          ]}
-          children={([isDirty, isFieldsValid, isSubmitting]) => (
-            <SubmitButton
+          selector={state => state}
+          children={state => (
+            <Button
               isSendeable={
-                isDirty &&
-                isFieldsValid &&
-                !isSubmitting &&
-                !isSuccess &&
-                !isError
+                state.isValid &&
+                !!state.values.username.length &&
+                !!state.values.password.length
               }
+              isLoading={isPending}
             >
-              {isPending ? (
-                <Spinner className="!border-3 h-[30px] w-[30px] !border-white" />
-              ) : (
-                'Sign in'
-              )}
-            </SubmitButton>
+              Sign in
+            </Button>
           )}
         />
       </form>

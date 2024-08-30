@@ -12,7 +12,7 @@ const Homepage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-y-9 lg:gap-y-12">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-y-12">
       <div className="flex flex-col items-center justify-center gap-y-6 text-center xl:gap-y-0">
         <h1 className="text-6xl font-bold lg:text-7xl">
           Welcome to <span className="text-lilac">SaveMyTask</span>

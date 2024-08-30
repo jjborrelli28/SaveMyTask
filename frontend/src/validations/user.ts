@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
-export const createUserSchema = {
+export const createUserSchema = z.object({
   username: z
     .string()
+    .min(1, { message: 'Username cannot be empty' })
     .min(3, { message: 'Username must be at least 3 characters long' })
     .max(20, { message: 'Username must be no more than 20 characters long' })
     .regex(/^[a-zA-Z0-9_]+$/, {
@@ -10,6 +11,7 @@ export const createUserSchema = {
     }),
   password: z
     .string()
+    .min(1, { message: 'Password cannot be empty' })
     .min(8, { message: 'Password must be at least 8 characters long' })
     .max(100, { message: 'Password must be no more than 100 characters long' })
     .regex(
@@ -19,19 +21,23 @@ export const createUserSchema = {
           'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
       }
     ),
-  email: z.string().email({ message: 'Invalid email address' }),
+  email: z
+    .string()
+    .min(1, { message: 'Email cannot be empty' })
+    .email({ message: 'Invalid email address' }),
   full_name: z
     .string()
-    .min(1, { message: 'Full name is required' })
+    .min(1, { message: 'Full name cannot be empty' })
     .max(100, { message: 'Full name must be no more than 100 characters long' })
     .regex(/^(?!\s)(?!.*\s{2})([a-zA-Z]+\s?)+$/, {
       message: 'Full name can only contain letters and spaces'
     })
-};
+});
 
-export const loginSchema = {
+export const loginSchema = z.object({
   username: z
     .string()
+    .min(1, { message: 'Username cannot be empty' })
     .min(3, { message: 'Username must be at least 3 characters long' })
     .max(20, { message: 'Username must be no more than 20 characters long' })
     .regex(/^[a-zA-Z0-9_]+$/, {
@@ -39,6 +45,7 @@ export const loginSchema = {
     }),
   password: z
     .string()
+    .min(1, { message: 'Password cannot be empty' })
     .min(8, { message: 'Password must be at least 8 characters long' })
     .max(100, { message: 'Password must be no more than 100 characters long' })
     .regex(
@@ -48,4 +55,4 @@ export const loginSchema = {
           'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
       }
     )
-};
+});

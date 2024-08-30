@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import { useState } from 'react';
-import { Field as FieldProps } from '../../types';
+import { FieldProps } from '../../types';
 import ErrorMessage from './components/error-message';
 import EyeButton from './components/eye-button';
 import Label from './components/label';
 import { colors } from './constants';
 
-const Field = ({ type = 'text', data }: FieldProps) => {
+const Field = ({ type = 'text', data,requerid }: FieldProps) => {
   const [onFocus, setOnFocus] = useState(false);
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
 
@@ -50,6 +50,7 @@ const Field = ({ type = 'text', data }: FieldProps) => {
             'z-10 flex-1 border-b-2 bg-transparent pb-0.5 text-lg outline-none focus:ring-0',
             colors.borders[inputState]
           )}
+          required={requerid}
         />
         {type === 'password' && (
           <EyeButton

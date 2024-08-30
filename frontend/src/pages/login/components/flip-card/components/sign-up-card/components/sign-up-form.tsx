@@ -1,6 +1,5 @@
+import Button from '@components/button';
 import Field from '@components/field';
-import Spinner from '@components/spinner';
-import SubmitButton from '@components/submit-button';
 import SubmitMessage from '@components/submit-message';
 import { useAuthentication } from '@context/authentication';
 import { createUser } from '@services/user';
@@ -76,39 +75,29 @@ const SignUpForm = () => {
             name={field.name}
             validatorAdapter={zodValidator()}
             validators={{
-              onChange: createUserSchema[field.name],
+              onChange: createUserSchema.shape[field.name],
               onChangeAsyncDebounceMs: 300
             }}
             children={data => {
-              return <Field type={field?.type} data={data} />;
+              return <Field type={field?.type} data={data} requerid />;
             }}
           />
         ))}
         <form.Subscribe
-          selector={state => [
-            state.isDirty,
-            state.isFieldsValid,
-            state.isSubmitting,
-            state.isSubmitted
-          ]}
-          children={([isDirty, isFieldsValid, isSubmitting]) => (
-            <SubmitButton
+          selector={state => state}
+          children={state => (
+            <Button
               isSendeable={
-                isDirty &&
-                isFieldsValid &&
-                !isSubmitting &&
-                !isSuccess &&
-                !isError
+                state.isValid &&
+                !!state.values.username.length &&
+                !!state.values.password.length &&
+                !!state.values.email &&
+                !!state.values.full_name
               }
+              isLoading={isPending}
             >
-              {isPending ? (
-                <Spinner className="!border-3 h-[30px] w-[30px] !border-white" />
-              ) : isSuccess ? (
-                'You got it!'
-              ) : (
-                'Create user'
-              )}
-            </SubmitButton>
+              {isSuccess ? 'You got it!' : 'Create user'}
+            </Button>
           )}
         />
       </form>

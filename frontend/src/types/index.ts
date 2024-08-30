@@ -1,6 +1,11 @@
 import { FieldApi, ValidationError, Validator } from '@tanstack/react-form';
 import { MutationFunction } from '@tanstack/react-query';
-import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from 'react';
+import {
+  Dispatch,
+  HTMLInputTypeAttribute,
+  MouseEventHandler,
+  SetStateAction
+} from 'react';
 import { ZodType, ZodTypeDef } from 'zod';
 
 // User
@@ -164,7 +169,7 @@ type LoginFields = {
   password: string;
 };
 
-export type Field = {
+export type FieldProps = {
   type?: HTMLInputTypeAttribute;
   data:
     | FieldApi<
@@ -181,6 +186,7 @@ export type Field = {
         Validator<LoginFields>,
         string
       >;
+  requerid?: boolean;
 };
 
 export type SubmitButton = { isSendeable: boolean; isSubmitting: boolean };
@@ -198,3 +204,10 @@ export type AuthenticationContextProps =
       logout: () => void;
     }
   | undefined;
+
+export type ButtonProps = {
+  type?: 'button' | 'submit' | 'reset';
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  isSendeable?: boolean;
+  isLoading?: boolean;
+};
