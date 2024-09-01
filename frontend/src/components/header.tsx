@@ -1,10 +1,10 @@
 import { useAuthentication } from '@context/authentication';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const { logout } = useAuthentication();
   const navigate = useNavigate();
-
+  const { pathname } = useLocation();
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -20,12 +20,12 @@ const Header = () => {
         <nav>
           <ul className="flex gap-3">
             <li>
-              <a
-                href="/" // TODO: User page for when we have users
+              <NavLink
+                to={pathname === '/dashboard' ? '/my-account' : '/dashboard'}
                 className="text-md text-text underline-animate font-bold"
               >
-                My account
-              </a>
+                {pathname === '/dashboard' ? 'My account' : 'Dashboard'}
+              </NavLink>
             </li>
             <span className="w-0.5 bg-lilac" />
             <li>

@@ -1,5 +1,6 @@
 import { FaGithub, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
 import { FaPerson } from 'react-icons/fa6';
+import { NavLink } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -10,44 +11,44 @@ const Footer = () => {
         <nav>
           <ul className="flex justify-center gap-4">
             <li>
-              <a
+              <NavLink
                 aria-label="LinkedIn"
-                href="https://www.linkedin.com/in/jjborrelli/"
+                to="https://www.linkedin.com/in/jjborrelli/"
                 target="_blank"
                 rel="noreelnoopener noreferrer"
               >
                 <FaLinkedin size={24} className="text-white" />
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a
+              <NavLink
                 aria-label="GitHub"
-                href="https://github.com/jjborrelli28"
+                to="https://github.com/jjborrelli28"
                 target="_blank"
                 rel="noreelnoopener noreferrer"
               >
                 <FaGithub size={24} className="text-white" />
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a
+              <NavLink
                 aria-label="Portfolio"
-                href="https://jj-dev.vercel.app/"
+                to="https://jj-dev.vercel.app/"
                 target="_blank"
                 rel="noreelnoopener noreferrer"
               >
                 <FaPerson size={24} className="text-white" />
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a
+              <NavLink
                 aria-label="Whatsapp"
-                href="wa.link/t83bsi"
+                to="https://wa.link/t83bsi"
                 target="_blank"
                 rel="noreelnoopener noreferrer"
               >
                 <FaWhatsapp size={24} className="text-white" />
-              </a>
+              </NavLink>
             </li>
           </ul>
         </nav>
