@@ -16,7 +16,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable("task")
     .addColumn("id", "integer", (col) => col.primaryKey().autoIncrement())
-    .addColumn("title", "varchar(255)", (col) => col.notNull().unique())
+    .addColumn("title", "varchar(255)", (col) => col.notNull())
     .addColumn("state", "varchar(255)", (col) => col.notNull())
     .addColumn("user_id", "integer", (col) =>
       col.references("user.id").onDelete("cascade").notNull()

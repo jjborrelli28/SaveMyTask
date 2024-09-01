@@ -88,3 +88,16 @@ export const updateItem = async <T extends TableNames>(
 
 export const deleteItem = (taskName: TableNames, id: number) =>
   db.deleteFrom(taskName).where("id", "=", id).execute();
+
+export const getUserItem = async (
+  tableName: TableNames,
+  userId: number,
+  objectKey: UserKeys | TaskKeys,
+  objectValue: string | number
+) =>
+  await db
+    .selectFrom(tableName)
+    .selectAll()
+    .where("user_id", "=", userId)
+    .where(objectKey, "=", objectValue)
+    .executeTakeFirst();

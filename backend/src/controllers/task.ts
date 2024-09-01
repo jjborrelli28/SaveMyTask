@@ -4,6 +4,7 @@ import {
   getItem,
   getItems,
   getNumberOfTotalItems,
+  getUserItem,
   insertItem,
   updateItem,
 } from "../helpers/database";
@@ -66,8 +67,9 @@ export const getTasks = async (req: AuthenticatedRequest, res: Response) => {
 };
 
 export const createTask = async (req: AuthenticatedRequest, res: Response) => {
-  const user_id = await getUserId(req?.userId);
-  if (!user_id) {
+  const userId = await getUserId(req?.userId);
+
+  if (!userId) {
     return res.status(404).json({ message: "User not found" });
   }
 
@@ -81,11 +83,16 @@ export const createTask = async (req: AuthenticatedRequest, res: Response) => {
 
   const { title } = createTaskValidation.data;
 
+  const existingTask = await getUserItem("task", userId, "title", title);
+  if (existingTask && existingTask.user_id === userId) {
+    return res.status(409).json({ message: "Task already registered" });
+  }
+
   try {
     const result = await insertItem("task", {
       title,
       state: "To do",
-      user_id,
+      user_id: userId,
     });
 
     const newTask = await getItem("task", "id", Number(result.insertId));
