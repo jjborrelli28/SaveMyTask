@@ -1,23 +1,34 @@
 import Button from '@components/button';
+import SubmitMessage from '@components/submit-message';
 import { createTask } from '@services/task';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 const TaskCreatorForm = () => {
   const [value, setValue] = useState('');
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const mutationCreateTask = useMutation({
     mutationFn: createTask,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['task'] });
+    },
+    onError: error => {
+      error?.message && setSubmitMessage(error.message);
+      setTimeout(() => {
+        setSubmitMessage(null);
+      }, 5000);
     }
   });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
     mutationCreateTask.mutate({ title: value });
     setValue('');
+  };
+
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
   };
 
   const { isPending } = mutationCreateTask;
@@ -31,13 +42,14 @@ const TaskCreatorForm = () => {
         <input
           type="text"
           value={value}
-          onChange={e => setValue(e.target.value)}
+          onChange={handleChange}
           placeholder="What is your new task to save?"
           className="overflow-hidden text-ellipsis border-b-2 border-lilac bg-transparent bg-white px-1 text-2xl outline-none placeholder:text-dark-gray focus:outline-none focus:ring-0"
         />
         <Button type="submit" onClick={handleSubmit} isLoading={isPending}>
           Create task
         </Button>
+        <SubmitMessage type="Error">{submitMessage}</SubmitMessage>
       </form>
     </div>
   );

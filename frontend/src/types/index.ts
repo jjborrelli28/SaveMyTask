@@ -81,7 +81,9 @@ export type NewTaskData = {
 
 export type GetTasks = (queries?: TaskQueries) => Promise<Tasks | undefined>;
 
-export type CreateTask = (data: NewTaskData) => Promise<Task | undefined>;
+export type CreateTask = (
+  data: NewTaskData
+) => Promise<{ message: string; newTask: Task | undefined } | undefined>;
 
 export type TaskUpdateData = {
   title?: string;

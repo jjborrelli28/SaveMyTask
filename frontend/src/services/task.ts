@@ -44,7 +44,10 @@ export const createTask: CreateTask = async data => {
       newTask
     });
 
-    return newTask;
+    return {
+      message: 'Task created successfully!',
+      newTask
+    };
   } catch (error) {
     handleError(error);
   }

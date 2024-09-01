@@ -4,14 +4,17 @@ import React, { PropsWithChildren } from 'react';
 const SubmitMessage = React.memo(
   ({
     type,
-    children
+    children,
+    className
   }: PropsWithChildren<{
     type?: 'Success' | 'Error';
+    className?: string;
   }>) => (
     <div
       className={clsx(
         'grid-rows-auto grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-300',
-        children && 'mb-2 grid-rows-[1fr] opacity-100'
+        children && 'mb-2 grid-rows-[1fr] opacity-100',
+        className
       )}
     >
       <div className="flex flex-col gap-2 overflow-hidden">
