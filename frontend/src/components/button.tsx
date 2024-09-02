@@ -1,7 +1,13 @@
-import { ButtonProps } from '../types';
 import clsx from 'clsx';
-import { PropsWithChildren } from 'react';
+import { MouseEventHandler, PropsWithChildren } from 'react';
 import Spinner from './spinner';
+
+type ButtonProps = {
+  type?: 'button' | 'submit' | 'reset';
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  isSendeable?: boolean;
+  isLoading?: boolean;
+};
 
 const Button = ({
   children,

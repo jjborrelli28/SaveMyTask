@@ -5,16 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import { FaListUl } from 'react-icons/fa';
 import TaskCard from '../task-card';
 import Search from './components/search';
-import { useAuthentication } from '@context/authentication';
 
 const TaskList = () => {
-  const { isAuthenticated } = useAuthentication();
   const { taskQueries } = useTaskQueries();
   const { data, isLoading } = useQuery({
     queryKey: ['task', taskQueries],
     queryFn: () => getTasks(taskQueries),
-    retry: 10,
-    enabled: isAuthenticated
+    retry: 10
   });
 
   return (

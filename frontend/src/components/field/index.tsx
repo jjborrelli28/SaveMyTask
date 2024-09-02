@@ -1,12 +1,60 @@
+import { FieldApi, Validator } from '@tanstack/react-form';
 import clsx from 'clsx';
-import { useState } from 'react';
-import { FieldProps } from '../../types';
+import { HTMLInputTypeAttribute, useState } from 'react';
+import { ZodType, ZodTypeDef } from 'zod';
 import ErrorMessage from './components/error-message';
 import EyeButton from './components/eye-button';
 import Label from './components/label';
 import { colors } from './constants';
 
-const Field = ({ type = 'text', data,requerid }: FieldProps) => {
+export type InputStates =
+  | 'initialState'
+  | 'isHighlighted'
+  | 'notValid'
+  | 'isValid';
+
+export type Fields<T extends string> = {
+  name: T;
+  type?: HTMLInputTypeAttribute;
+}[];
+
+export type CreateUserFieldNames = 'username' | 'password' | 'email' | 'full_name';
+
+type CreateUserFields = {
+  username: string;
+  password: string;
+  email: string;
+  full_name: string;
+};
+
+export type LoginFieldNames = 'username' | 'password';
+
+type LoginFields = {
+  username: string;
+  password: string;
+};
+
+type FieldProps = {
+  type?: HTMLInputTypeAttribute;
+  data:
+    | FieldApi<
+        CreateUserFields,
+        CreateUserFieldNames,
+        Validator<unknown, ZodType<any, ZodTypeDef, any>>,
+        Validator<CreateUserFields>,
+        string
+      >
+    | FieldApi<
+        LoginFields,
+        LoginFieldNames,
+        Validator<unknown, ZodType<any, ZodTypeDef, any>>,
+        Validator<LoginFields>,
+        string
+      >;
+  requerid?: boolean;
+};
+
+const Field = ({ type = 'text', data, requerid }: FieldProps) => {
   const [onFocus, setOnFocus] = useState(false);
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
 

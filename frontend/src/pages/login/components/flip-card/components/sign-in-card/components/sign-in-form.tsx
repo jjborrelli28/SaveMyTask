@@ -1,5 +1,5 @@
 import Button from '@components/button';
-import Field from '@components/field';
+import Field, { Fields, LoginFieldNames } from '@components/field';
 import SubmitMessage from '@components/submit-message';
 import { useAuthentication } from '@context/authentication';
 import { loginUser } from '@services/user';
@@ -9,7 +9,6 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { loginSchema } from '@validations/user';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Fields, LoginFieldNames } from '../../../../../../../types';
 
 const defaultValues = {
   username: '',

@@ -1,8 +1,12 @@
+import { ValidationError } from '@tanstack/react-form';
 import clsx from 'clsx';
-import { FieldErrorMessage } from '../../../types';
-import React from 'react';
 
-const ErrorMessage = React.memo(({ name, errors }: FieldErrorMessage) => (
+type ErrorMessageProps = {
+  name: string;
+  errors: ValidationError[];
+};
+
+const ErrorMessage = ({ name, errors }: ErrorMessageProps) => (
   <div
     className={clsx(
       'grid-rows-auto mb-2 grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity]',
@@ -22,6 +26,6 @@ const ErrorMessage = React.memo(({ name, errors }: FieldErrorMessage) => (
       </ul>
     </div>
   </div>
-));
+);
 
 export default ErrorMessage;

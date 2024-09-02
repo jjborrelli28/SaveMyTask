@@ -1,5 +1,5 @@
 import Button from '@components/button';
-import Field from '@components/field';
+import Field, { CreateUserFieldNames, Fields } from '@components/field';
 import SubmitMessage from '@components/submit-message';
 import { useAuthentication } from '@context/authentication';
 import { createUser } from '@services/user';
@@ -10,7 +10,6 @@ import { createUserSchema } from '@validations/user';
 import { useState } from 'react';
 import Confetti from 'react-confetti';
 import { useNavigate } from 'react-router-dom';
-import { CreateUserFieldNames, Fields } from '../../../../../../../types';
 
 const defaultValues = {
   username: '',

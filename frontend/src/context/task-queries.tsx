@@ -1,9 +1,22 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
-import { TaskQueries, TaskQueriesContextProps } from '../types';
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useState
+} from 'react';
+import { TaskQueries } from '../types';
+
+export type TaskQueriesContextProps = {
+  taskQueries: TaskQueries;
+  setTaskQueries: Dispatch<SetStateAction<TaskQueries>>;
+};
 
 const initialTaskQueriesState = {
   search: '',
-  page: 1
+  page: 1,
+  limit: 20
 };
 
 const TaskQueriesContext = createContext<TaskQueriesContextProps>({

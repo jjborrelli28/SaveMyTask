@@ -2,28 +2,31 @@ import { taskApi } from '@apis/index';
 import getAuthenticationHeaders from '@helpers/get-authentication-headers';
 import { handleError } from '@helpers/handle-error';
 import { showByConsole } from '@helpers/show-by-console';
+import { AxiosResponse } from 'axios';
 import {
   CreateTask,
+  CreateTaskResponse,
   DeleteTask,
+  DeleteTaskResponse,
   GetTasks,
-  TaskData,
-  TasksData,
-  UpdateTask
+  GetTasksResponse,
+  UpdateTask,
+  UpdateTaskResponse
 } from '../types';
 
 export const getTasks: GetTasks = async queries => {
   const headers = getAuthenticationHeaders();
 
   try {
-    const { data }: TasksData = await taskApi.get('', {
-      params: queries,
-      headers
-    });
+    const { data } = await taskApi.get<any, AxiosResponse<GetTasksResponse>>(
+      '',
+      {
+        params: queries,
+        headers
+      }
+    );
 
-    showByConsole({
-      message: 'Tasks obtained successfully',
-      data
-    });
+    showByConsole(data);
 
     return data;
   } catch (error) {
@@ -31,42 +34,40 @@ export const getTasks: GetTasks = async queries => {
   }
 };
 
-export const createTask: CreateTask = async data => {
+export const createTask: CreateTask = async taskData => {
   const headers = getAuthenticationHeaders();
 
   try {
-    const { data: newTask }: TaskData = await taskApi.post('', data, {
-      headers
-    });
+    const { data } = await taskApi.post<any, AxiosResponse<CreateTaskResponse>>(
+      '',
+      taskData,
+      {
+        headers
+      }
+    );
 
-    showByConsole({
-      message: 'Task created successfully!',
-      newTask
-    });
+    showByConsole(data);
 
-    return {
-      message: 'Task created successfully!',
-      newTask
-    };
+    return data;
   } catch (error) {
     handleError(error);
   }
 };
 
-export const updateTask: UpdateTask = async ({ id, data }) => {
+export const updateTask: UpdateTask = async ({ id, taskData }) => {
   const headers = getAuthenticationHeaders();
 
   try {
-    const { data: updatedTask } = await taskApi.patch(`/${id}`, data, {
+    const { data } = await taskApi.patch<
+      any,
+      AxiosResponse<UpdateTaskResponse>
+    >(`/${id}`, taskData, {
       headers
     });
 
-    showByConsole({
-      message: 'Tasks updated successfully',
-      updatedTask
-    });
+    showByConsole(data);
 
-    return updatedTask;
+    return data;
   } catch (error) {
     handleError(error);
   }
@@ -76,17 +77,16 @@ export const deleteTask: DeleteTask = async id => {
   const headers = getAuthenticationHeaders();
 
   try {
-    const { data: deletedTask }: { data: number | undefined } =
-      await taskApi.delete(`/${id}`, {
-        headers
-      });
-
-    showByConsole({
-      message: 'Tasks updated successfully',
-      deletedTask
+    const { data } = await taskApi.delete<
+      any,
+      AxiosResponse<DeleteTaskResponse>
+    >(`/${id}`, {
+      headers
     });
 
-    return id;
+    showByConsole(data);
+
+    return data;
   } catch (error) {
     handleError(error);
   }

@@ -1,5 +1,5 @@
 import MainLayout from '@components/main-layout';
-import { default as PrivateRoutes } from '@components/private-route';
+import { default as PrivateRoutes } from '@components/private-routes';
 import Dashboard from '@pages/dashboard';
 import Homepage from '@pages/homepage';
 import Login from '@pages/login';

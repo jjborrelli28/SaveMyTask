@@ -2,7 +2,15 @@ import getAuthenticationToken from '@helpers/get-authentication-token';
 import { useQueryClient } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import { createContext, ReactNode, useContext, useState } from 'react';
-import { AuthenticationContextProps } from '../types';
+
+type AuthenticationContextProps =
+  | {
+      isAuthenticated: boolean;
+      token: string | undefined;
+      login: (token: string) => void;
+      logout: () => void;
+    }
+  | undefined;
 
 export const authenticationCookieName = 'savemytask-authentication-token';
 

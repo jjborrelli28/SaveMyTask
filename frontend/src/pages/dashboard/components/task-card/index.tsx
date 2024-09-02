@@ -1,18 +1,20 @@
 import { changeTaskState, getStateTask } from '@helpers/task';
 import { deleteTask, updateTask } from '@services/task';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  Task,
-  TaskCardAccordionStates,
-  TaskCardInputStates,
-  UpdateTaskParams
-} from '../../../../types';
 import clsx from 'clsx';
 import React, { MouseEvent, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdCircle } from 'react-icons/md';
+import { Task, UpdateTaskParams } from '../../../../types';
 import Accordion from './components/accordion';
+
+type TaskCardInputStates = {
+  value: string;
+  isEditing: boolean;
+};
+
+export type TaskCardAccordionStates = 'Opened' | 'Closed';
 
 const TaskCard = React.memo(({ data }: { data: Task }) => {
   const [input, setInput] = useState<TaskCardInputStates>({
@@ -26,7 +28,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
     mutationFn: (params: UpdateTaskParams) =>
       updateTask({
         id: params.id,
-        data: params.data
+        taskData: params.taskData
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['task'] });
@@ -54,7 +56,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
 
       mutationUpdateTask.mutate({
         id,
-        data: { state: newState }
+        taskData: { state: newState }
       });
     } else if (action === 'update-title') {
       setInput(prevInput => ({
@@ -64,7 +66,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
 
       mutationUpdateTask.mutate({
         id,
-        data: { title: value }
+        taskData: { title: value }
       });
     }
   };

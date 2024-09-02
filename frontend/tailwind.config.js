@@ -14,7 +14,7 @@ export default {
         }
       },
       fontFamily: {
-        primary: ['Poppins', 'sans-serif']
+        primary: ['Montserrat', 'sans-serif']
       },
       fontSize: {
         xs: '0.75rem',

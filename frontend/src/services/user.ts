@@ -1,43 +1,65 @@
 import { userApi } from '@apis/index';
+import getAuthenticationToken from '@helpers/get-authentication-token';
 import { handleError } from '@helpers/handle-error';
 import { showByConsole } from '@helpers/show-by-console';
-import { CreateUser, LoginUser } from '../types';
+import { AxiosResponse } from 'axios';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
+import {
+  CreateUser,
+  CreateUserResponse,
+  GetUser,
+  GetUserResponse,
+  LoginUser,
+  LoginUserResponse
+} from '../types';
 
-export const createUser: CreateUser = async data => {
+export const createUser: CreateUser = async userData => {
   try {
-    const {
-      data: { token, newUser }
-    } = await userApi.post('', data);
+    const { data } = await userApi.post<any, AxiosResponse<CreateUserResponse>>(
+      '',
+      userData
+    );
 
-    const response = {
-      message: 'User created successfully',
-      token,
-      newUser
-    };
+    showByConsole(data);
 
-    showByConsole(response);
-
-    return response;
+    return data;
   } catch (error) {
     handleError(error);
   }
 };
 
-export const loginUser: LoginUser = async data => {
+export const loginUser: LoginUser = async loginData => {
   try {
-    const {
-      data: { token, userId }
-    } = await userApi.post('/login', data);
+    const { data } = await userApi.post<any, AxiosResponse<LoginUserResponse>>(
+      '/login',
+      loginData
+    );
 
-    const response = {
-      message: 'Successfully logged in',
-      token,
-      userId
-    };
+    showByConsole(data);
 
-    showByConsole(response);
+    return data;
+  } catch (error) {
+    handleError(error);
+  }
+};
 
-    return response;
+export const getUser: GetUser = async () => {
+  const token = getAuthenticationToken() || '';
+  const { id: userId } = jwtDecode<JwtPayload & { id: string }>(token);
+
+  try {
+    const { data } = await userApi.get<any, AxiosResponse<GetUserResponse>>(
+      `/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    showByConsole(data);
+
+    return data;
   } catch (error) {
     handleError(error);
   }
