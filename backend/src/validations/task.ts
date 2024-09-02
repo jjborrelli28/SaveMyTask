@@ -15,14 +15,12 @@ export const queryParamsSchema = z.object({
     .string()
     .regex(/^\d+$/, "Page must be a positive integer")
     .transform((val) => parseInt(val, 10))
-    .optional()
-    .default("1"),
+    .optional(),
   limit: z
     .string()
     .regex(/^\d+$/, "Limit must be a positive integer")
     .transform((val) => parseInt(val, 10))
-    .optional()
-    .default("20"),
+    .optional(),
 });
 
 export const createTaskSchema = z.object({

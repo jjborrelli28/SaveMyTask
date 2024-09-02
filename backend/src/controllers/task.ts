@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   deleteItem,
+  getAllItems,
   getItem,
   getItems,
   getNumberOfTotalItems,
@@ -33,32 +34,47 @@ export const getTasks = async (req: AuthenticatedRequest, res: Response) => {
   }
 
   const { search, page, limit } = queryParams.data;
-  const offset = (page - 1) * limit;
 
   try {
-    const tasks = await getItems(
-      "task",
-      userId,
-      { key: "title", value: search },
-      limit,
-      offset,
-      { key: "created_at" }
-    );
+    if (search === "" && !page && !limit) {
+      const tasks = await getAllItems("task", userId, { key: "created_at" });
 
-    const [{ totalCount }] = await getNumberOfTotalItems("task", userId, "id");
+      return res.json({
+        tasks,
+        message: "All Tasks obtained successfully",
+      });
+    } else if (page && limit) {
+      const offset = (page - 1) * limit;
 
-    const totalTasks = Number(totalCount);
-    const totalPages = Math.ceil(totalTasks / limit);
-    const hasNextPage = page < totalPages;
+      const tasks = await getItems(
+        "task",
+        userId,
+        { key: "title", value: search },
+        limit,
+        offset,
+        { key: "created_at" }
+      );
 
-    return res.json({
-      tasks,
-      totalTasks,
-      currentPage: page,
-      tasksPerPage: limit,
-      totalPages,
-      hasNextPage,
-    });
+      const [{ totalCount }] = await getNumberOfTotalItems(
+        "task",
+        userId,
+        "id"
+      );
+
+      const totalTasks = Number(totalCount);
+      const totalPages = Math.ceil(totalTasks / limit);
+      const hasNextPage = page < totalPages;
+
+      return res.json({
+        tasks,
+        totalTasks,
+        currentPage: page,
+        tasksPerPage: limit,
+        totalPages,
+        hasNextPage,
+        message: "Tasks obtained successfully",
+      });
+    }
   } catch (error) {
     return res.status(500).json({
       message: "Failure to obtain tasks",
@@ -85,7 +101,7 @@ export const createTask = async (req: AuthenticatedRequest, res: Response) => {
 
   const existingTask = await getUserItem("task", userId, "title", title);
   if (existingTask && existingTask.user_id === userId) {
-    return res.status(409).json({ message: "Task already registered" });
+    return res.status(409).json({ message: "Task already created" });
   }
 
   try {
@@ -98,8 +114,8 @@ export const createTask = async (req: AuthenticatedRequest, res: Response) => {
     const newTask = await getItem("task", "id", Number(result.insertId));
 
     return res.status(201).json({
-      message: "Task created successfully!",
       newTask,
+      message: "Task created successfully!",
     });
   } catch (error) {
     return res.status(500).json({
@@ -143,8 +159,8 @@ export const updateTask = async (req: Request, res: Response) => {
     const updatedTask = await getItem("task", "id", id);
 
     return res.json({
-      message: "Task successfully updated",
       updatedTask,
+      message: "Task successfully updated",
     });
   } catch (error) {
     return res.status(500).json({
@@ -164,6 +180,8 @@ export const deleteTask = async (req: Request, res: Response) => {
 
   const { id } = idValidation.data;
 
+  const deletedTask = await getItem("task", "id", id);
+
   try {
     const result = await deleteItem("task", id);
 
@@ -171,7 +189,9 @@ export const deleteTask = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Task not found" });
     }
 
-    return res.status(200).json({ message: "Task deleted successfully", id });
+    return res
+      .status(200)
+      .json({ deletedTask, message: "Task deleted successfully" });
   } catch (error) {
     return res.status(500).json({
       message: "Failed to delete task",

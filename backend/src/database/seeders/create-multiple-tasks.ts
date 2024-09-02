@@ -8,7 +8,7 @@ const createMultipleTasks = async (count: number) => {
     .map((_, n) => ({
       title: `Task ${n + 1}`,
       state: "To do" as TaskTable["state"],
-      user_id: 1,
+      user_id: 2,
     }));
 
   return await db.insertInto("task").values(numberOfTasks).execute();

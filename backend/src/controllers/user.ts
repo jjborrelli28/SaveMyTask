@@ -1,9 +1,13 @@
+import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { getItem, insertItem } from "../helpers/database";
 import hashPassword from "../helpers/hash-password";
-import { createUserSchema, loginSchema } from "../validations/user";
-import bcrypt from "bcrypt";
 import { generateToken } from "../helpers/jwt";
+import {
+  createUserSchema,
+  loginSchema,
+  paramsSchema,
+} from "../validations/user";
 
 export const createUser = async (req: Request, res: Response) => {
   const createUserValidation = createUserSchema.safeParse(req.body);
@@ -42,7 +46,7 @@ export const createUser = async (req: Request, res: Response) => {
 
     return res
       .status(201)
-      .json({ message: "User created successfully!", token, newUser });
+      .json({ token, newUser, message: "User created successfully!" });
   } catch (error) {
     return res.status(500).json({
       message: "Failed to create user",
@@ -81,13 +85,37 @@ export const login = async (req: Request, res: Response) => {
     const token = generateToken(user.id.toString());
 
     return res.json({
-      message: "Successfully logged in",
-      userId: user.id,
       token,
+      message: "Successfully logged in",
     });
   } catch (error) {
     return res.status(500).json({
       message: "Failed to login",
+    });
+  }
+};
+
+export const getUser = async (req: Request, res: Response) => {
+  const idValidation = paramsSchema.safeParse(req.params);
+
+  if (!idValidation.success) {
+    return res.status(400).json({
+      error: idValidation.error.issues.map((issue) => issue.message).join(", "),
+    });
+  }
+
+  const { id } = idValidation.data;
+
+  try {
+    const user = await getItem("user", "id", id);
+
+    return res.json({
+      user,
+      message: "User successfully obtained",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failure to obtain tasks",
     });
   }
 };

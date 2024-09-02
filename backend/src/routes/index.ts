@@ -5,7 +5,7 @@ import {
   getTasks,
   updateTask,
 } from "../controllers/task";
-import { createUser, login } from "../controllers/user";
+import { createUser, getUser, login } from "../controllers/user";
 import { authentication } from "../middleware/authentication";
 
 const router = express.Router();
@@ -13,6 +13,7 @@ const router = express.Router();
 // User routes
 router.post("/user", createUser);
 router.post("/user/login", login);
+router.get("/user/:id", getUser);
 
 // Task routes
 router.get("/task", authentication, getTasks);

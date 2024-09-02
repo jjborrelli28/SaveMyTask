@@ -49,3 +49,12 @@ export const loginSchema = z.object({
       }
     ),
 });
+
+export const paramsSchema = z.object({
+  id: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val), {
+      message: "Invalid id",
+    }),
+});

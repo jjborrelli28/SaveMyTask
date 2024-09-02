@@ -51,6 +51,21 @@ export const getItems = async (
     .orderBy(order.key, order.type || "desc")
     .execute();
 
+export const getAllItems = async (
+  tableName: TableNames,
+  userId: number,
+  order: {
+    key: UserKeys | TaskKeys;
+    type?: OrderByDirectionExpression;
+  }
+) =>
+  await db
+    .selectFrom(tableName)
+    .selectAll()
+    .where("user_id", "=", userId)
+    .orderBy(order.key, order.type || "desc")
+    .execute();
+
 export const getNumberOfTotalItems = async (
   tableName: TableNames,
   userId: number,
