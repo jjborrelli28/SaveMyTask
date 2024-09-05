@@ -1,5 +1,5 @@
 import Button from '@components/button';
-import Field, { CreateUserFieldNames, Fields } from '@components/field';
+import Field, { Fields } from '@components/field';
 import SubmitMessage from '@components/submit-message';
 import { useAuthentication } from '@context/authentication';
 import { createUser } from '@services/user';
@@ -11,12 +11,11 @@ import { useState } from 'react';
 import Confetti from 'react-confetti';
 import { useNavigate } from 'react-router-dom';
 
-const defaultValues = {
-  username: '',
-  password: '',
-  email: '',
-  full_name: ''
-};
+export type CreateUserFieldNames =
+  | 'username'
+  | 'password'
+  | 'email'
+  | 'full_name';
 
 const fields: Fields<CreateUserFieldNames> = [
   { name: 'username' },
@@ -24,6 +23,13 @@ const fields: Fields<CreateUserFieldNames> = [
   { name: 'email', type: 'email' },
   { name: 'full_name' }
 ];
+
+const defaultValues = {
+  username: '',
+  password: '',
+  email: '',
+  full_name: ''
+};
 
 const SignUpForm = () => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
@@ -35,9 +41,8 @@ const SignUpForm = () => {
     mutationFn: createUser,
     onSuccess: data => {
       data?.message && setSubmitMessage(data.message);
-      data?.token && login(data.token);
       setTimeout(() => {
-        navigate('/dashboard');
+        data?.token && login(data.token);
         reset();
       }, 5000);
       queryClient.invalidateQueries({ queryKey: ['user'] });
@@ -105,7 +110,7 @@ const SignUpForm = () => {
       >
         {submitMessage}
       </SubmitMessage>
-      {isSuccess && <Confetti className="l-0 t-0 absolute w-screen" />}
+      {isSuccess && <Confetti className="absolute left-0 top-0" />}
     </>
   );
 };

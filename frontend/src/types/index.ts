@@ -30,9 +30,42 @@ export type LoginUserResponse =
 
 export type LoginUser = (data: LoginUserData) => Promise<LoginUserResponse>;
 
-export type GetUserResponse = { user: User; message: string } | undefined;
+export type GetUserResponse =
+  | { user: Exclude<keyof User, 'password'>; message: string }
+  | undefined;
 
 export type GetUser = () => Promise<GetUserResponse>;
+
+export type UserUpdateData = {
+  username?: string;
+  password?: string;
+  email?: string;
+  full_name?: string;
+  currentPassword: string;
+};
+
+export type UpdateUserResponse =
+  | {
+      updatedUser: Exclude<keyof User, 'password'>;
+      message: string;
+    }
+  | undefined;
+
+export type UpdateUser = (
+  userData: UserUpdateData
+) => Promise<UpdateUserResponse>;
+
+export type DeleteUserResponse =
+  | { deletedUser: Exclude<keyof User, 'password'>; message: string }
+  | undefined;
+
+export type DeleteUserData = {
+  password: string;
+};
+
+export type DeleteUser = (
+  dataUser: DeleteUserData
+) => Promise<DeleteUserResponse>;
 
 // Task
 export type TaskStates = 'To do' | 'In progress' | 'Done';

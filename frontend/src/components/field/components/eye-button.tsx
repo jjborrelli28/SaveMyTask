@@ -16,7 +16,7 @@ const EyeButton = ({
   setPasswordIsVisible
 }: EyeButtonProps) => {
   const handleClick = () => {
-    setPasswordIsVisible(prevState => !prevState);
+    setPasswordIsVisible(!passwordIsVisible);
   };
 
   return (

@@ -1,5 +1,5 @@
 import Button from '@components/button';
-import Field, { Fields, LoginFieldNames } from '@components/field';
+import Field, { Fields } from '@components/field';
 import SubmitMessage from '@components/submit-message';
 import { useAuthentication } from '@context/authentication';
 import { loginUser } from '@services/user';
@@ -10,15 +10,17 @@ import { loginSchema } from '@validations/user';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const defaultValues = {
-  username: '',
-  password: ''
-};
+export type LoginFieldNames = 'username' | 'password';
 
 const fields: Fields<LoginFieldNames> = [
   { name: 'username' },
   { name: 'password', type: 'password' }
 ];
+
+const defaultValues = {
+  username: '',
+  password: ''
+};
 
 const SignInForm = () => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);

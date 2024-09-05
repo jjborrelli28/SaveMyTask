@@ -20,12 +20,22 @@ const Header = () => {
         <nav>
           <ul className="flex gap-3">
             <li>
-              <NavLink
-                to={pathname === '/dashboard' ? '/my-account' : '/dashboard'}
-                className="text-md text-text underline-animate font-bold"
-              >
-                {pathname === '/dashboard' ? 'My account' : 'Dashboard'}
-              </NavLink>
+              {pathname === '/dashboard' && (
+                <NavLink
+                  to="/my-account"
+                  className="text-md text-text underline-animate font-bold"
+                >
+                  My account
+                </NavLink>
+              )}
+              {pathname === '/my-account' && (
+                <NavLink
+                  to="/dashboard"
+                  className="text-md text-text underline-animate font-bold"
+                >
+                  Dashboard
+                </NavLink>
+              )}
             </li>
             <span className="w-0.5 bg-lilac" />
             <li>

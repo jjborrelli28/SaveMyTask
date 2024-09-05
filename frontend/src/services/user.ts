@@ -7,10 +7,14 @@ import { jwtDecode, JwtPayload } from 'jwt-decode';
 import {
   CreateUser,
   CreateUserResponse,
+  DeleteUser,
+  DeleteUserResponse,
   GetUser,
   GetUserResponse,
   LoginUser,
-  LoginUserResponse
+  LoginUserResponse,
+  UpdateUser,
+  UpdateUserResponse
 } from '../types';
 
 export const createUser: CreateUser = async userData => {
@@ -45,17 +49,62 @@ export const loginUser: LoginUser = async loginData => {
 
 export const getUser: GetUser = async () => {
   const token = getAuthenticationToken() || '';
-  const { id: userId } = jwtDecode<JwtPayload & { id: string }>(token);
+  const { id } = jwtDecode<JwtPayload & { id: string }>(token);
 
   try {
     const { data } = await userApi.get<any, AxiosResponse<GetUserResponse>>(
-      `/${userId}`,
+      `/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
         }
       }
     );
+
+    showByConsole(data);
+
+    return data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const updateUser: UpdateUser = async userData => {
+  const token = getAuthenticationToken() || '';
+  const { id } = jwtDecode<JwtPayload & { id: string }>(token);
+
+  try {
+    const { data } = await userApi.patch<
+      any,
+      AxiosResponse<UpdateUserResponse>
+    >(`/${id}`, userData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    showByConsole(data);
+
+    return data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const deleteUser: DeleteUser = async userData => {
+  const token = getAuthenticationToken() || '';
+  const { id } = jwtDecode<JwtPayload & { id: string }>(token);
+
+  try {
+    const { data } = await userApi.delete<
+      any,
+      AxiosResponse<DeleteUserResponse>
+    >(`/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      data: userData
+    });
 
     showByConsole(data);
 

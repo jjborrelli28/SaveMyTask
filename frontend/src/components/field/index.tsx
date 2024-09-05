@@ -1,3 +1,8 @@
+import { LoginFieldNames } from '@pages/login/components/flip-card/components/sign-in-card/components/sign-in-form';
+import { CreateUserFieldNames } from '@pages/login/components/flip-card/components/sign-up-card/components/sign-up-form';
+import { FieldKeys } from '@pages/my-account/components/user-data';
+import { DeleteUserField } from '@pages/my-account/components/user-data/components/components/delete-user-form';
+import { UpdateUserFieldNames } from '@pages/my-account/components/user-data/components/modal-form';
 import { FieldApi, Validator } from '@tanstack/react-form';
 import clsx from 'clsx';
 import { HTMLInputTypeAttribute, useState } from 'react';
@@ -18,8 +23,6 @@ export type Fields<T extends string> = {
   type?: HTMLInputTypeAttribute;
 }[];
 
-export type CreateUserFieldNames = 'username' | 'password' | 'email' | 'full_name';
-
 type CreateUserFields = {
   username: string;
   password: string;
@@ -27,12 +30,12 @@ type CreateUserFields = {
   full_name: string;
 };
 
-export type LoginFieldNames = 'username' | 'password';
-
 type LoginFields = {
   username: string;
   password: string;
 };
+
+type UpdateUserFields = Record<FieldKeys, string> & { currentPassword: string };
 
 type FieldProps = {
   type?: HTMLInputTypeAttribute;
@@ -50,11 +53,31 @@ type FieldProps = {
         Validator<unknown, ZodType<any, ZodTypeDef, any>>,
         Validator<LoginFields>,
         string
+      >
+    | FieldApi<
+        UpdateUserFields,
+        UpdateUserFieldNames,
+        Validator<unknown, ZodType<any, ZodTypeDef, any>>,
+        Validator<UpdateUserFields>,
+        string
+      >
+    | FieldApi<
+        DeleteUserField,
+        'password',
+        Validator<unknown, ZodType<any, ZodTypeDef, any>>,
+        Validator<DeleteUserField>,
+        string
       >;
   requerid?: boolean;
+  hasLabel?: boolean;
 };
 
-const Field = ({ type = 'text', data, requerid }: FieldProps) => {
+const Field = ({
+  type = 'text',
+  data,
+  requerid,
+  hasLabel = true
+}: FieldProps) => {
   const [onFocus, setOnFocus] = useState(false);
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
 
@@ -72,17 +95,19 @@ const Field = ({ type = 'text', data, requerid }: FieldProps) => {
           : 'initialState';
 
   const handleFocus = () => {
-    setOnFocus(prevState => !prevState);
+    setOnFocus(!onFocus);
   };
 
   const handleBlur = () => {
     data.handleBlur();
-    setOnFocus(prevState => !prevState);
+    setOnFocus(!onFocus);
   };
 
   return (
     <fieldset className="relative flex flex-col">
-      <Label {...{ onFocus, value, isValid, inputState }}>{name}</Label>
+      {hasLabel && (
+        <Label {...{ onFocus, value, isValid, inputState }}>{name}</Label>
+      )}
       <div className="relative flex">
         <input
           id={name}
