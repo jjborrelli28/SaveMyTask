@@ -180,9 +180,13 @@ export const deleteTask = async (req: Request, res: Response) => {
 
   const { id } = idValidation.data;
 
-  const deletedTask = await getItem("task", "id", id);
-
   try {
+    const deletedTask = await getItem("task", "id", id);
+
+    if (!deletedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
     const result = await deleteItem("task", id);
 
     if (result[0].numDeletedRows === BigInt(0)) {

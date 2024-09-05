@@ -57,6 +57,13 @@ export type CreateUserData = {
   full_name: string;
 };
 
+export type UpdateUserData = {
+  username?: string;
+  password?: string;
+  email?: string;
+  full_name?: string;
+};
+
 export type CreateTaskData = {
   title: string;
   state: "To do";

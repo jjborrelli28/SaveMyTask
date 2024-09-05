@@ -5,15 +5,23 @@ import {
   getTasks,
   updateTask,
 } from "../controllers/task";
-import { createUser, getUser, login } from "../controllers/user";
+import {
+  createUser,
+  deleteUser,
+  getUser,
+  login,
+  updateUser,
+} from "../controllers/user";
 import { authentication } from "../middleware/authentication";
 
 const router = express.Router();
 
 // User routes
+router.get("/user/:id", getUser);
 router.post("/user", createUser);
 router.post("/user/login", login);
-router.get("/user/:id", getUser);
+router.patch("/user/:id", updateUser);
+router.delete("/user/:id", deleteUser);
 
 // Task routes
 router.get("/task", authentication, getTasks);
