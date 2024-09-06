@@ -94,14 +94,14 @@ export type GetTasksResponse =
     })
   | undefined;
 
-export type TaskQueries = {
+export type TaskQueryParams = {
   search?: string;
   page?: number;
   limit?: number;
 };
 
 export type GetTasks = (
-  queries?: TaskQueries | undefined
+  queries?: TaskQueryParams | undefined
 ) => Promise<GetTasksResponse>;
 
 export type CreateTaskResponse = { newTask: Task; message: string };

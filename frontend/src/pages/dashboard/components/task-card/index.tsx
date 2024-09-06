@@ -16,7 +16,9 @@ type TaskCardInputStates = {
 
 export type TaskCardAccordionStates = 'Opened' | 'Closed';
 
-const TaskCard = React.memo(({ data }: { data: Task }) => {
+const TaskCard = React.memo(({ data }: { data?: Task }) => {
+  if (!data) return null;
+
   const [input, setInput] = useState<TaskCardInputStates>({
     value: data.title,
     isEditing: false

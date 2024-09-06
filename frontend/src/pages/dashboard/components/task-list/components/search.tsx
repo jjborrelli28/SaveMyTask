@@ -1,21 +1,21 @@
-import { useTaskQueries } from '@context/task-queries';
+import { useTaskQueryParams } from '@context/task-query-params';
 import debounce from 'lodash/debounce';
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 const Search = () => {
-  const { taskQueries, setTaskQueries } = useTaskQueries();
-  const [value, setValue] = useState(taskQueries.search);
+  const { queryParams, setQueryParams } = useTaskQueryParams();
+  const [value, setValue] = useState(queryParams.search);
 
   const debouncedSetTaskQueries = useCallback(
     debounce((newValue: string) => {
-      setTaskQueries(prevState => ({
+      setQueryParams(prevState => ({
         ...prevState,
         search: newValue,
         page: 1
       }));
     }, 300),
-    [setTaskQueries]
+    [setQueryParams]
   );
 
   const handleChange = useCallback(
