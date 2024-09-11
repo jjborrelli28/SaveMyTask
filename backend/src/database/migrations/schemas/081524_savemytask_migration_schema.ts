@@ -3,7 +3,9 @@ import { Kysely, sql } from "kysely";
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable("user")
-    .addColumn("id", "integer", (col) => col.primaryKey().autoIncrement())
+    .addColumn("id", "integer", (col) =>
+      col.primaryKey().autoIncrement().unique()
+    )
     .addColumn("username", "varchar(255)", (col) => col.notNull().unique())
     .addColumn("password", "varchar(255)", (col) => col.notNull())
     .addColumn("email", "varchar(255)", (col) => col.notNull().unique())
@@ -15,7 +17,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 
   await db.schema
     .createTable("task")
-    .addColumn("id", "integer", (col) => col.primaryKey().autoIncrement())
+    .addColumn("id", "integer", (col) =>
+      col.primaryKey().autoIncrement().unique()
+    )
     .addColumn("title", "varchar(255)", (col) => col.notNull())
     .addColumn("state", "varchar(255)", (col) => col.notNull())
     .addColumn("user_id", "integer", (col) =>

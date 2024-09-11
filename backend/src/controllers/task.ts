@@ -4,7 +4,8 @@ import {
   getAllItems,
   getItem,
   getItems,
-  getNumberOfTotalItems,
+  getTotalItems,
+  getTotalItemsNumber,
   getUserItem,
   insertItem,
   updateItem,
@@ -17,6 +18,7 @@ import {
   queryParamsSchema,
   updateTaskSchema,
 } from "../validations/task";
+import getMessage from "../messages";
 
 export const getTasks = async (req: AuthenticatedRequest, res: Response) => {
   const userId = await getUserId(req?.userId);
@@ -46,33 +48,31 @@ export const getTasks = async (req: AuthenticatedRequest, res: Response) => {
     } else if (page && limit) {
       const offset = (page - 1) * limit;
 
-      const tasks = await getItems(
+      const items = await getItems(
         "task",
         userId,
-        { key: "title", value: search },
+        { value: search },
         limit,
-        offset,
-        { key: "created_at" }
+        offset
       );
 
-      const [{ totalCount }] = await getNumberOfTotalItems(
+      const totalFilteredItems = await getTotalItems("task", userId, {
+        value: search,
+      });
+
+      const [{ totalCount: totalItems }] = await getTotalItemsNumber(
         "task",
         userId,
         "id"
       );
 
-      const totalTasks = Number(totalCount);
-      const totalPages = Math.ceil(totalTasks / limit);
+      const totalPages = Math.ceil(totalFilteredItems.length / limit);
       const hasNextPage = page < totalPages;
+      const data = { items, totalItems, page, totalPages, hasNextPage, limit };
 
       return res.json({
-        tasks,
-        totalTasks,
-        currentPage: page,
-        tasksPerPage: limit,
-        totalPages,
-        hasNextPage,
-        message: "Tasks obtained successfully",
+        ...data,
+        message: getMessage("success", "Tasks"),
       });
     }
   } catch (error) {

@@ -30,26 +30,57 @@ export const getItems = async (
   tableName: TableNames,
   userId: number,
   search: {
-    key: UserKeys | TaskKeys;
+    key?: UserKeys | TaskKeys;
     comparator?: ComparisonOperatorExpression;
     value: string;
   },
   limit: number,
   offset: number,
-  order: {
-    key: UserKeys | TaskKeys;
+  order?: {
+    key?: UserKeys | TaskKeys;
     type?: OrderByDirectionExpression;
   }
-) =>
-  await db
+) => {
+  return await db
     .selectFrom(tableName)
     .selectAll()
     .where("user_id", "=", userId)
-    .where(search.key, search.comparator || "like", `%${search.value}%`)
+    .where(
+      search.key || "title",
+      search.comparator || "like",
+      `%${search.value}%`
+    )
     .limit(limit)
     .offset(offset)
-    .orderBy(order.key, order.type || "desc")
+    .orderBy(order?.key || "created_at", order?.type || "desc")
     .execute();
+};
+
+export const getTotalItems = async (
+  tableName: TableNames,
+  userId: number,
+  search: {
+    key?: UserKeys | TaskKeys;
+    comparator?: ComparisonOperatorExpression;
+    value: string;
+  },
+  order?: {
+    key?: UserKeys | TaskKeys;
+    type?: OrderByDirectionExpression;
+  }
+) => {
+  return await db
+    .selectFrom(tableName)
+    .selectAll()
+    .where("user_id", "=", userId)
+    .where(
+      search.key || "title",
+      search.comparator || "like",
+      `%${search.value}%`
+    )
+    .orderBy(order?.key || "created_at", order?.type || "desc")
+    .execute();
+};
 
 export const getAllItems = async (
   tableName: TableNames,
@@ -66,7 +97,7 @@ export const getAllItems = async (
     .orderBy(order.key, order.type || "desc")
     .execute();
 
-export const getNumberOfTotalItems = async (
+export const getTotalItemsNumber = async (
   tableName: TableNames,
   userId: number,
   key: UserKeys | TaskKeys
