@@ -80,12 +80,12 @@ export type Task = {
 };
 
 export type Tasks = {
-  currentPage: number;
-  hasNextPage: boolean;
-  tasks: Task[];
-  tasksPerPage: number;
+  items: Task[];
+  totalItems: number;
+  page: number;
   totalPages: number;
-  totalTasks: number;
+  hasNextPage: boolean;
+  limit: number;
 };
 
 export type GetTasksResponse =

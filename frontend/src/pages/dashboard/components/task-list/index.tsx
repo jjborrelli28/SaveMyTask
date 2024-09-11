@@ -11,62 +11,63 @@ import Search from './components/search';
 
 const TaskList = () => {
   const { queryParams } = useTaskQueryParams();
-  const listRef = useRef<HTMLDivElement>(null);
+
+  const { search, page, limit } = queryParams;
 
   const {
     data,
     error,
     isLoading,
     isError,
-    isFetching,
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
     refetch
   } = useInfiniteQuery({
-    queryKey: ['task', queryParams.search],
-    initialPageParam: queryParams.page,
+    queryKey: ['task', search],
+    initialPageParam: page,
     queryFn: ctx =>
       getTasks({
         search: ctx.queryKey[1],
         page: ctx.pageParam,
-        limit: queryParams.limit
+        limit
       }),
     getNextPageParam: lastGroup => {
-      const nextPage = lastGroup?.hasNextPage
-        ? lastGroup.currentPage + 1
-        : undefined;
+      const nextPage = lastGroup?.hasNextPage ? lastGroup.page + 1 : undefined;
       return nextPage;
     },
     retry: 10
   });
 
-  const taskList = data ? data.pages.flatMap(page => page?.tasks) : [];
+  useEffect(() => {
+    refetch();
+  }, [search, refetch]);
+
+  const items = data ? data.pages.flatMap(page => page?.items) : [];
 
   const virtualizer = useWindowVirtualizer({
-    count: taskList.length,
+    count: items.length,
     estimateSize: () => 74,
+    gap: 20,
     overscan: 5,
-    scrollMargin: listRef.current?.offsetTop ?? 0
+    enabled: true
   });
 
   useEffect(() => {
-    refetch();
-  }, [queryParams.search, refetch]);
-
-  useEffect(() => {
-    const lastItem = virtualizer.getVirtualItems().slice(-1)[0];
+    const [lastItem] = [...virtualizer.getVirtualItems()].reverse();
 
     if (!lastItem) return;
 
     if (
-      lastItem.index >= taskList.length - 1 &&
       hasNextPage &&
+      lastItem.index >= items.length - 1 &&
       !isFetchingNextPage
     ) {
       fetchNextPage();
     }
   }, [virtualizer.getVirtualItems(), hasNextPage, isFetchingNextPage]);
+
+  const containerRef = useRef(null);
 
   return (
     <div className="lg:order-0 order-1 flex flex-1 flex-col gap-5 pb-5 lg:border-r-2 lg:border-gray lg:px-10 lg:pb-10">
@@ -83,37 +84,33 @@ const TaskList = () => {
         </div>
       ) : isError ? (
         <SubmitMessage className="px-3">{error.message}</SubmitMessage>
-      ) : taskList.length ? (
-        <div ref={listRef}>
-          <ul
-            style={{
-              height: `${virtualizer.getTotalSize()}px`,
-              width: '100%',
-              position: 'relative'
-            }}
-            className="flex flex-col gap-5"
-          >
-            {virtualizer.getVirtualItems().map(item => (
-              <div
-                key={item.key}
-                className={item.index % 2 ? 'ListItemOdd' : 'ListItemEven'}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: `${item.size}px`,
-                  transform: `translateY(${
-                    item.start - virtualizer.options.scrollMargin
-                  }px)`
-                }}
-              >
-                <TaskCard data={taskList[item.index]} />
-              </div>
-            ))}
-          </ul>
-          {isFetching && <Spinner className="!border-gray py-3" />}
-        </div>
+      ) : items.length ? (
+        <>
+          <div ref={containerRef}>
+            <ul
+              key={queryParams.search}
+              className="relative flex w-full flex-col gap-5"
+              style={{
+                height: `${virtualizer.getTotalSize()}px`
+              }}
+            >
+              {virtualizer.getVirtualItems().map(virtualItem => (
+                <div
+                  ref={virtualizer.measureElement}
+                  key={virtualItem.key}
+                  data-index={virtualItem.index}
+                  className="absolute top-0 w-full"
+                  style={{
+                    transform: `translateY(${virtualItem.start}px)`
+                  }}
+                >
+                  <TaskCard data={items[virtualItem.index]} />
+                </div>
+              ))}
+            </ul>
+          </div>
+          {isFetchingNextPage && <Spinner className="!border-gray py-3" />}
+        </>
       ) : (
         <div className="flex flex-1 items-center py-10">
           <p className="text-xl font-semibold">
