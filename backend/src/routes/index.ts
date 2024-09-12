@@ -1,18 +1,17 @@
 import express from "express";
-import {
-  createTask,
-  deleteTask,
-  getTasks,
-  updateTask,
-} from "../controllers/task";
-import {
-  createUser,
-  deleteUser,
-  getUser,
-  login,
-  updateUser,
-} from "../controllers/user";
-import { authentication } from "../middleware/authentication";
+
+import createTask from "../controllers/task/create";
+import deleteTask from "../controllers/task/detete";
+import getTasks from "../controllers/task/get";
+import updateTask from "../controllers/task/update";
+
+import createUser from "../controllers/user/create";
+import deleteUser from "../controllers/user/delete";
+import getUser from "../controllers/user/get";
+import login from "../controllers/user/login";
+import updateUser from "../controllers/user/update";
+
+import authentication from "../middleware/authentication";
 
 const router = express.Router();
 

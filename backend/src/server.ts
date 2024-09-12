@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import { createServer } from "http";
 import app from "./app";
-import { showByConsole } from "./helpers/show-by-console";
+import showByConsole from "./helpers/show-by-console";
 
 dotenv.config();
 

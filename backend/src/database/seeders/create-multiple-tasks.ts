@@ -1,5 +1,5 @@
-import { showByConsole } from "../../helpers/show-by-console";
-import { TaskTable } from "../../types";
+import showByConsole from "../../helpers/show-by-console";
+import { type TaskTable } from "../../types";
 import db from "../database";
 
 const createMultipleTasks = async (userId: number, count: number) => {

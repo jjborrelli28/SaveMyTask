@@ -1,4 +1,4 @@
-import { showByConsole } from "../../helpers/show-by-console";
+import showByConsole from "../../helpers/show-by-console";
 import db from "../database";
 
 const deleteAlltasks = async () => {

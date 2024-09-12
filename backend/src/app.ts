@@ -1,8 +1,8 @@
 import cors from "cors";
 import express from "express";
+import runInDevelopmentEnv from "./helpers/run-in-development-env";
 import delay from "./middleware/delay";
 import router from "./routes";
-import { runInDev } from "./helpers/run-in-dev";
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(
   })
 );
 
-runInDev(app.use((req, res, next) => delay(req, res, next, 500)));
+runInDevelopmentEnv(app.use((req, res, next) => delay(req, res, next, 500)));
 
 app.use(express.json());
 app.use("/api", router);

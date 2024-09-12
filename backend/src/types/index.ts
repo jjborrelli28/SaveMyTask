@@ -1,10 +1,9 @@
-import { Request } from "express";
 import {
-  ColumnType,
-  Generated,
-  Insertable,
-  Selectable,
-  Updateable,
+  type ColumnType,
+  type Generated,
+  type Insertable,
+  type Selectable,
+  type Updateable,
 } from "kysely";
 
 export interface UserTable {
@@ -71,7 +70,3 @@ export type CreateTaskData = {
 };
 
 export type TaskStates = Task["state"];
-
-export interface AuthenticatedRequest extends Request {
-  userId?: number;
-}
