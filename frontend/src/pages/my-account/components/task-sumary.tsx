@@ -6,13 +6,13 @@ import { MdCircle } from 'react-icons/md';
 import { User } from '../../../types';
 
 const TaskSumary = ({ user }: { user: User }) => {
-  const { data: tasksData } = useQuery({
+  const { data: itemsData } = useQuery({
     queryKey: ['task'],
     queryFn: () => getTasks()
   });
 
   const userName = user.full_name;
-  const allTasks = tasksData?.tasks;
+  const allTasks = itemsData?.items;
 
   if (!userName || !allTasks) return <Spinner />;
 

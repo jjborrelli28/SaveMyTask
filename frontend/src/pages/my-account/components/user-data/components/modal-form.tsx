@@ -12,7 +12,7 @@ interface ModalFormProps {
   onClose: () => void;
 }
 
-export type UpdateUserFieldNames = CreateUserFieldNames | 'currentPassword';
+export type UpdateUserFieldNames = CreateUserFieldNames | 'confirmationPassword';
 
 const ModalForm = ({ isOpen, fieldKey, onClose }: ModalFormProps) => {
   if (!isOpen) return null;

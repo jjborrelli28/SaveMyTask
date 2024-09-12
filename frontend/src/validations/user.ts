@@ -93,7 +93,7 @@ export const updateUserSchema = z.object({
       message: 'Full name can only contain letters and spaces'
     })
     .optional(),
-  currentPassword: z
+    confirmationPassword: z
     .string()
     .min(1, { message: 'Current Password cannot be empty' })
     .min(8, { message: 'Current Password must be at least 8 characters long' })

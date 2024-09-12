@@ -1,12 +1,12 @@
-import { LoginFieldNames } from '@pages/login/components/flip-card/components/sign-in-card/components/sign-in-form';
-import { CreateUserFieldNames } from '@pages/login/components/flip-card/components/sign-up-card/components/sign-up-form';
-import { FieldKeys } from '@pages/my-account/components/user-data';
-import { DeleteUserField } from '@pages/my-account/components/user-data/components/components/delete-user-form';
-import { UpdateUserFieldNames } from '@pages/my-account/components/user-data/components/modal-form';
-import { FieldApi, Validator } from '@tanstack/react-form';
+import { type LoginFieldNames } from '@pages/login/components/flip-card/components/sign-in-card/components/sign-in-form';
+import { type CreateUserFieldNames } from '@pages/login/components/flip-card/components/sign-up-card/components/sign-up-form';
+import { type FieldKeys } from '@pages/my-account/components/user-data';
+import { type DeleteUserField } from '@pages/my-account/components/user-data/components/components/delete-user-form';
+import { type UpdateUserFieldNames } from '@pages/my-account/components/user-data/components/modal-form';
+import { type FieldApi, type Validator } from '@tanstack/react-form';
 import clsx from 'clsx';
-import { HTMLInputTypeAttribute, useState } from 'react';
-import { ZodType, ZodTypeDef } from 'zod';
+import { type HTMLInputTypeAttribute, useState } from 'react';
+import { type ZodType, type ZodTypeDef } from 'zod';
 import ErrorMessage from './components/error-message';
 import EyeButton from './components/eye-button';
 import Label from './components/label';
@@ -35,7 +35,9 @@ type LoginFields = {
   password: string;
 };
 
-type UpdateUserFields = Record<FieldKeys, string> & { currentPassword: string };
+type UpdateUserFields = Record<FieldKeys, string> & {
+  confirmationPassword: string;
+};
 
 type FieldProps = {
   type?: HTMLInputTypeAttribute;

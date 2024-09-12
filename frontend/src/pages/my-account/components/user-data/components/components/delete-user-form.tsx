@@ -58,6 +58,7 @@ const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
+          
           form.handleSubmit();
         }}
         className="flex flex-col gap-6"
@@ -67,7 +68,7 @@ const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
           name="password"
           validatorAdapter={zodValidator()}
           validators={{
-            onChange: updateUserSchema.shape.currentPassword,
+            onChange: updateUserSchema.shape.confirmationPassword,
             onChangeAsyncDebounceMs: 300
           }}
           children={data => {
@@ -84,18 +85,22 @@ const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
 
         <form.Subscribe
           selector={state => state}
-          children={state => (
-            <Button
-              isSendeable={state.isValid && !!state.values.password}
-              isLoading={isPending}
-              containerClassName="!border-red"
-              className="!bg-red"
-              textClassName="group-hover:!text-red"
-              spinnerClassName="!border-red !border-t-transparent"
-            >
-              {isSuccess ? 'Done' : `Delete User `}
-            </Button>
-          )}
+          children={state => {
+            const isSendeable = state.isValid && !!state.values.password;
+
+            return (
+              <Button
+                isSendeable={isSendeable}
+                isLoading={isPending}
+                containerClassName={clsx(isSendeable && 'border-red')}
+                className={clsx(isSendeable && 'bg-red')}
+                textClassName={clsx(isSendeable && 'group-hover:!text-red')}
+                spinnerClassName={clsx(isSendeable && 'border-red')}
+              >
+                {isSuccess ? 'Done' : `Delete User `}
+              </Button>
+            );
+          }}
         />
       </form>
       <SubmitMessage

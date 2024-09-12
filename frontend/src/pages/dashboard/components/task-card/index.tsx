@@ -1,12 +1,11 @@
 import { changeTaskState, getStateTask } from '@helpers/task';
-import { deleteTask, updateTask } from '@services/task';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import useMutationTask from '@hooks/use-mutation-task';
 import clsx from 'clsx';
-import React, { MouseEvent, useState } from 'react';
+import React, { type MouseEvent, useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdCircle } from 'react-icons/md';
-import { Task, UpdateTaskParams } from '../../../../types';
+import { type Task } from '../../../../types';
 import Accordion from './components/accordion';
 
 type TaskCardInputStates = {
@@ -16,35 +15,23 @@ type TaskCardInputStates = {
 
 export type TaskCardAccordionStates = 'Opened' | 'Closed';
 
-const TaskCard = React.memo(({ data }: { data?: Task }) => {
-  if (!data) return null;
-
+const TaskCard = React.memo(({ data }: { data: Task }) => {
   const [input, setInput] = useState<TaskCardInputStates>({
     value: data.title,
     isEditing: false
   });
-  const [accordionState, setAccordionState] =
-    useState<TaskCardAccordionStates>('Closed');
-  const queryClient = useQueryClient();
-  const mutationUpdateTask = useMutation({
-    mutationFn: (params: UpdateTaskParams) =>
-      updateTask({
-        id: params.id,
-        taskData: params.taskData
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['task'] });
-    }
-  });
-  const mutationDeleteTask = useMutation({
-    mutationFn: deleteTask,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['task'] });
-    }
-  });
+
+  const { taskUpdate, taskDeletion } = useMutationTask();
 
   const { id, state, created_at, updated_at } = data;
   const { value, isEditing } = input;
+
+  useEffect(() => {
+    setInput(prevInput => ({
+      ...prevInput,
+      value: data.title
+    }));
+  }, [data.title]);
 
   const handleUpdate = (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
@@ -56,7 +43,7 @@ const TaskCard = React.memo(({ data }: { data?: Task }) => {
     if (action === 'update-state') {
       const newState = changeTaskState(state);
 
-      mutationUpdateTask.mutate({
+      taskUpdate.mutate({
         id,
         taskData: { state: newState }
       });
@@ -66,7 +53,7 @@ const TaskCard = React.memo(({ data }: { data?: Task }) => {
         isEditing: !prevInput.isEditing
       }));
 
-      mutationUpdateTask.mutate({
+      taskUpdate.mutate({
         id,
         taskData: { title: value }
       });
@@ -78,8 +65,11 @@ const TaskCard = React.memo(({ data }: { data?: Task }) => {
   ) => {
     e.preventDefault();
 
-    mutationDeleteTask.mutate(id);
+    taskDeletion.mutate(id);
   };
+
+  const [accordionState, setAccordionState] =
+    useState<TaskCardAccordionStates>('Closed');
 
   const toggleAccordion = () =>
     setAccordionState(prevState =>

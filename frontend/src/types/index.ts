@@ -41,7 +41,7 @@ export type UserUpdateData = {
   password?: string;
   email?: string;
   full_name?: string;
-  currentPassword: string;
+  confirmationPassword: string;
 };
 
 export type UpdateUserResponse =

@@ -61,6 +61,7 @@ const SignInForm = () => {
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
+          
           form.handleSubmit();
         }}
         className="flex flex-col gap-6"
@@ -81,18 +82,18 @@ const SignInForm = () => {
         ))}
         <form.Subscribe
           selector={state => state}
-          children={state => (
-            <Button
-              isSendeable={
-                state.isValid &&
-                !!state.values.username.length &&
-                !!state.values.password.length
-              }
-              isLoading={isPending}
-            >
-              Sign in
-            </Button>
-          )}
+          children={state => {
+            const isSendeable =
+              state.isValid &&
+              !!state.values.username.length &&
+              !!state.values.password.length;
+
+            return (
+              <Button isSendeable={isSendeable} isLoading={isPending}>
+                Sign in
+              </Button>
+            );
+          }}
         />
       </form>
       <SubmitMessage

@@ -1,29 +1,27 @@
 import Button from '@components/button';
 import SubmitMessage from '@components/submit-message';
-import { createTask } from '@services/task';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import useMutationTask from '@hooks/use-mutation-task';
+import { type ChangeEvent, type FormEvent, useState } from 'react';
 
 const TaskCreatorForm = () => {
   const [value, setValue] = useState('');
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
-  const queryClient = useQueryClient();
-  const mutationCreateTask = useMutation({
-    mutationFn: createTask,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['task'] });
-    },
-    onError: error => {
-      error?.message && setSubmitMessage(error.message);
-      setTimeout(() => {
-        setSubmitMessage(null);
-      }, 5000);
+
+  const { taskCreation } = useMutationTask({
+    creation: {
+      onError: error => {
+        error?.message && setSubmitMessage(error.message);
+        setTimeout(() => {
+          setSubmitMessage(null);
+        }, 5000);
+      }
     }
   });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    mutationCreateTask.mutate({ title: value });
+
+    taskCreation.mutate({ title: value });
     setValue('');
   };
 
@@ -31,7 +29,7 @@ const TaskCreatorForm = () => {
     setValue(e.target.value);
   };
 
-  const { isPending } = mutationCreateTask;
+  const { isPending } = taskCreation;
 
   return (
     <div className="order-0 relative flex flex-col pb-10 lg:order-1 lg:px-10 lg:pt-10">
@@ -46,7 +44,7 @@ const TaskCreatorForm = () => {
           placeholder="What is your new task to save?"
           className="overflow-hidden text-ellipsis border-b-2 border-lilac bg-transparent bg-white px-1 text-2xl outline-none placeholder:text-dark-gray focus:outline-none focus:ring-0"
         />
-        <Button type="submit" onClick={handleSubmit} isLoading={isPending}>
+        <Button type="submit" isLoading={isPending}>
           Create task
         </Button>
         <SubmitMessage type="Error">{submitMessage}</SubmitMessage>

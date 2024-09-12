@@ -5,6 +5,7 @@ const Header = () => {
   const { logout } = useAuthentication();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
   const handleLogout = () => {
     logout();
     navigate('/');

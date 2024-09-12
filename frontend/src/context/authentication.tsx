@@ -1,7 +1,7 @@
 import getAuthenticationToken from '@helpers/get-authentication-token';
 import { useQueryClient } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, type ReactNode, useContext, useState } from 'react';
 
 type AuthenticationContextProps =
   | {

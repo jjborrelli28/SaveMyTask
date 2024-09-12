@@ -1,15 +1,15 @@
 import clsx from 'clsx';
-import React, { PropsWithChildren } from 'react';
+import { type PropsWithChildren } from 'react';
 
-const SubmitMessage = React.memo(
-  ({
-    type,
-    children,
-    className
-  }: PropsWithChildren<{
-    type?: 'Success' | 'Error';
-    className?: string;
-  }>) => (
+const SubmitMessage = ({
+  type,
+  children,
+  className
+}: PropsWithChildren<{
+  type?: 'Success' | 'Error';
+  className?: string;
+}>) => {
+  return (
     <div
       className={clsx(
         'grid-rows-auto grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-300',
@@ -30,7 +30,7 @@ const SubmitMessage = React.memo(
         </p>
       </div>
     </div>
-  )
-);
+  );
+};
 
 export default SubmitMessage;

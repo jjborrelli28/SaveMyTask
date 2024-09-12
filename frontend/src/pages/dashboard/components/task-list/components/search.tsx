@@ -1,6 +1,11 @@
 import { useTaskQueryParams } from '@context/task-query-params';
 import debounce from 'lodash/debounce';
-import { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
+import {
+  type ChangeEvent,
+  type KeyboardEvent,
+  useCallback,
+  useState
+} from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 const Search = () => {

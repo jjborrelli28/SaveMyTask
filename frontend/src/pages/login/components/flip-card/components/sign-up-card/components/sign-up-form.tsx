@@ -69,6 +69,7 @@ const SignUpForm = () => {
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
+          
           form.handleSubmit();
         }}
         className="flex flex-col gap-6"
@@ -89,20 +90,20 @@ const SignUpForm = () => {
         ))}
         <form.Subscribe
           selector={state => state}
-          children={state => (
-            <Button
-              isSendeable={
-                state.isValid &&
-                !!state.values.username.length &&
-                !!state.values.password.length &&
-                !!state.values.email &&
-                !!state.values.full_name
-              }
-              isLoading={isPending}
-            >
-              {isSuccess ? 'You got it!' : 'Create user'}
-            </Button>
-          )}
+          children={state => {
+            const isSendeable =
+              state.isValid &&
+              !!state.values.username.length &&
+              !!state.values.password.length &&
+              !!state.values.email &&
+              !!state.values.full_name;
+
+            return (
+              <Button isSendeable={isSendeable} isLoading={isPending}>
+                {isSuccess ? 'You got it!' : 'Create user'}
+              </Button>
+            );
+          }}
         />
       </form>
       <SubmitMessage

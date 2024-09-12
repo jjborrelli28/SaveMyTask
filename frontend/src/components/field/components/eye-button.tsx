@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import { Dispatch, SetStateAction } from 'react';
+import { type Dispatch, type SetStateAction } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { InputStates } from '..';
+import { type InputStates } from '..';
 import { colors } from '../constants';
 
 type EyeButtonProps = {

@@ -1,12 +1,12 @@
 import {
   createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
   useContext,
   useState
 } from 'react';
-import type { TaskQueryParams } from '../types';
+import { type TaskQueryParams } from '../types';
 
 export type TaskQueryParamsContextProps = {
   queryParams: TaskQueryParams;

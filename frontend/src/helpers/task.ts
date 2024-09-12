@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { TaskStates } from '../types';
+import { type TaskStates } from '../types';
 
 const taskStates = {
   'To do': 'text-orange',

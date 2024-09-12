@@ -40,9 +40,9 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
 
   const defaultValues = {
     [fieldKey]: '',
-    currentPassword: ''
+    confirmationPassword: ''
   } as Record<FieldKeys, string> & {
-    currentPassword: string;
+    confirmationPassword: string;
   };
 
   const form = useForm({
@@ -63,7 +63,7 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
             ? 'email'
             : 'text'
     },
-    { name: 'currentPassword', type: 'password' }
+    { name: 'confirmationPassword', type: 'password' }
   ];
 
   return (
@@ -72,6 +72,7 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
+          
           form.handleSubmit();
         }}
         className="flex flex-col gap-6"
@@ -89,7 +90,7 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
               return (
                 <div>
                   <label className="text-lg font-semibold">
-                    {data.name === 'currentPassword'
+                    {data.name === 'confirmationPassword'
                       ? 'Your Password'
                       : `New ${formatLabel(data.name)}`}
                     :
@@ -108,18 +109,18 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
 
         <form.Subscribe
           selector={state => state}
-          children={state => (
-            <Button
-              isSendeable={
-                state.isValid &&
-                !!state.values[fieldKey] &&
-                !!state.values.currentPassword
-              }
-              isLoading={isPending}
-            >
-              {isSuccess ? 'In good time' : `Update ${formatLabel(fieldKey)}`}
-            </Button>
-          )}
+          children={state => {
+            const isSendeable =
+              state.isValid &&
+              !!state.values[fieldKey] &&
+              !!state.values.confirmationPassword;
+
+            return (
+              <Button isSendeable={isSendeable} isLoading={isPending}>
+                {isSuccess ? 'In good time' : `Update ${formatLabel(fieldKey)}`}
+              </Button>
+            );
+          }}
         />
       </form>
       <SubmitMessage

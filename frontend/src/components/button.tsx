@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { MouseEventHandler, PropsWithChildren } from 'react';
+import { type MouseEventHandler, type PropsWithChildren } from 'react';
 import Spinner from './spinner';
 
 type ButtonProps = {

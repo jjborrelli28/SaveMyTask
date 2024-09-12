@@ -8,6 +8,7 @@ import { useEffect, useRef } from 'react';
 import { FaListUl } from 'react-icons/fa';
 import TaskCard from '../task-card';
 import Search from './components/search';
+import Skeleton from './components/skeleton';
 
 const TaskList = () => {
   const { queryParams } = useTaskQueryParams();
@@ -94,22 +95,28 @@ const TaskList = () => {
                 height: `${virtualizer.getTotalSize()}px`
               }}
             >
-              {virtualizer.getVirtualItems().map(virtualItem => (
-                <div
-                  ref={virtualizer.measureElement}
-                  key={virtualItem.key}
-                  data-index={virtualItem.index}
-                  className="absolute top-0 w-full"
-                  style={{
-                    transform: `translateY(${virtualItem.start}px)`
-                  }}
-                >
-                  <TaskCard data={items[virtualItem.index]} />
-                </div>
-              ))}
+              {virtualizer.getVirtualItems().map(virtualItem => {
+                const virtulItemData = items[virtualItem.index];
+
+                if (!virtulItemData) return null;
+
+                return (
+                  <div
+                    ref={virtualizer.measureElement}
+                    key={virtualItem.key}
+                    data-index={virtualItem.index}
+                    className="absolute top-0 w-full"
+                    style={{
+                      transform: `translateY(${virtualItem.start}px)`
+                    }}
+                  >
+                    <TaskCard data={virtulItemData} />
+                  </div>
+                );
+              })}
             </ul>
           </div>
-          {isFetchingNextPage && <Spinner className="!border-gray py-3" />}
+          {isFetchingNextPage && <Skeleton />}
         </>
       ) : (
         <div className="flex flex-1 items-center py-10">
