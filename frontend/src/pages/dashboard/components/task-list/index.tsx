@@ -101,7 +101,7 @@ const TaskList = () => {
                 if (!virtulItemData) return null;
 
                 return (
-                  <div
+                  <li
                     ref={virtualizer.measureElement}
                     key={virtualItem.key}
                     data-index={virtualItem.index}
@@ -111,7 +111,7 @@ const TaskList = () => {
                     }}
                   >
                     <TaskCard data={virtulItemData} />
-                  </div>
+                  </li>
                 );
               })}
             </ul>

@@ -1,29 +1,47 @@
 import Spinner from '@components/spinner';
+import SubmitMessage from '@components/submit-message';
+import { initialQueryParams } from '@context/task-query-params';
 import getFilteredTasks from '@helpers/get-filtered-tasks';
 import { getTasks } from '@services/task';
+import { getUser } from '@services/user';
 import { useQuery } from '@tanstack/react-query';
 import { MdCircle } from 'react-icons/md';
-import { User } from '../../../types';
 
-const TaskSumary = ({ user }: { user: User }) => {
-  const { data: itemsData } = useQuery({
+const TaskSumary = () => {
+  const { isLoading, data, isError, error } = useQuery({
     queryKey: ['task'],
-    queryFn: () => getTasks()
+    queryFn: () => getTasks(initialQueryParams)
   });
 
-  const userName = user.full_name;
-  const allTasks = itemsData?.items;
+  const {
+    isLoading: userDataIsLoading,
+    data: userData,
+    isError: userDataIsError,
+    error: userDataError
+  } = useQuery({
+    queryKey: ['user'],
+    queryFn: getUser
+  });
 
-  if (!userName || !allTasks) return <Spinner />;
+  if (isLoading || userDataIsLoading) return <Spinner />;
+  if (isError || userDataIsError)
+    return (
+      <SubmitMessage type="Error">
+        {error?.message || userDataError?.message}
+      </SubmitMessage>
+    );
 
-  const todoTasks = getFilteredTasks(allTasks, 'To do');
-  const inProgressTasks = getFilteredTasks(allTasks, 'In progress');
-  const doneTasks = getFilteredTasks(allTasks, 'Done');
+  const { totalItems } = data!;
+  const { full_name } = userData?.user!;
+
+  const todoTasks = getFilteredTasks(totalItems, 'To do');
+  const inProgressTasks = getFilteredTasks(totalItems, 'In progress');
+  const doneTasks = getFilteredTasks(totalItems, 'Done');
 
   return (
     <div className="flex flex-1 flex-col gap-10 pb-5 lg:border-r-2 lg:border-gray lg:px-10 lg:pb-10">
       <h2 className="text-2xl font-semibold">
-        {`Welcome ${userName},`}
+        {`Welcome ${full_name},`}
         <br />
         this is your current task status:
       </h2>
@@ -56,6 +74,7 @@ const TaskSumary = ({ user }: { user: User }) => {
           </p>
         </div>
       </div>
+      <p className="text-lg font-semibold">Total tasks: {totalItems.length}</p>
     </div>
   );
 };

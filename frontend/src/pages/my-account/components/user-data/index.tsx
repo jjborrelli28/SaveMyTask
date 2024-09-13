@@ -1,14 +1,18 @@
+import Button from '@components/button';
+import Spinner from '@components/spinner';
+import SubmitMessage from '@components/submit-message';
 import formatLabel from '@helpers/format-label';
+import { getUser } from '@services/user';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { LuAsterisk } from 'react-icons/lu';
-import { User } from '../../../../types';
+import { type User } from '../../../../types';
 import ModalForm from './components/modal-form';
-import Button from '@components/button';
 
 export type FieldKeys = Exclude<keyof User, 'id' | 'created_at'>;
 
-export const UserData = ({ user }: { user: User }) => {
+export const UserData = () => {
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     key: FieldKeys | null;
@@ -17,15 +21,26 @@ export const UserData = ({ user }: { user: User }) => {
     key: null
   });
 
-  const userDataToShow = {
-    username: user.username,
+  const { isLoading, data, isError, error } = useQuery({
+    queryKey: ['user'],
+    queryFn: getUser
+  });
+
+  if (isLoading) return <Spinner />;
+  if (isError)
+    return <SubmitMessage type="Error">{error.message}</SubmitMessage>;
+
+  const { username, email, full_name } = data?.user!;
+
+  const userData = {
+    username,
     password: (
       <span className="flex items-center">
         {Array(8).fill(<LuAsterisk size={16} />)}
       </span>
     ),
-    email: user.email,
-    full_name: user.full_name
+    email,
+    full_name
   };
 
   const handleOpenModal = (key: FieldKeys) => {
@@ -43,8 +58,8 @@ export const UserData = ({ user }: { user: User }) => {
     <div className="relative flex flex-col gap-10 pb-10 lg:order-1 lg:px-10">
       <h2 className="text-2xl font-semibold">My information</h2>
       <div className="flex flex-col gap-5 border-2 border-gray p-5 lg:p-10">
-        {Object.entries(userDataToShow).map(([key, value]) => (
-          <div className="flex items-center gap-3" key={key}>
+        {Object.entries(userData).map(([key, value]) => (
+          <div key={key} className="flex items-center gap-3">
             <p className="flex gap-2 text-xl">
               <span className="font-semibold capitalize">
                 {formatLabel(key)}:

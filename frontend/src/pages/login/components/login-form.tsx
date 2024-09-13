@@ -1,51 +1,43 @@
 import Button from '@components/button';
-import Field, { Fields } from '@components/field';
+import Field, { type Fields } from '@components/field';
 import SubmitMessage from '@components/submit-message';
 import { useAuthentication } from '@context/authentication';
-import { createUser } from '@services/user';
+import { loginUser } from '@services/user';
 import { useForm } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { createUserSchema } from '@validations/user';
+import { loginSchema } from '@validations/user';
 import { useState } from 'react';
-import Confetti from 'react-confetti';
 import { useNavigate } from 'react-router-dom';
 
-export type CreateUserFieldNames =
-  | 'username'
-  | 'password'
-  | 'email'
-  | 'full_name';
+export type LoginFieldNames = 'username' | 'password';
 
-const fields: Fields<CreateUserFieldNames> = [
+const fields: Fields<LoginFieldNames> = [
   { name: 'username' },
-  { name: 'password', type: 'password' },
-  { name: 'email', type: 'email' },
-  { name: 'full_name' }
+  { name: 'password', type: 'password' }
 ];
 
 const defaultValues = {
   username: '',
-  password: '',
-  email: '',
-  full_name: ''
+  password: ''
 };
 
-const SignUpForm = () => {
+const SignInForm = () => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const { login } = useAuthentication();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
   const mutationCreateUser = useMutation({
-    mutationFn: createUser,
+    mutationFn: loginUser,
     onSuccess: data => {
       data?.message && setSubmitMessage(data.message);
+      data?.token && login(data.token);
       setTimeout(() => {
-        data?.token && login(data.token);
+        navigate('/dashboard');
         reset();
-      }, 5000);
-      queryClient.invalidateQueries({ queryKey: ['user'] });
+      }, 1000);
+      queryClient.invalidateQueries({ queryKey: ['logged-user'] });
     },
     onError: error => {
       setSubmitMessage(error.message);
@@ -69,7 +61,7 @@ const SignUpForm = () => {
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
-          
+
           form.handleSubmit();
         }}
         className="flex flex-col gap-6"
@@ -80,7 +72,7 @@ const SignUpForm = () => {
             name={field.name}
             validatorAdapter={zodValidator()}
             validators={{
-              onChange: createUserSchema.shape[field.name],
+              onChange: loginSchema.shape[field.name],
               onChangeAsyncDebounceMs: 300
             }}
             children={data => {
@@ -94,13 +86,11 @@ const SignUpForm = () => {
             const isSendeable =
               state.isValid &&
               !!state.values.username.length &&
-              !!state.values.password.length &&
-              !!state.values.email &&
-              !!state.values.full_name;
+              !!state.values.password.length;
 
             return (
               <Button isSendeable={isSendeable} isLoading={isPending}>
-                {isSuccess ? 'You got it!' : 'Create user'}
+                Log in
               </Button>
             );
           }}
@@ -111,9 +101,8 @@ const SignUpForm = () => {
       >
         {submitMessage}
       </SubmitMessage>
-      {isSuccess && <Confetti className="absolute left-0 top-0" />}
     </>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;

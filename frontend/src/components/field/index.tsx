@@ -1,8 +1,8 @@
-import { type LoginFieldNames } from '@pages/login/components/flip-card/components/sign-in-card/components/sign-in-form';
-import { type CreateUserFieldNames } from '@pages/login/components/flip-card/components/sign-up-card/components/sign-up-form';
+import { type LoginFieldNames } from '@pages/login/components/login-form';
 import { type FieldKeys } from '@pages/my-account/components/user-data';
-import { type DeleteUserField } from '@pages/my-account/components/user-data/components/components/delete-user-form';
+import { type DeleteUserField } from '@pages/my-account/components/user-data/components/forms/delete-user';
 import { type UpdateUserFieldNames } from '@pages/my-account/components/user-data/components/modal-form';
+import { type CreateUserFieldNames } from '@pages/sing-up/components/sign-up-form';
 import { type FieldApi, type Validator } from '@tanstack/react-form';
 import clsx from 'clsx';
 import { type HTMLInputTypeAttribute, useState } from 'react';

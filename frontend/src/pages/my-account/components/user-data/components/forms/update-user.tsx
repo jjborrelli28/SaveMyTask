@@ -1,16 +1,15 @@
 import Button from '@components/button';
-import Field, { Fields } from '@components/field';
+import Field, { type Fields } from '@components/field';
 import SubmitMessage from '@components/submit-message';
 import formatLabel from '@helpers/format-label';
-import { updateUser } from '@services/user';
+import useMutationUser from '@hooks/use-mutation-user';
 import { useForm } from '@tanstack/react-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { updateUserSchema } from '@validations/user';
 import clsx from 'clsx';
 import { useState } from 'react';
-import { FieldKeys } from '../..';
-import { UpdateUserFieldNames } from '../modal-form';
+import { type FieldKeys } from '../..';
+import { type UpdateUserFieldNames } from '../modal-form';
 
 type UpdateUserFormProps = {
   fieldKey: FieldKeys;
@@ -20,23 +19,23 @@ type UpdateUserFormProps = {
 const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
 
-  const queryClient = useQueryClient();
-  const mutationUpdateUser = useMutation({
-    mutationFn: updateUser,
-    onSuccess: data => {
-      data?.message && setSubmitMessage(data.message);
-      queryClient.invalidateQueries({ queryKey: ['user'] });
-      setTimeout(() => {
-        setSubmitMessage(null);
-        reset();
-        onClose();
-      }, 2500);
-    },
-    onError: error => {
-      setSubmitMessage(error.message);
+  const { userUpdate } = useMutationUser({
+    update: {
+      onSuccess: data => {
+        data?.message && setSubmitMessage(data.message);
+        setTimeout(() => {
+          setSubmitMessage(null);
+          reset();
+          onClose();
+        }, 2500);
+      },
+      onError: error => {
+        setSubmitMessage(error.message);
+      }
     }
   });
-  const { isSuccess, isError, isPending, reset } = mutationUpdateUser;
+
+  const { isSuccess, isError, isPending, reset } = userUpdate;
 
   const defaultValues = {
     [fieldKey]: '',
@@ -49,7 +48,7 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
     defaultValues,
     validatorAdapter: zodValidator(),
     onSubmit: async ({ value }) => {
-      mutationUpdateUser.mutate(value);
+      userUpdate.mutate(value);
     }
   });
 
@@ -72,7 +71,6 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
-          
           form.handleSubmit();
         }}
         className="flex flex-col gap-6"

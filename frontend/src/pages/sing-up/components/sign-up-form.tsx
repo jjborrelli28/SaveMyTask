@@ -1,47 +1,51 @@
 import Button from '@components/button';
-import Field, { Fields } from '@components/field';
+import Field, { type Fields } from '@components/field';
 import SubmitMessage from '@components/submit-message';
 import { useAuthentication } from '@context/authentication';
-import { loginUser } from '@services/user';
+import useMutationUser from '@hooks/use-mutation-user';
 import { useForm } from '@tanstack/react-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { loginSchema } from '@validations/user';
+import { createUserSchema } from '@validations/user';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import Confetti from 'react-confetti';
 
-export type LoginFieldNames = 'username' | 'password';
+export type CreateUserFieldNames =
+  | 'username'
+  | 'password'
+  | 'email'
+  | 'full_name';
 
-const fields: Fields<LoginFieldNames> = [
+const fields: Fields<CreateUserFieldNames> = [
   { name: 'username' },
-  { name: 'password', type: 'password' }
+  { name: 'password', type: 'password' },
+  { name: 'email', type: 'email' },
+  { name: 'full_name' }
 ];
 
 const defaultValues = {
   username: '',
-  password: ''
+  password: '',
+  email: '',
+  full_name: ''
 };
 
-const SignInForm = () => {
+const SignUpForm = () => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const { login } = useAuthentication();
-  const navigate = useNavigate();
 
-  const queryClient = useQueryClient();
-  const mutationCreateUser = useMutation({
-    mutationFn: loginUser,
-    onSuccess: data => {
-      data?.message && setSubmitMessage(data.message);
-      data?.token && login(data.token);
-      setTimeout(() => {
-        navigate('/dashboard');
+  const { userCreation } = useMutationUser({
+    creation: {
+      onSuccess: data => {
+        data?.message && setSubmitMessage(data.message);
+        setTimeout(() => {
+          data?.token && login(data.token);
+          reset();
+        }, 5000);
+      },
+      onError: error => {
+        setSubmitMessage(error.message);
         reset();
-      }, 1000);
-      queryClient.invalidateQueries({ queryKey: ['logged-user'] });
-    },
-    onError: error => {
-      setSubmitMessage(error.message);
-      reset();
+      }
     }
   });
 
@@ -49,11 +53,11 @@ const SignInForm = () => {
     defaultValues,
     validatorAdapter: zodValidator(),
     onSubmit: async ({ value }) => {
-      mutationCreateUser.mutate(value);
+      userCreation.mutate(value);
     }
   });
 
-  const { isSuccess, isError, isPending, reset } = mutationCreateUser;
+  const { isSuccess, isError, isPending, reset } = userCreation;
 
   return (
     <>
@@ -61,7 +65,6 @@ const SignInForm = () => {
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
-          
           form.handleSubmit();
         }}
         className="flex flex-col gap-6"
@@ -72,7 +75,7 @@ const SignInForm = () => {
             name={field.name}
             validatorAdapter={zodValidator()}
             validators={{
-              onChange: loginSchema.shape[field.name],
+              onChange: createUserSchema.shape[field.name],
               onChangeAsyncDebounceMs: 300
             }}
             children={data => {
@@ -86,11 +89,13 @@ const SignInForm = () => {
             const isSendeable =
               state.isValid &&
               !!state.values.username.length &&
-              !!state.values.password.length;
+              !!state.values.password.length &&
+              !!state.values.email &&
+              !!state.values.full_name;
 
             return (
               <Button isSendeable={isSendeable} isLoading={isPending}>
-                Sign in
+                {isSuccess ? 'You got it!' : 'Create user'}
               </Button>
             );
           }}
@@ -101,8 +106,9 @@ const SignInForm = () => {
       >
         {submitMessage}
       </SubmitMessage>
+      {isSuccess && <Confetti className="absolute left-0 top-0" />}
     </>
   );
 };
 
-export default SignInForm;
+export default SignUpForm;

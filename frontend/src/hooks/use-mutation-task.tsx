@@ -7,17 +7,15 @@ import {
   type UpdateTaskResponse
 } from '../types';
 
-type Response = CreateTaskResponse | UpdateTaskResponse | DeleteTaskResponse;
-
-type ResponseFunctions = {
-  onSuccess?: (response: Response) => void;
+type ResponseFunctions<T> = {
+  onSuccess?: (response: T) => void;
   onError?: (error: Error) => void;
 };
 
 type UseMutationTask = {
-  creation?: ResponseFunctions;
-  update?: ResponseFunctions;
-  deletion?: ResponseFunctions;
+  creation?: ResponseFunctions<CreateTaskResponse>;
+  update?: ResponseFunctions<UpdateTaskResponse>;
+  deletion?: ResponseFunctions<DeleteTaskResponse>;
 };
 
 const useMutationTask = ({

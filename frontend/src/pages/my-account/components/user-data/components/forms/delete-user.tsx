@@ -2,9 +2,8 @@ import Button from '@components/button';
 import Field from '@components/field';
 import SubmitMessage from '@components/submit-message';
 import { useAuthentication } from '@context/authentication';
-import { deleteUser } from '@services/user';
+import useMutationUser from '@hooks/use-mutation-user';
 import { useForm } from '@tanstack/react-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { updateUserSchema } from '@validations/user';
 import clsx from 'clsx';
@@ -20,24 +19,24 @@ const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const { logout } = useAuthentication();
 
-  const queryClient = useQueryClient();
-  const mutationDeleteUser = useMutation({
-    mutationFn: deleteUser,
-    onSuccess: data => {
-      data?.message && setSubmitMessage(data.message);
-      queryClient.invalidateQueries({ queryKey: ['user'] });
-      setTimeout(() => {
-        setSubmitMessage(null);
-        reset();
-        logout();
-        onClose();
-      }, 2500);
-    },
-    onError: error => {
-      setSubmitMessage(error.message);
+  const { userDeletion } = useMutationUser({
+    deletion: {
+      onSuccess: data => {
+        data?.message && setSubmitMessage(data.message);
+        setTimeout(() => {
+          setSubmitMessage(null);
+          reset();
+          logout();
+          onClose();
+        }, 2500);
+      },
+      onError: error => {
+        setSubmitMessage(error.message);
+      }
     }
   });
-  const { isSuccess, isError, isPending, reset } = mutationDeleteUser;
+
+  const { isSuccess, isError, isPending, reset } = userDeletion;
 
   const defaultValues = {
     password: ''
@@ -47,8 +46,7 @@ const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
     defaultValues,
     validatorAdapter: zodValidator(),
     onSubmit: async ({ value }) => {
-      console.log(value);
-      mutationDeleteUser.mutate(value);
+      userDeletion.mutate(value);
     }
   });
 
@@ -58,7 +56,6 @@ const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
-          
           form.handleSubmit();
         }}
         className="flex flex-col gap-6"

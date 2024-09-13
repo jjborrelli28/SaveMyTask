@@ -17,10 +17,10 @@ export type NewUserData = {
 };
 
 export type CreateUserResponse =
-  | { message: string; token: string; newUser: User }
+  | { message: string; token: string; user: Omit<User, 'password'> }
   | undefined;
 
-export type CreateUser = (data: NewUserData) => Promise<CreateUserResponse>;
+export type CreateUser = (userData: NewUserData) => Promise<CreateUserResponse>;
 
 export type LoginUserData = { username: string; password: string };
 
@@ -28,10 +28,10 @@ export type LoginUserResponse =
   | { message: string; userId: number; token: string }
   | undefined;
 
-export type LoginUser = (data: LoginUserData) => Promise<LoginUserResponse>;
+export type LoginUser = (userData: LoginUserData) => Promise<LoginUserResponse>;
 
 export type GetUserResponse =
-  | { user: Exclude<keyof User, 'password'>; message: string }
+  | { user: Omit<NewUserData, 'password'>; message: string }
   | undefined;
 
 export type GetUser = () => Promise<GetUserResponse>;
@@ -46,7 +46,7 @@ export type UserUpdateData = {
 
 export type UpdateUserResponse =
   | {
-      updatedUser: Exclude<keyof User, 'password'>;
+      user: Omit<NewUserData, 'password'>;
       message: string;
     }
   | undefined;
@@ -55,17 +55,11 @@ export type UpdateUser = (
   userData: UserUpdateData
 ) => Promise<UpdateUserResponse>;
 
-export type DeleteUserResponse =
-  | { deletedUser: Exclude<keyof User, 'password'>; message: string }
-  | undefined;
+export type DeleteUserResponse = { message: string } | undefined;
 
-export type DeleteUserData = {
-  password: string;
-};
-
-export type DeleteUser = (
-  dataUser: DeleteUserData
-) => Promise<DeleteUserResponse>;
+export type DeleteUser = (userData: {
+  password: string
+}) => Promise<DeleteUserResponse>;
 
 // Task
 export type TaskStates = 'To do' | 'In progress' | 'Done';
@@ -79,19 +73,15 @@ export type Task = {
   updated_at: Date;
 };
 
-export type Tasks = {
-  items: Task[];
-  totalItems: number;
-  page: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  limit: number;
-};
-
 export type GetTasksResponse =
-  | (Tasks & {
+  | {
+      items: Task[];
+      page: number;
+      limit: number;
+      hasNextPage: number;
+      totalItems: Task[];
       message: string;
-    })
+    }
   | undefined;
 
 export type TaskQueryParams = {
@@ -104,7 +94,7 @@ export type GetTasks = (
   queries?: TaskQueryParams | undefined
 ) => Promise<GetTasksResponse>;
 
-export type CreateTaskResponse = { newTask: Task; message: string };
+export type CreateTaskResponse = { newTask: Task; message: string } | undefined;
 
 export type NewTaskData = {
   title: string;

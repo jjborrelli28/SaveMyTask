@@ -1,3 +1,4 @@
+import SubmitMessage from '@components/submit-message';
 import { changeTaskState, getStateTask } from '@helpers/task';
 import useMutationTask from '@hooks/use-mutation-task';
 import clsx from 'clsx';
@@ -20,8 +21,26 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
     value: data.title,
     isEditing: false
   });
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
 
-  const { taskUpdate, taskDeletion } = useMutationTask();
+  const { taskUpdate, taskDeletion } = useMutationTask({
+    update: {
+      onError: error => {
+        error?.message && setSubmitMessage(error.message);
+        setTimeout(() => {
+          setSubmitMessage(null);
+        }, 2500);
+      }
+    },
+    deletion: {
+      onError: error => {
+        error?.message && setSubmitMessage(error.message);
+        setTimeout(() => {
+          setSubmitMessage(null);
+        }, 2500);
+      }
+    }
+  });
 
   const { id, state, created_at, updated_at } = data;
   const { value, isEditing } = input;
@@ -77,7 +96,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
     );
 
   return (
-    <li
+    <div
       className={clsx(
         'flex flex-col bg-gray p-3 shadow-md transition-[background,transform] duration-300 hover:scale-[1.01] hover:bg-light-gray',
         isEditing && 'animate-blink-background-gray'
@@ -153,7 +172,17 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
         </button>
       </div>
       <Accordion data={data} state={accordionState} />
-    </li>
+      <div>
+        <SubmitMessage
+          type="Error"
+          className={clsx(
+            submitMessage && 'mt-3 transition-[margin] duration-300'
+          )}
+        >
+          {submitMessage}
+        </SubmitMessage>
+      </div>
+    </div>
   );
 });
 

@@ -1,9 +1,10 @@
 import MainLayout from '@components/main-layout';
-import { default as PrivateRoutes } from '@components/private-routes';
+import PrivateRoutes from '@components/private-routes';
 import Dashboard from '@pages/dashboard';
 import Homepage from '@pages/homepage';
 import Login from '@pages/login';
 import MyAccount from '@pages/my-account';
+import SignUp from '@pages/sing-up';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const Router = () => {
@@ -13,6 +14,7 @@ const Router = () => {
       children: [
         { path: '/', element: <Homepage /> },
         { path: '/login', element: <Login /> },
+        { path: '/sign-up', element: <SignUp /> },
         {
           element: <PrivateRoutes />,
           children: [

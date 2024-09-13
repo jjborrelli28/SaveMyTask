@@ -2,16 +2,16 @@ import { taskApi } from '@apis/index';
 import getAuthenticationHeaders from '@helpers/get-authentication-headers';
 import { handleError } from '@helpers/handle-error';
 import { showByConsole } from '@helpers/show-by-console';
-import { AxiosResponse } from 'axios';
+import { type AxiosResponse } from 'axios';
 import {
-  CreateTask,
-  CreateTaskResponse,
-  DeleteTask,
-  DeleteTaskResponse,
-  GetTasks,
-  GetTasksResponse,
-  UpdateTask,
-  UpdateTaskResponse
+  type CreateTask,
+  type CreateTaskResponse,
+  type DeleteTask,
+  type DeleteTaskResponse,
+  type GetTasks,
+  type GetTasksResponse,
+  type UpdateTask,
+  type UpdateTaskResponse
 } from '../types';
 
 export const getTasks: GetTasks = async queries => {

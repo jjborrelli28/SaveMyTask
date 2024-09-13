@@ -1,10 +1,11 @@
 import formatLabel from '@helpers/format-label';
-import { CreateUserFieldNames } from '@pages/login/components/flip-card/components/sign-up-card/components/sign-up-form';
+
+import { type CreateUserFieldNames } from '@pages/sing-up/components/sign-up-form';
+import { type MouseEvent } from 'react';
 import { RxCross2 } from 'react-icons/rx';
-import { FieldKeys } from '..';
-import DeleteUserForm from './components/delete-user-form';
-import UpdateUserForm from './components/update-user-form';
-import { MouseEvent } from 'react';
+import { type FieldKeys } from '..';
+import DeleteUserForm from './forms/delete-user';
+import UpdateUserForm from './forms/update-user';
 
 interface ModalFormProps {
   isOpen: boolean;
@@ -12,7 +13,9 @@ interface ModalFormProps {
   onClose: () => void;
 }
 
-export type UpdateUserFieldNames = CreateUserFieldNames | 'confirmationPassword';
+export type UpdateUserFieldNames =
+  | CreateUserFieldNames
+  | 'confirmationPassword';
 
 const ModalForm = ({ isOpen, fieldKey, onClose }: ModalFormProps) => {
   if (!isOpen) return null;

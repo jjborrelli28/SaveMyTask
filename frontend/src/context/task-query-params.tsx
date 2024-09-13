@@ -13,7 +13,7 @@ export type TaskQueryParamsContextProps = {
   setQueryParams: Dispatch<SetStateAction<TaskQueryParams>>;
 };
 
-const initialQueryParams = {
+export const initialQueryParams = {
   search: '',
   page: 1,
   limit: 20

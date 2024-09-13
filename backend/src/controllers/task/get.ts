@@ -50,19 +50,21 @@ const getTasks = async (req: RequestProps, res: Response) => {
       }
     );
 
-    const [{ totalCount: numberOfTotalItems }] =
-      await getNumberOfTotalItemsByUser("task", userId);
-
     const totalPagesOfFilteredItems = Math.ceil(
       totalFilteredItems.length / limit
     );
     const hasNextPage = page < totalPagesOfFilteredItems;
+
+    const totalItems = await getTotalFilteredItemsByUser("task", userId, {
+      value: "",
+    });
+
     const data = {
       items,
       page,
       limit,
       hasNextPage,
-      numberOfTotalItems,
+      totalItems,
     };
 
     return res.json({
