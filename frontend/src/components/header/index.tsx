@@ -1,7 +1,8 @@
 import { useAuthentication } from '@context/authentication';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import CTA from './components/cta';
 import { Fragment } from 'react/jsx-runtime';
+import CTA from './components/cta';
+import logo from '/assets/images/logo.png';
 
 const Header = () => {
   const { isAuthenticated, logout } = useAuthentication();
@@ -40,7 +41,7 @@ const Header = () => {
       <div className="container flex items-center justify-between">
         <NavLink to="/" aria-label="SaveMyTask Logo">
           <div className="flex items-center gap-2">
-            <img src="src/assets/logo.png" className="h-7 w-7" />
+            <img src={logo} className="h-7 w-7" />
             <span className="text-text text-md font-bold">SaveMyTask</span>
           </div>
         </NavLink>
