@@ -15,7 +15,9 @@ app.use(
   })
 );
 
-runInDevelopmentEnv(app.use((req, res, next) => delay(req, res, next, 500)));
+runInDevelopmentEnv(() =>
+  app.use((req, res, next) => delay(req, res, next, 500))
+);
 
 app.use(express.json());
 app.use("/api", router);
