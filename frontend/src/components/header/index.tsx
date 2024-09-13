@@ -1,5 +1,5 @@
 import { useAuthentication } from '@context/authentication';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import CTA from './components/cta';
 import { Fragment } from 'react/jsx-runtime';
 
@@ -38,10 +38,12 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-10 py-5 backdrop-blur-md">
       <div className="container flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <img src="src/assets/logo.png" className="h-7 w-7" />
-          <span className="text-text text-md font-bold">SaveMyTask</span>
-        </div>
+        <NavLink to="/" aria-label="SaveMyTask Logo">
+          <div className="flex items-center gap-2">
+            <img src="src/assets/logo.png" className="h-7 w-7" />
+            <span className="text-text text-md font-bold">SaveMyTask</span>
+          </div>
+        </NavLink>
         <nav>
           <ul className="flex gap-3">
             {ctas.map((cta, i) => {

@@ -1,6 +1,6 @@
 import useNavigateToDashboard from '@hooks/use-navigate-to-dashboard';
 import { useNavigate } from 'react-router-dom';
-import LogInForm from './components/login-form';
+import SignInForm from './components/login-form';
 
 const Login = () => {
   useNavigateToDashboard();
@@ -15,7 +15,7 @@ const Login = () => {
       <div className="flex w-96 flex-col gap-12 border-2 border-gray p-10 shadow-lg">
         <h2 className="text-left text-3xl font-bold">Sign in</h2>
         <div className="flex flex-col gap-3">
-          <LogInForm />
+          <SignInForm />
           <p className="text-left text-sm">
             Is this your first time at <b>SaveMyTask</b>? Create an account by
             clicking{' '}

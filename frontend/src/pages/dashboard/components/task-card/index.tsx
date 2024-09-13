@@ -62,6 +62,8 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
       ...prevInput,
       value: data.title
     }));
+
+    originalTitleRef.current = data.title;
   }, [data.title]);
 
   const handleUpdate = (
