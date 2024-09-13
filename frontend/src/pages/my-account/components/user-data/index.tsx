@@ -36,7 +36,11 @@ export const UserData = () => {
     username,
     password: (
       <span className="flex items-center">
-        {Array(8).fill(<LuAsterisk size={16} />)}
+        {Array(8)
+          .fill(null)
+          .map((_, index) => (
+            <LuAsterisk key={index} size={16} />
+          ))}
       </span>
     ),
     email,

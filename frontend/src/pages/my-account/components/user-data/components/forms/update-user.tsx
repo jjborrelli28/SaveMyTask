@@ -35,7 +35,7 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
     }
   });
 
-  const { isSuccess, isError, isPending, reset } = userUpdate;
+  const { isPending, isSuccess, isError, reset } = userUpdate;
 
   const defaultValues = {
     [fieldKey]: '',
@@ -114,7 +114,11 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
               !!state.values.confirmationPassword;
 
             return (
-              <Button isSendeable={isSendeable} isLoading={isPending}>
+              <Button
+                isSendeable={isSendeable}
+                isLoading={isPending}
+                isSuccess={isSuccess}
+              >
                 {isSuccess ? 'In good time' : `Update ${formatLabel(fieldKey)}`}
               </Button>
             );

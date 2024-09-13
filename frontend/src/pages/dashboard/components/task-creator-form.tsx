@@ -47,7 +47,9 @@ const TaskCreatorForm = () => {
         <Button type="submit" isLoading={isPending}>
           Create task
         </Button>
-        <SubmitMessage type="Error">{submitMessage}</SubmitMessage>
+        <SubmitMessage type="Error" className="-mt-2">
+          {submitMessage}
+        </SubmitMessage>
       </form>
     </div>
   );

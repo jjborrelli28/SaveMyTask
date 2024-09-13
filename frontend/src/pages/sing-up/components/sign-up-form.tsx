@@ -57,7 +57,7 @@ const SignUpForm = () => {
     }
   });
 
-  const { isSuccess, isError, isPending, reset } = userCreation;
+  const { isPending, isSuccess, isError, reset } = userCreation;
 
   return (
     <>
@@ -94,7 +94,11 @@ const SignUpForm = () => {
               !!state.values.full_name;
 
             return (
-              <Button isSendeable={isSendeable} isLoading={isPending}>
+              <Button
+                isSendeable={isSendeable}
+                isLoading={isPending}
+                isSuccess={isSuccess}
+              >
                 {isSuccess ? 'You got it!' : 'Create user'}
               </Button>
             );

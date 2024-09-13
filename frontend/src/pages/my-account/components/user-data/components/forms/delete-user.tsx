@@ -36,7 +36,7 @@ const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
     }
   });
 
-  const { isSuccess, isError, isPending, reset } = userDeletion;
+  const { isPending, isSuccess, isError, reset } = userDeletion;
 
   const defaultValues = {
     password: ''
@@ -89,9 +89,12 @@ const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
               <Button
                 isSendeable={isSendeable}
                 isLoading={isPending}
+                isError={isSuccess}
                 containerClassName={clsx(isSendeable && 'border-red')}
                 className={clsx(isSendeable && 'bg-red')}
-                textClassName={clsx(isSendeable && 'group-hover:!text-red')}
+                textClassName={clsx(
+                  isSendeable && !isSuccess && 'group-hover:!text-red'
+                )}
                 spinnerClassName={clsx(isSendeable && 'border-red')}
               >
                 {isSuccess ? 'Done' : `Delete User `}

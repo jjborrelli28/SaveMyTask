@@ -53,7 +53,7 @@ const SignInForm = () => {
     }
   });
 
-  const { isSuccess, isError, isPending, reset } = mutationCreateUser;
+  const { isPending, isSuccess, isError, reset } = mutationCreateUser;
 
   return (
     <>

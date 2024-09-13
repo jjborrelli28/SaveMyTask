@@ -2,7 +2,13 @@ import SubmitMessage from '@components/submit-message';
 import { changeTaskState, getStateTask } from '@helpers/task';
 import useMutationTask from '@hooks/use-mutation-task';
 import clsx from 'clsx';
-import React, { type MouseEvent, useEffect, useState } from 'react';
+import React, {
+  type ChangeEvent,
+  type MouseEvent,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdCircle } from 'react-icons/md';
@@ -22,13 +28,19 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
     isEditing: false
   });
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+  const originalTitleRef = useRef(data.title);
 
   const { taskUpdate, taskDeletion } = useMutationTask({
     update: {
       onError: error => {
         error?.message && setSubmitMessage(error.message);
+
         setTimeout(() => {
           setSubmitMessage(null);
+          setInput(prevInput => ({
+            ...prevInput,
+            value: originalTitleRef.current
+          }));
         }, 2500);
       }
     },
@@ -67,16 +79,25 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
         taskData: { state: newState }
       });
     } else if (action === 'update-title') {
+      if (isEditing) {
+        taskUpdate.mutate({
+          id,
+          taskData: { title: value }
+        });
+      }
+
       setInput(prevInput => ({
         ...prevInput,
         isEditing: !prevInput.isEditing
       }));
-
-      taskUpdate.mutate({
-        id,
-        taskData: { title: value }
-      });
     }
+  };
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInput(prevInput => ({
+      ...prevInput,
+      value: e.target.value
+    }));
   };
 
   const handleDelete = (
@@ -126,12 +147,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
                 isEditing && 'border-b-2 border-dark-gray'
               )}
               value={value}
-              onChange={e =>
-                setInput(prevInput => ({
-                  ...prevInput,
-                  value: e.target.value
-                }))
-              }
+              onChange={handleOnChange}
               disabled={!isEditing}
             />
             <button
@@ -172,16 +188,14 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
         </button>
       </div>
       <Accordion data={data} state={accordionState} />
-      <div>
-        <SubmitMessage
-          type="Error"
-          className={clsx(
-            submitMessage && 'mt-3 transition-[margin] duration-300'
-          )}
-        >
-          {submitMessage}
-        </SubmitMessage>
-      </div>
+      <SubmitMessage
+        type="Error"
+        className={clsx(
+          submitMessage && 'mt-3 transition-[margin] duration-300'
+        )}
+      >
+        {submitMessage}
+      </SubmitMessage>
     </div>
   );
 });

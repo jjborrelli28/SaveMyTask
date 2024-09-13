@@ -74,7 +74,7 @@ const TaskSumary = () => {
           </p>
         </div>
       </div>
-      <p className="text-lg font-semibold">Total tasks: {totalItems.length}</p>
+      <p className="text-xl font-semibold">Total tasks: {totalItems.length}</p>
     </div>
   );
 };

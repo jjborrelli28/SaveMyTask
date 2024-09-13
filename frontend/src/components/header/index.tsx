@@ -1,6 +1,7 @@
 import { useAuthentication } from '@context/authentication';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CTA from './components/cta';
+import { Fragment } from 'react/jsx-runtime';
 
 const Header = () => {
   const { isAuthenticated, logout } = useAuthentication();
@@ -45,10 +46,10 @@ const Header = () => {
           <ul className="flex gap-3">
             {ctas.map((cta, i) => {
               return (
-                <>
-                  <CTA key={i} content={cta} />
+                <Fragment key={i}>
+                  <CTA content={cta} />
                   {i < ctas.length - 1 && <span className="w-0.5 bg-lilac" />}
-                </>
+                </Fragment>
               );
             })}
           </ul>
