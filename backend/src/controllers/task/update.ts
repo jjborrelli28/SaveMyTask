@@ -1,6 +1,10 @@
 import { type Response } from "express";
 import { z } from "zod";
-import { getItem, updateItem } from "../../helpers/database";
+import {
+  getItem,
+  getTotalFilteredItemsByUser,
+  updateItem,
+} from "../../helpers/database";
 import { type RequestProps } from "../../middleware/authentication";
 import { idParamSchema, title } from "../../validations";
 
@@ -36,6 +40,21 @@ const updateTask = async (req: RequestProps, res: Response) => {
   }
   const { id } = idValidation.data;
   const { data } = dataValidation;
+
+  if (data.title) {
+    const existingTask = await getItem("task", {
+      key: "title",
+      value: data.title,
+    });
+
+    if (existingTask) {
+      if (existingTask.id === id) {
+        return res.status(409).json({ message: "It is the same task name" });
+      } else {
+        return res.status(409).json({ message: "Task already exists" });
+      }
+    }
+  }
 
   try {
     const result = await updateItem("task", id, {
