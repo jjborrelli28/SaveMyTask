@@ -1,7 +1,6 @@
 import { useAuthentication } from '@/context/authentication';
 import clsx from 'clsx';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Fragment } from 'react/jsx-runtime';
 import CTA from './components/cta';
 
 const Header = () => {
