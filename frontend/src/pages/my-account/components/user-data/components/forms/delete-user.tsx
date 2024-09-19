@@ -28,7 +28,7 @@ const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
           setSubmitMessage(null);
           reset();
           onClose();
-        }, 2500);
+        }, 4000);
       },
       onError: error => {
         setSubmitMessage(error.message);

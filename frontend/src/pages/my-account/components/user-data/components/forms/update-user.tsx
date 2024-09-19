@@ -27,7 +27,7 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
           setSubmitMessage(null);
           reset();
           onClose();
-        }, 2500);
+        }, 2000);
       },
       onError: error => {
         setSubmitMessage(error.message);

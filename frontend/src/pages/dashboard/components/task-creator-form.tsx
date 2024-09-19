@@ -13,7 +13,7 @@ const TaskCreatorForm = () => {
         error?.message && setSubmitMessage(error.message);
         setTimeout(() => {
           setSubmitMessage(null);
-        }, 5000);
+        }, 4000);
       }
     }
   });

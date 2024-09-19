@@ -38,7 +38,7 @@ const SignInForm = () => {
         setIsAuthenticated(true);
         navigate('/dashboard');
         reset();
-      }, 1000);
+      }, 2000);
       queryClient.invalidateQueries({ queryKey: ['logged-user'] });
     },
     onError: error => {

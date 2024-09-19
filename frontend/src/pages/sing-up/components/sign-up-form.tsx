@@ -40,7 +40,7 @@ const SignUpForm = () => {
         setTimeout(() => {
           setIsAuthenticated(true);
           reset();
-        }, 5000);
+        }, 4000);
       },
       onError: error => {
         setSubmitMessage(error.message);

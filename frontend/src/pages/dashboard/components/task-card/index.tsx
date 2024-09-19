@@ -41,7 +41,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
             ...prevInput,
             value: originalTitleRef.current
           }));
-        }, 2500);
+        }, 2000);
       }
     },
     deletion: {
@@ -49,7 +49,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
         error?.message && setSubmitMessage(error.message);
         setTimeout(() => {
           setSubmitMessage(null);
-        }, 2500);
+        }, 2000);
       }
     }
   });
