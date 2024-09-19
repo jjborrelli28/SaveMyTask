@@ -1,4 +1,33 @@
 // User
+export type GetAuthenticationResponse =
+  | {
+      isAuthenticated: boolean;
+      message: string;
+    }
+  | undefined;
+
+export type GetAuthentication = () => Promise<GetAuthenticationResponse>;
+
+export type LoginUserData = { username: string; password: string };
+
+export type LoginUserResponse = { message: string; userId: number } | undefined;
+
+export type LoginUser = (userData: LoginUserData) => Promise<LoginUserResponse>;
+
+export type LogoutUser = () => Promise<{ message: string } | undefined>;
+
+export type NewUserData = {
+  username: string;
+  password: string;
+  email: string;
+  full_name: string;
+};
+
+export type GetUserResponse =
+  | { user: Omit<NewUserData, 'password'>; message: string }
+  | undefined;
+
+export type GetUser = () => Promise<GetUserResponse>;
 
 export type User = {
   id: number;
@@ -9,32 +38,11 @@ export type User = {
   created_at: Date;
 };
 
-export type NewUserData = {
-  username: string;
-  password: string;
-  email: string;
-  full_name: string;
-};
-
 export type CreateUserResponse =
-  | { message: string; token: string; user: Omit<User, 'password'> }
+  | { message: string; user: Omit<User, 'password'> }
   | undefined;
 
 export type CreateUser = (userData: NewUserData) => Promise<CreateUserResponse>;
-
-export type LoginUserData = { username: string; password: string };
-
-export type LoginUserResponse =
-  | { message: string; userId: number; token: string }
-  | undefined;
-
-export type LoginUser = (userData: LoginUserData) => Promise<LoginUserResponse>;
-
-export type GetUserResponse =
-  | { user: Omit<NewUserData, 'password'>; message: string }
-  | undefined;
-
-export type GetUser = () => Promise<GetUserResponse>;
 
 export type UserUpdateData = {
   username?: string;
@@ -58,7 +66,7 @@ export type UpdateUser = (
 export type DeleteUserResponse = { message: string } | undefined;
 
 export type DeleteUser = (userData: {
-  password: string
+  password: string;
 }) => Promise<DeleteUserResponse>;
 
 // Task

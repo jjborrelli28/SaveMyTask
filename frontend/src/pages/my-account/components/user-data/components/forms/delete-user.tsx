@@ -17,16 +17,16 @@ export type DeleteUserField = { password: string };
 
 const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
-  const { logout } = useAuthentication();
+  const { setIsAuthenticated } = useAuthentication();
 
   const { userDeletion } = useMutationUser({
     deletion: {
-      onSuccess: data => {
+      onSuccess: async data => {
         data?.message && setSubmitMessage(data.message);
         setTimeout(() => {
+          setIsAuthenticated(false);
           setSubmitMessage(null);
           reset();
-          logout();
           onClose();
         }, 2500);
       },

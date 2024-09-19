@@ -1,5 +1,4 @@
 import { taskApi } from '@apis/index';
-import getAuthenticationHeaders from '@helpers/get-authentication-headers';
 import { handleError } from '@helpers/handle-error';
 import { showByConsole } from '@helpers/show-by-console';
 import { type AxiosResponse } from 'axios';
@@ -15,15 +14,10 @@ import {
 } from '../types';
 
 export const getTasks: GetTasks = async queries => {
-  const headers = getAuthenticationHeaders();
-
   try {
     const { data } = await taskApi.get<any, AxiosResponse<GetTasksResponse>>(
       '',
-      {
-        params: queries,
-        headers
-      }
+      { params: queries, withCredentials: true }
     );
 
     showByConsole(data);
@@ -35,15 +29,11 @@ export const getTasks: GetTasks = async queries => {
 };
 
 export const createTask: CreateTask = async taskData => {
-  const headers = getAuthenticationHeaders();
-
   try {
     const { data } = await taskApi.post<any, AxiosResponse<CreateTaskResponse>>(
       '',
       taskData,
-      {
-        headers
-      }
+      { withCredentials: true }
     );
 
     showByConsole(data);
@@ -55,15 +45,11 @@ export const createTask: CreateTask = async taskData => {
 };
 
 export const updateTask: UpdateTask = async ({ id, taskData }) => {
-  const headers = getAuthenticationHeaders();
-
   try {
     const { data } = await taskApi.patch<
       any,
       AxiosResponse<UpdateTaskResponse>
-    >(`/${id}`, taskData, {
-      headers
-    });
+    >(`/${id}`, taskData, { withCredentials: true });
 
     showByConsole(data);
 
@@ -74,15 +60,11 @@ export const updateTask: UpdateTask = async ({ id, taskData }) => {
 };
 
 export const deleteTask: DeleteTask = async id => {
-  const headers = getAuthenticationHeaders();
-
   try {
     const { data } = await taskApi.delete<
       any,
       AxiosResponse<DeleteTaskResponse>
-    >(`/${id}`, {
-      headers
-    });
+    >(`/${id}`, { withCredentials: true });
 
     showByConsole(data);
 

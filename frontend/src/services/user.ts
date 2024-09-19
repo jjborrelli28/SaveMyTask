@@ -1,10 +1,9 @@
 import { userApi } from '@apis/index';
-import getAuthenticationToken from '@helpers/get-authentication-token';
 import { handleError } from '@helpers/handle-error';
 import { showByConsole } from '@helpers/show-by-console';
 import { type AxiosResponse } from 'axios';
-import { jwtDecode, type JwtPayload } from 'jwt-decode';
 import {
+  type LogoutUser,
   type CreateUser,
   type CreateUserResponse,
   type DeleteUser,
@@ -17,11 +16,14 @@ import {
   type UpdateUserResponse
 } from '../types';
 
-export const createUser: CreateUser = async userData => {
+export const loginUser: LoginUser = async userData => {
   try {
-    const { data } = await userApi.post<any, AxiosResponse<CreateUserResponse>>(
-      '',
-      userData
+    const { data } = await userApi.post<any, AxiosResponse<LoginUserResponse>>(
+      '/login',
+      userData,
+      {
+        withCredentials: true
+      }
     );
 
     showByConsole(data);
@@ -32,11 +34,31 @@ export const createUser: CreateUser = async userData => {
   }
 };
 
-export const loginUser: LoginUser = async userData => {
+export const logoutUser: LogoutUser = async () => {
   try {
-    const { data } = await userApi.post<any, AxiosResponse<LoginUserResponse>>(
-      '/login',
-      userData
+    const { data } = await userApi.get<any, AxiosResponse<{ message: string }>>(
+      '/logout',
+      {
+        withCredentials: true
+      }
+    );
+
+    showByConsole(data);
+
+    return data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const createUser: CreateUser = async userData => {
+  try {
+    const { data } = await userApi.post<any, AxiosResponse<CreateUserResponse>>(
+      '',
+      userData,
+      {
+        withCredentials: true
+      }
     );
 
     showByConsole(data);
@@ -48,16 +70,11 @@ export const loginUser: LoginUser = async userData => {
 };
 
 export const getUser: GetUser = async () => {
-  const token = getAuthenticationToken() || '';
-  const { id } = jwtDecode<JwtPayload & { id: string }>(token);
-
   try {
     const { data } = await userApi.get<any, AxiosResponse<GetUserResponse>>(
-      `/${id}`,
+      `/me`,
       {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        withCredentials: true
       }
     );
 
@@ -70,17 +87,12 @@ export const getUser: GetUser = async () => {
 };
 
 export const updateUser: UpdateUser = async userData => {
-  const token = getAuthenticationToken() || '';
-  const { id } = jwtDecode<JwtPayload & { id: string }>(token);
-
   try {
     const { data } = await userApi.patch<
       any,
       AxiosResponse<UpdateUserResponse>
-    >(`/${id}`, userData, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+    >(`/me`, userData, {
+      withCredentials: true
     });
 
     showByConsole(data);
@@ -92,18 +104,13 @@ export const updateUser: UpdateUser = async userData => {
 };
 
 export const deleteUser: DeleteUser = async userData => {
-  const token = getAuthenticationToken() || '';
-  const { id } = jwtDecode<JwtPayload & { id: string }>(token);
-
   try {
     const { data } = await userApi.delete<
       any,
       AxiosResponse<DeleteUserResponse>
-    >(`/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      data: userData
+    >(`/me`, {
+      data: userData,
+      withCredentials: true
     });
 
     showByConsole(data);

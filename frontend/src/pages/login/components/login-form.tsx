@@ -24,7 +24,8 @@ const defaultValues = {
 
 const SignInForm = () => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
-  const { login } = useAuthentication();
+  const { setIsAuthenticated } = useAuthentication();
+
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
@@ -32,8 +33,9 @@ const SignInForm = () => {
     mutationFn: loginUser,
     onSuccess: data => {
       data?.message && setSubmitMessage(data.message);
-      data?.token && login(data.token);
+
       setTimeout(() => {
+        setIsAuthenticated(true);
         navigate('/dashboard');
         reset();
       }, 1000);

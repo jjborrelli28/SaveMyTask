@@ -31,14 +31,14 @@ const defaultValues = {
 
 const SignUpForm = () => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
-  const { login } = useAuthentication();
+  const { setIsAuthenticated } = useAuthentication();
 
   const { userCreation } = useMutationUser({
     creation: {
       onSuccess: data => {
         data?.message && setSubmitMessage(data.message);
         setTimeout(() => {
-          data?.token && login(data.token);
+          setIsAuthenticated(true);
           reset();
         }, 5000);
       },

@@ -9,3 +9,7 @@ export const userApi = axios.create({
 export const taskApi = axios.create({
   baseURL: `${apiBaseUrl}/task`
 });
+
+export const authenticationApi = axios.create({
+  baseURL: `${apiBaseUrl}/authentication`
+});

@@ -1,18 +1,24 @@
-import getAuthenticationToken from '@helpers/get-authentication-token';
+import { handleError } from '@helpers/handle-error';
+import getAuthentication from '@services/authentication';
+import { logoutUser } from '@services/user';
 import { useQueryClient } from '@tanstack/react-query';
-import Cookies from 'js-cookie';
-import { createContext, type ReactNode, useContext, useState } from 'react';
+import {
+  createContext,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
 
 type AuthenticationContextProps =
   | {
       isAuthenticated: boolean;
-      token: string | undefined;
-      login: (token: string) => void;
-      logout: () => void;
+      setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
+      logout: () => Promise<void>;
     }
   | undefined;
-
-export const authenticationCookieName = 'savemytask-authentication-token';
 
 const AuthenticationContext =
   createContext<AuthenticationContextProps>(undefined);
@@ -22,28 +28,45 @@ export const AuthenticationContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [token, setToken] = useState<string | undefined>(
-    getAuthenticationToken()
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const queryClient = useQueryClient();
 
-  const login = (newToken: string) => {
-    Cookies.set(authenticationCookieName, newToken, { expires: 7 });
-    setToken(newToken);
-  };
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const res = await getAuthentication();
 
-  const logout = () => {
-    queryClient.cancelQueries({ queryKey: ['task'] });
-    queryClient.removeQueries({ queryKey: ['task'], type: 'active' });
-    Cookies.remove(authenticationCookieName);
-    setToken(undefined);
-  };
+        if (res?.isAuthenticated) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        setIsAuthenticated(false);
+        handleError(error);
+      }
+    };
 
-  const isAuthenticated = !!token;
+    checkAuthentication();
+  }, []);
+
+  const logout = async () => {
+    try {
+      await logoutUser();
+
+      queryClient.cancelQueries({ queryKey: ['task'] });
+      queryClient.removeQueries({ queryKey: ['task'], type: 'active' });
+
+      setIsAuthenticated(false);
+    } catch (error) {
+      handleError(error);
+    }
+  };
 
   return (
     <AuthenticationContext.Provider
-      value={{ isAuthenticated, token, login, logout }}
+      value={{ isAuthenticated, setIsAuthenticated, logout }}
     >
       {children}
     </AuthenticationContext.Provider>
