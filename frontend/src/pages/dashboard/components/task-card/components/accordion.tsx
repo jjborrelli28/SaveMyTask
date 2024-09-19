@@ -28,7 +28,7 @@ const Accordion = ({ data, state }: TaskCardAccordion) => {
       )}
     >
       <div className="overflow-hidden">
-        <div className="flex justify-between bg-light-gray p-3">
+        <div className="bg-gray-100 flex justify-between p-3">
           <div className="flex items-center justify-center">
             <p
               className={clsx(

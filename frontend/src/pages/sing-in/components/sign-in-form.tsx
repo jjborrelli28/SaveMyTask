@@ -91,18 +91,24 @@ const SignInForm = () => {
               !!state.values.password.length;
 
             return (
-              <Button isSendeable={isSendeable} isLoading={isPending}>
-                Log in
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button
+                  isSendeable={isSendeable}
+                  isLoading={isPending}
+                  isSuccess={isSuccess}
+                >
+                  Log in
+                </Button>
+                <SubmitMessage
+                  type={isSuccess ? 'Success' : isError ? 'Error' : undefined}
+                >
+                  {submitMessage}
+                </SubmitMessage>
+              </div>
             );
           }}
         />
       </form>
-      <SubmitMessage
-        type={isSuccess ? 'Success' : isError ? 'Error' : undefined}
-      >
-        {submitMessage}
-      </SubmitMessage>
     </>
   );
 };

@@ -44,7 +44,7 @@ const ModalForm = ({ isOpen, fieldKey, onClose }: ModalFormProps) => {
         {fieldKey ? (
           <h2 className="text-xl font-bold">
             Enter the new{' '}
-            {<span className="text-lilac">{formatLabel(fieldKey)}</span>} you
+            {<span className="text-blue-500">{formatLabel(fieldKey)}</span>} you
             want to change:
           </h2>
         ) : (
@@ -56,7 +56,7 @@ const ModalForm = ({ isOpen, fieldKey, onClose }: ModalFormProps) => {
           <p className="text-md">
             You will not be able to recover your user name and task records
             saved in your account once you delete your{' '}
-            <span className="font-semibold text-lilac">SaveMyTask</span>{' '}
+            <span className="font-semibold text-blue-500">SaveMyTask</span>{' '}
             account. <br />
             <br />
             If you want to continue with the deletion, proceed by completing the

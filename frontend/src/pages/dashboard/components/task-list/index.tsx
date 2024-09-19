@@ -71,7 +71,7 @@ const TaskList = () => {
   const containerRef = useRef(null);
 
   return (
-    <div className="lg:order-0 order-1 flex flex-1 flex-col gap-5 pb-5 lg:border-r-2 lg:border-gray lg:px-10 lg:pb-10">
+    <div className="lg:order-0 lg:border-gray-200 order-1 flex flex-1 flex-col gap-5 pb-5 lg:border-r-2 lg:px-10 lg:pb-10">
       <div className="mb-2.5 flex items-center justify-between gap-5 lg:mb-5">
         <h2 className="flex items-center gap-2 text-nowrap text-2xl font-semibold">
           <FaListUl className="hidden sm:block" />

@@ -121,7 +121,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
   return (
     <div
       className={clsx(
-        'flex flex-col bg-gray p-3 shadow-md transition-[background,transform] duration-300 hover:scale-[1.01] hover:bg-light-gray',
+        'hover:bg-gray-100 bg-gray-200 flex flex-col p-3 shadow-md transition-[background,transform] duration-300 hover:scale-[1.01]',
         isEditing && 'animate-blink-background-gray'
       )}
     >
@@ -146,7 +146,7 @@ const TaskCard = React.memo(({ data }: { data: Task }) => {
               className={clsx(
                 'w-[calc(100%_-_42px)] flex-1 overflow-hidden text-ellipsis bg-transparent text-xl outline-none focus:outline-none',
                 state === 'Done' && 'line-through',
-                isEditing && 'border-b-2 border-dark-gray'
+                isEditing && 'border-gray-300 border-b-2'
               )}
               value={value}
               onChange={handleOnChange}

@@ -2,8 +2,8 @@ import MainLayout from '@/components/main-layout';
 import PrivateRoutes from '@/components/private-routes';
 import Dashboard from '@/pages/dashboard';
 import Homepage from '@/pages/homepage';
-import Login from '@/pages/login';
 import MyAccount from '@/pages/my-account';
+import SignIn from '@/pages/sing-in';
 import SignUp from '@/pages/sing-up';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const Router = () => {
       element: <MainLayout />,
       children: [
         { path: '/', element: <Homepage /> },
-        { path: '/login', element: <Login /> },
+        { path: '/sign-in', element: <SignIn /> },
         { path: '/sign-up', element: <SignUp /> },
         {
           element: <PrivateRoutes />,

@@ -86,28 +86,30 @@ const DeleteUserForm = ({ onClose }: DeleteUserForm) => {
             const isSendeable = state.isValid && !!state.values.password;
 
             return (
-              <Button
-                isSendeable={isSendeable}
-                isLoading={isPending}
-                isError={isSuccess}
-                containerClassName={clsx(isSendeable && 'border-red')}
-                className={clsx(isSendeable && 'bg-red')}
-                textClassName={clsx(
-                  isSendeable && !isSuccess && 'group-hover:!text-red'
-                )}
-                spinnerClassName={clsx(isSendeable && 'border-red')}
-              >
-                {isSuccess ? 'Done' : `Delete User `}
-              </Button>
+              <div className="flex flex-col gap-y-2">
+                <Button
+                  isSendeable={isSendeable}
+                  isLoading={isPending}
+                  isError={isSuccess}
+                  containerClassName={clsx(isSendeable && 'border-red')}
+                  className={clsx(isSendeable && 'bg-red')}
+                  textClassName={clsx(
+                    isSendeable && !isSuccess && 'group-hover:!text-red'
+                  )}
+                  spinnerClassName={clsx(isSendeable && 'border-red')}
+                >
+                  {isSuccess ? 'Done' : `Delete User `}
+                </Button>
+                <SubmitMessage
+                  type={isSuccess ? 'Success' : isError ? 'Error' : undefined}
+                >
+                  {submitMessage}
+                </SubmitMessage>
+              </div>
             );
           }}
         />
       </form>
-      <SubmitMessage
-        type={isSuccess ? 'Success' : isError ? 'Error' : undefined}
-      >
-        {submitMessage}
-      </SubmitMessage>
     </>
   );
 };

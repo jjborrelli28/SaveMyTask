@@ -24,7 +24,7 @@ const EyeButton = ({
       type="button"
       tabIndex={-1}
       onClick={handleClick}
-      className="z-10 cursor-pointer"
+      className="z-10"
     >
       {passwordIsVisible ? (
         <FaEye

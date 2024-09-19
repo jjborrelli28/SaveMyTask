@@ -5,9 +5,9 @@ const Skeleton = () => {
     <div className="flex animate-blink-background-gray items-center gap-3 p-3 shadow-md">
       <MdCircle
         size={20}
-        className="rounded-full border-2 border-dark-gray text-dark-gray shadow-md"
+        className="border-gray-300 text-gray-300 rounded-full border-2 shadow-md"
       />
-      <p className="text-xl text-dark-gray">Loading...</p>
+      <p className="text-gray-300 text-xl">Loading...</p>
     </div>
   );
 };

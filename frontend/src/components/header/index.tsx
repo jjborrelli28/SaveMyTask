@@ -1,8 +1,8 @@
 import { useAuthentication } from '@/context/authentication';
+import clsx from 'clsx';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Fragment } from 'react/jsx-runtime';
 import CTA from './components/cta';
-import logo from '/assets/images/logo.png';
 
 const Header = () => {
   const { isAuthenticated, logout } = useAuthentication();
@@ -14,10 +14,17 @@ const Header = () => {
     navigate('/');
   };
 
-  const unauthenticatedLinks = [
-    { label: 'Log in', url: '/login' },
-    { label: 'Sign up', url: '/sign-up' }
-  ];
+  const unauthenticatedLinks =
+    pathname === '/'
+      ? [
+          { label: 'Sign in', url: '/sign-in' },
+          { label: 'Sign up', url: '/sign-up' }
+        ]
+      : [
+          pathname === '/sign-in'
+            ? { label: 'Sign up', url: '/sign-up' }
+            : { label: 'Sing in', url: '/sign-in' }
+        ];
 
   const authenticatedPages = {
     '/dashboard': { label: 'My account', url: '/my-account' },
@@ -39,22 +46,26 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-10 py-5 backdrop-blur-md">
       <div className="container flex items-center justify-between">
-        <NavLink to="/" aria-label="SaveMyTask Logo">
-          <div className="flex items-center gap-2">
-            <img src={logo} className="h-7 w-7" />
-            <span className="text-text text-md font-bold">SaveMyTask</span>
-          </div>
-        </NavLink>
+        <nav className={clsx(pathname === '/' ? 'invisible' : 'visible')}>
+          <NavLink
+            to="/"
+            className={clsx(
+              isAuthenticated && 'pointer-events-none cursor-default'
+            )}
+          >
+            <span className="text-md bg-gradient-to-r from-purple-500 to-violet-600 bg-clip-text font-semibold text-transparent">
+              SaveMyTasks
+            </span>
+          </NavLink>
+        </nav>
         <nav>
           <ul className="flex gap-3">
-            {ctas.map((cta, i) => {
-              return (
-                <Fragment key={i}>
-                  <CTA content={cta} />
-                  {i < ctas.length - 1 && <span className="w-0.5 bg-lilac" />}
-                </Fragment>
-              );
-            })}
+            {ctas.map((cta, i) => (
+              <Fragment key={i}>
+                <CTA content={cta} />
+                {i < ctas.length - 1 && <span className="bg-gray-200 w-0.5" />}
+              </Fragment>
+            ))}
           </ul>
         </nav>
       </div>

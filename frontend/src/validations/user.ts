@@ -54,5 +54,5 @@ export const updateUserSchema = z.object({
   password: getPasswordValidation().optional(),
   email: email.optional(),
   full_name: full_name.optional(),
-  confirmationPassword: getPasswordValidation('Confirmation Password')
+  confirmationPassword: getPasswordValidation('Confirmation Password2')
 });

@@ -114,23 +114,26 @@ const UpdateUserForm = ({ fieldKey, onClose }: UpdateUserFormProps) => {
               !!state.values.confirmationPassword;
 
             return (
-              <Button
-                isSendeable={isSendeable}
-                isLoading={isPending}
-                isSuccess={isSuccess}
-              >
-                {isSuccess ? 'In good time' : `Update ${formatLabel(fieldKey)}`}
-              </Button>
+              <div className="flex flex-col gap-y-2">
+                <Button
+                  isSendeable={isSendeable}
+                  isLoading={isPending}
+                  isSuccess={isSuccess}
+                >
+                  {isSuccess
+                    ? 'In good time'
+                    : `Update ${formatLabel(fieldKey)}`}
+                </Button>
+                <SubmitMessage
+                  type={isSuccess ? 'Success' : isError ? 'Error' : undefined}
+                >
+                  {submitMessage}
+                </SubmitMessage>
+              </div>
             );
           }}
         />
       </form>
-      <SubmitMessage
-        type={isSuccess ? 'Success' : isError ? 'Error' : undefined}
-        className={clsx(isSuccess && 'mt-3')}
-      >
-        {submitMessage}
-      </SubmitMessage>
     </>
   );
 };

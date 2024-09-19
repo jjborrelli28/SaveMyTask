@@ -28,13 +28,17 @@ const Button = ({
   textClassName,
   spinnerClassName
 }: PropsWithChildren<ButtonProps>) => {
-  const buttonProps = { type, onClick, disabled: !isSendeable };
+  const buttonProps = {
+    type,
+    onClick,
+    disabled: !isSendeable || isLoading || isSuccess || isError
+  };
 
   return (
     <button
       {...buttonProps}
       className={clsx(
-        'group relative overflow-hidden border-2 bg-white px-5 py-3 text-white',
+        'group relative overflow-hidden border-2 bg-white px-4 py-2.5 text-white',
         isSendeable
           ? [
               'text-white',
@@ -42,9 +46,9 @@ const Button = ({
                 ? 'border-green'
                 : isError
                   ? 'border-red'
-                  : 'border-lilac'
+                  : 'border-blue-500'
             ]
-          : 'border-dark-gray',
+          : 'border-gray-300',
         containerClassName
       )}
     >
@@ -57,9 +61,9 @@ const Button = ({
                   ? 'bg-green'
                   : isError
                     ? 'bg-red'
-                    : 'bg-lilac group-hover:translate-x-full'
+                    : 'bg-blue-500 group-hover:translate-x-full'
               ]
-            : 'bg-dark-gray',
+            : 'bg-gray-300',
           isLoading && 'translate-x-full',
           className
         )}
@@ -73,7 +77,7 @@ const Button = ({
                   ? 'group-hover:text-white'
                   : isError
                     ? 'group-hover:text-white'
-                    : 'group-hover:text-lilac'
+                    : 'group-hover:text-blue-500'
               ]
             : '',
           textClassName

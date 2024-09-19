@@ -3,9 +3,9 @@ import Field, { type Fields } from '@/components/field';
 import SubmitMessage from '@/components/submit-message';
 import { useAuthentication } from '@/context/authentication';
 import useMutationUser from '@/hooks/use-mutation-user';
+import { createUserSchema } from '@/validations/user';
 import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { createUserSchema } from '@/validations/user';
 import { useState } from 'react';
 import Confetti from 'react-confetti';
 
@@ -94,22 +94,25 @@ const SignUpForm = () => {
               !!state.values.full_name;
 
             return (
-              <Button
-                isSendeable={isSendeable}
-                isLoading={isPending}
-                isSuccess={isSuccess}
-              >
-                {isSuccess ? 'You got it!' : 'Create user'}
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button
+                  isSendeable={isSendeable}
+                  isLoading={isPending}
+                  isSuccess={isSuccess}
+                >
+                  {isSuccess ? 'You got it!' : 'Create user'}
+                </Button>
+                <SubmitMessage
+                  type={isSuccess ? 'Success' : isError ? 'Error' : undefined}
+                >
+                  {submitMessage}
+                </SubmitMessage>
+              </div>
             );
           }}
         />
       </form>
-      <SubmitMessage
-        type={isSuccess ? 'Success' : isError ? 'Error' : undefined}
-      >
-        {submitMessage}
-      </SubmitMessage>
+
       {isSuccess && <Confetti className="absolute left-0 top-0" />}
     </>
   );

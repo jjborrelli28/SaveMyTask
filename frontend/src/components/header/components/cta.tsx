@@ -15,7 +15,7 @@ const CTA = ({ content }: CTAProps) => {
     return (
       <NavLink
         to={url}
-        className="text-md text-text underline-animate font-bold"
+        className="text-md text-text underline-animate font-semibold"
       >
         {label}
       </NavLink>
@@ -26,7 +26,7 @@ const CTA = ({ content }: CTAProps) => {
     return (
       <button
         onClick={action}
-        className="text-md text-text underline-animate font-bold"
+        className="text-md text-text underline-animate font-semibold"
       >
         {label}
       </button>

@@ -61,7 +61,7 @@ export const UserData = () => {
   return (
     <div className="relative flex flex-col gap-10 pb-10 lg:order-1 lg:px-10">
       <h2 className="text-2xl font-semibold">My information</h2>
-      <div className="flex flex-col gap-5 border-2 border-gray p-5 lg:p-10">
+      <div className="border-gray-200 flex flex-col gap-5 border-2 p-5 lg:p-10">
         {Object.entries(userData).map(([key, value]) => (
           <div key={key} className="flex items-center gap-3">
             <p className="flex gap-2 text-xl">
@@ -73,7 +73,7 @@ export const UserData = () => {
             <button onClick={() => handleOpenModal(key as FieldKeys)}>
               <FaEdit
                 size={22}
-                className="text-black transition-colors duration-300 hover:text-lilac"
+                className="text-black transition-colors duration-300 hover:text-blue-500"
               />
             </button>
           </div>

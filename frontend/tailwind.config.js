@@ -30,24 +30,14 @@ export default {
         '7xl': '5rem'
       },
       colors: {
-        white: '#fff',
-        white: '#f5f5f5',
-        'light-gray': '#efefef',
-        gray: '#e0e0e0',
-        'dark-gray': '#c0c0c0',
-        black: '#000',
-        black: '#333333',
-        background: '#f0d9d1',
-        'light-lilac': '#b4a6d8',
-        lilac: '#a28ac8',
         green: '#388e3c',
         yellow: '#fbc02d',
         orange: '#f57c00',
         red: '#c62828'
       },
-      minHeight: { 'screen-with-navbar': 'calc(100vh - 72px)' },
-      height: { 'screen-with-navbar': 'calc(100vh - 72px)' },
-      maxHeight: { 'screen-with-navbar': 'calc(100vh - 72px)' },
+      minHeight: { 'screen-with-navbar': 'calc(100vh - 64px)' },
+      height: { 'screen-with-navbar': 'calc(100vh - 64px)' },
+      maxHeight: { 'screen-with-navbar': 'calc(100vh - 64px)' },
       spacing: {
         1: '0.25rem',
         2: '0.5rem',
@@ -70,12 +60,12 @@ export default {
     },
     keyframes: {
       'blink-background-gray': {
-        '0%, 100%': { backgroundColor: 'rgba(224, 224, 224, 0.5)' },
-        '50%': { backgroundColor: 'rgba(224, 224, 224, 1)' }
+        '0%, 100%': { backgroundColor: 'rgba(229, 231, 235, 0.5)' },
+        '50%': { backgroundColor: 'rgba(229, 231, 235, 1)' }
       },
       'blink-text-black': {
-        '0%, 100%': { color: 'rgba(51, 51, 51, 0.5)' },
-        '50%': { color: 'rgba(51, 51, 51, 1)' }
+        '0%, 100%': { color: 'rgba(0, 0, 0, 0.5)' },
+        '50%': { color: 'rgba(0, 0, 0, 1)' }
       },
       'draw-border-black': {
         '0%': {
@@ -84,7 +74,7 @@ export default {
         },
         '100%': {
           'border-bottom-width': '100px',
-          'border-bottom-color': '#333333'
+          'border-bottom-color': '#000'
         },
         'slide-in': {
           '0%': { backgroundPosition: '100% 0' },

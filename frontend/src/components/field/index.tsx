@@ -1,7 +1,7 @@
-import { type LoginFieldNames } from '@/pages/login/components/login-form';
 import { type FieldKeys } from '@/pages/my-account/components/user-data';
 import { type DeleteUserField } from '@/pages/my-account/components/user-data/components/forms/delete-user';
 import { type UpdateUserFieldNames } from '@/pages/my-account/components/user-data/components/modal-form';
+import { type LoginFieldNames } from '@/pages/sing-in/components/sign-in-form';
 import { type CreateUserFieldNames } from '@/pages/sing-up/components/sign-up-form';
 import { type FieldApi, type Validator } from '@tanstack/react-form';
 import clsx from 'clsx';
@@ -122,7 +122,7 @@ const Field = ({
           onBlur={handleBlur}
           onChange={e => data.handleChange(e.target.value)}
           className={clsx(
-            'z-10 flex-1 border-b-2 bg-transparent pb-0.5 text-lg outline-none focus:ring-0',
+            'z-10 flex-1 border-b bg-transparent pb-0.5 text-lg outline-none focus:ring-0',
             colors.borders[inputState]
           )}
           required={requerid}

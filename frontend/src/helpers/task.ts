@@ -2,9 +2,9 @@ import moment from 'moment';
 import { type TaskStates } from '@/types';
 
 const taskStates = {
-  'To do': 'text-orange',
-  'In progress': 'text-yellow',
-  Done: 'text-green'
+  'To do': 'text-orange border-orange',
+  'In progress': 'text-yellow border-yellow',
+  Done: 'text-green border-green'
 };
 
 export const getStateTask = (
@@ -18,7 +18,7 @@ export const getStateTask = (
     const daysDiff = today.diff(formattedCreatedAt, 'days');
 
     if (daysDiff > 3) {
-      return 'text-red';
+      return 'text-red border-red';
     }
   }
 

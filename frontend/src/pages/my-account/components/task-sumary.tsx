@@ -39,14 +39,14 @@ const TaskSumary = () => {
   const doneTasks = getFilteredTasks(totalItems, 'Done');
 
   return (
-    <div className="flex flex-1 flex-col gap-10 pb-5 lg:border-r-2 lg:border-gray lg:px-10 lg:pb-10">
+    <div className="lg:border-gray-200 flex flex-1 flex-col gap-10 pb-5 lg:border-r-2 lg:px-10 lg:pb-10">
       <h2 className="text-2xl font-semibold">
         {`Welcome ${full_name},`}
         <br />
         this is your current task status:
       </h2>
       <div className="flex flex-col gap-y-5 text-xl">
-        <div className="flex items-center gap-3 bg-gray p-3 shadow-md lg:justify-center">
+        <div className="bg-gray-200 flex items-center gap-3 p-3 shadow-md lg:justify-center">
           <MdCircle
             size={20}
             className="rounded-full border-2 text-orange shadow-md"
@@ -55,7 +55,7 @@ const TaskSumary = () => {
             Pending tasks: {todoTasks?.length}
           </p>
         </div>
-        <div className="flex items-center gap-3 bg-gray p-3 shadow-md lg:justify-center">
+        <div className="bg-gray-200 flex items-center gap-3 p-3 shadow-md lg:justify-center">
           <MdCircle
             size={20}
             className="rounded-full border-2 text-yellow shadow-md"
@@ -64,7 +64,7 @@ const TaskSumary = () => {
             Tasks in process: {inProgressTasks?.length}
           </p>
         </div>
-        <div className="flex items-center gap-3 bg-gray p-3 shadow-md lg:justify-center">
+        <div className="bg-gray-200 flex items-center gap-3 p-3 shadow-md lg:justify-center">
           <MdCircle
             size={20}
             className="rounded-full border-2 text-green shadow-md"

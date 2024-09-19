@@ -4,7 +4,7 @@ import Header from './header';
 
 const MainLayout = () => {
   return (
-    <div className="flex min-h-screen flex-col justify-between">
+    <div className="flex flex-col justify-between">
       <Header />
       <main className="container flex-1">
         <Outlet />
