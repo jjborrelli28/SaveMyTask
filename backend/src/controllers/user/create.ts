@@ -33,13 +33,11 @@ const createUser = async (req: Request, res: Response) => {
   const allTableUsers = await getAllTableItems("user");
 
   const existingUser = allTableUsers.some((user) => user.username === username);
-
   if (existingUser) {
     return res.status(409).json({ message: "Username already exists" });
   }
 
   const existingEmail = allTableUsers.some((user) => user.email === email);
-
   if (existingEmail) {
     return res.status(409).json({ message: "Email already registered" });
   }
@@ -67,8 +65,14 @@ const createUser = async (req: Request, res: Response) => {
 
     const token = generateToken(user.id.toString());
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24 * 30,
+    });
+
     return res.status(201).json({
-      token,
       user: userDataWithoutPassword,
       message: "User successfully created!",
     });

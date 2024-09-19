@@ -17,27 +17,27 @@ const authentication = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.header("Authorization")?.split(" ")[1];
+  const token = req.cookies?.token;
 
-  if (!token)
+  if (!token) {
     return res
       .status(401)
-      .json({ message: "Unauthorized, non-existent token" });
+      .json({ message: "Unauthorized, token not provided or malformed" });
+  }
 
   try {
     const decoded = verifyToken(token);
     const userId = parseInt(decoded.id, 10);
-    const userIsValid = await verifyUser(userId);
 
+    const userIsValid = await verifyUser(userId);
     if (!userIsValid) {
-      return res.status(500).json({ message: "Invalid User ID" });
+      return res.status(403).json({ message: "Forbidden, invalid user ID" });
     }
 
     req.userId = userId;
-
     next();
   } catch (error) {
-    res.status(401).json({ message: "Invalid Token" });
+    res.status(401).json({ message: "Unauthorized, invalid or expired token" });
   }
 };
 

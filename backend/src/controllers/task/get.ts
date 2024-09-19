@@ -26,7 +26,6 @@ const getTasks = async (req: RequestProps, res: Response) => {
         .join(", "),
     });
   }
-
   const userId = req.userId!;
   const search = req.query.search!;
   const limit = Number(req.query.limit);
@@ -41,7 +40,6 @@ const getTasks = async (req: RequestProps, res: Response) => {
       limit,
       offset
     );
-
     const totalFilteredItems = await getTotalFilteredItemsByUser(
       "task",
       userId,

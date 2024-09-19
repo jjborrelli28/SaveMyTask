@@ -3,6 +3,7 @@ import express from "express";
 import runInDevelopmentEnv from "./helpers/run-in-development-env";
 import delay from "./middleware/delay";
 import router from "./routes";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -12,7 +13,9 @@ app.use(
     origin: process.env.FRONTEND_HOST,
     methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+    credentials: true,
+  }),
+  cookieParser()
 );
 
 runInDevelopmentEnv(() =>

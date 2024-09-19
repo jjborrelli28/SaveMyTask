@@ -22,7 +22,6 @@ const login = async (req: Request, res: Response) => {
   }
 
   const { username, password: confirmationPassword } = dataValidation.data;
-
   try {
     const user = await getItem("user", { key: "username", value: username });
 
@@ -41,11 +40,17 @@ const login = async (req: Request, res: Response) => {
         .status(400)
         .json({ message: "Incorrect username or password" });
     }
-
+ 
     const token = generateToken(user.id.toString());
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24 * 30,
+    });
+
     return res.json({
-      token,
       user: userDataWithoutPassword,
       message: "Successfully logged in!",
     });

@@ -89,7 +89,7 @@ export const getItemsByUser = async (
     )
     .limit(limit)
     .offset(offset)
-    .orderBy(order?.key || "created_at", order?.type || "desc")
+    .orderBy(order?.key || "id", order?.type || "desc")
     .execute();
 };
 
@@ -115,7 +115,7 @@ export const getTotalFilteredItemsByUser = async (
       search.comparator || "like",
       `%${search.value}%`
     )
-    .orderBy(order?.key || "created_at", order?.type || "desc")
+    .orderBy(order?.key || "id", order?.type || "desc")
     .execute();
 };
 

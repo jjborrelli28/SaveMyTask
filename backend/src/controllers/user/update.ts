@@ -1,14 +1,14 @@
 import bcrypt from "bcrypt";
-import { type Request, type Response } from "express";
+import { type Response } from "express";
 import { z } from "zod";
 import { getAllTableItems, getItem, updateItem } from "../../helpers/database";
 import hashPassword from "../../helpers/hash-password";
+import { type RequestProps } from "../../middleware/authentication";
 import {
-    email,
-    full_name,
-    getPasswordValidation,
-    idParamSchema,
-    username,
+  email,
+  full_name,
+  getPasswordValidation,
+  username,
 } from "../../validations";
 
 const bodySchema = z.object({
@@ -19,14 +19,12 @@ const bodySchema = z.object({
   confirmationPassword: getPasswordValidation("Confirmation Password"),
 });
 
-const updateUser = async (req: Request, res: Response) => {
-  const idValidation = idParamSchema.safeParse(req.params);
+const updateUser = async (req: RequestProps, res: Response) => {
+  const { userId } = req;
 
-  if (!idValidation.success) {
+  if (typeof userId === "undefined") {
     return res.status(400).json({
-      message: idValidation.error.issues
-        .map((issue) => issue.message)
-        .join(", "),
+      message: "User ID is required",
     });
   }
 
@@ -40,7 +38,6 @@ const updateUser = async (req: Request, res: Response) => {
     });
   }
 
-  const { id } = idValidation.data;
   const { confirmationPassword, ...newUserData } = dataValidation.data;
   const {
     username: newUserName,
@@ -50,94 +47,59 @@ const updateUser = async (req: Request, res: Response) => {
   } = newUserData;
 
   try {
-    const user = await getItem("user", { key: "id", value: id });
+    const user = await getItem("user", { key: "id", value: userId });
 
     if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const { username, password, email, full_name } = user;
 
     const allTableUsers = await getAllTableItems("user");
 
-    if (newUserName) {
-      if (newUserName === username) {
-        return res.status(400).json({
-          message: "Username is the same as the current one",
-        });
-      }
-
+    if (newUserName && newUserName !== username) {
       const existingUsername = allTableUsers.some(
         (user) => user.username === newUserName
       );
-
       if (existingUsername) {
-        return res.status(400).json({
-          message: "Username already exists",
-        });
+        return res.status(400).json({ message: "Username already exists" });
       }
     }
 
-    if (newPassword) {
-      const existingPassword = await bcrypt.compare(newPassword, password);
-
-      if (existingPassword) {
-        return res.status(400).json({
-          message: "Password is the same as the current one",
-        });
-      }
-    }
-
-    if (email) {
-      if (newEmail === email) {
-        return res.status(400).json({
-          message: "Email is the same as the current one",
-        });
-      }
-
+    if (newEmail && newEmail !== email) {
       const existingEmail = allTableUsers.some(
         (user) => user.email === newEmail
       );
-
       if (existingEmail) {
-        return res.status(400).json({
-          message: "Email already registered",
-        });
+        return res.status(400).json({ message: "Email already registered" });
       }
     }
 
-    if (newFullName) {
-      if (newFullName === full_name) {
-        return res.status(400).json({
-          message: "Full Name is the same as the current one",
-        });
-      }
+    if (newFullName && newFullName === full_name) {
+      return res
+        .status(400)
+        .json({ message: "Full Name is the same as the current one" });
     }
 
     const passwordIsValid = await bcrypt.compare(
       confirmationPassword,
       password
     );
-
     if (!passwordIsValid) {
-      return res.status(401).json({
-        message: "Incorrect password",
-      });
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
-    const result = await updateItem(
-      "user",
-      id,
-      newPassword ? { password: await hashPassword(newPassword) } : newUserData
-    );
+    const updatedData = newPassword
+      ? { ...newUserData, password: await hashPassword(newPassword) }
+      : newUserData;
+
+    const result = await updateItem("user", userId, updatedData);
 
     if (result[0].numUpdatedRows === BigInt(0)) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const updatedUser = await getItem("user", { key: "id", value: id });
+    const updatedUser = await getItem("user", { key: "id", value: userId });
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
@@ -146,7 +108,7 @@ const updateUser = async (req: Request, res: Response) => {
     const { password: updatedUserPassword, ...userDataUpdatedWithoutPassword } =
       updatedUser;
 
-    return res.status(201).json({
+    return res.status(200).json({
       user: userDataUpdatedWithoutPassword,
       message: "User successfully updated!",
     });

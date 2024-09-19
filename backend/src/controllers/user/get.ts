@@ -1,22 +1,18 @@
-import { type Request, type Response } from "express";
+import { type Response } from "express";
 import { getItem } from "../../helpers/database";
-import { idParamSchema } from "../../validations";
+import { type RequestProps } from "../../middleware/authentication";
 
-const getUser = async (req: Request, res: Response) => {
-  const idValidation = idParamSchema.safeParse(req.params);
+const getUser = async (req: RequestProps, res: Response) => {
+  const { userId } = req;
 
-  if (!idValidation.success) {
+  if (typeof userId === "undefined") {
     return res.status(400).json({
-      message: idValidation.error.issues
-        .map((issue) => issue.message)
-        .join(", "),
+      message: "User ID is required",
     });
   }
 
-  const { id } = idValidation.data;
-
   try {
-    const user = await getItem("user", { key: "id", value: id });
+    const user = await getItem("user", { key: "id", value: userId });
 
     if (!user) {
       return res.status(404).json({
