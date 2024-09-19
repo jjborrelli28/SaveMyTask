@@ -8,7 +8,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-gradient-to-r from-blue-400 via-purple-500 to-violet-600">
-      <div className="container flex flex-col gap-4 border-t-2 border-blue-500 pb-16 pt-12">
+      <div className="container flex flex-col gap-4 border-t-2 border-purple-600 pb-16 pt-12">
         <nav>
           <ul className="flex justify-center gap-4">
             <li>

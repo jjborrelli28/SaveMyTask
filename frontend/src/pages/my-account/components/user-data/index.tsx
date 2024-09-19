@@ -73,7 +73,7 @@ export const UserData = () => {
             <button onClick={() => handleOpenModal(key as FieldKeys)}>
               <FaEdit
                 size={22}
-                className="text-black transition-colors duration-300 hover:text-blue-500"
+                className="text-black transition-colors duration-300 hover:text-purple-600"
               />
             </button>
           </div>

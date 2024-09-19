@@ -26,7 +26,7 @@ const SignIn = () => {
             ? Create an account by clicking{' '}
             <button
               onClick={handleClick}
-              className="font-semibold text-blue-500 underline"
+              className="font-semibold text-purple-600 underline"
             >
               here
             </button>

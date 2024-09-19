@@ -59,12 +59,18 @@ const Header = () => {
           </NavLink>
         </nav>
         <nav>
-          <ul className="flex gap-3">
+          <ul className="flex">
             {ctas.map((cta, i) => (
-              <Fragment key={i}>
+              <li
+                key={i}
+                className={clsx(
+                  ctas.length > 1 &&
+                    i !== ctas.length - 1 &&
+                    'border-gray-200 border-r-2'
+                )}
+              >
                 <CTA content={cta} />
-                {i < ctas.length - 1 && <span className="bg-gray-200 w-0.5" />}
-              </Fragment>
+              </li>
             ))}
           </ul>
         </nav>

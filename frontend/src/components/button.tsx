@@ -46,7 +46,7 @@ const Button = ({
                 ? 'border-green'
                 : isError
                   ? 'border-red'
-                  : 'border-blue-500'
+                  : 'border-purple-600'
             ]
           : 'border-gray-300',
         containerClassName
@@ -61,7 +61,7 @@ const Button = ({
                   ? 'bg-green'
                   : isError
                     ? 'bg-red'
-                    : 'bg-blue-500 group-hover:translate-x-full'
+                    : 'bg-purple-600 group-hover:translate-x-full'
               ]
             : 'bg-gray-300',
           isLoading && 'translate-x-full',
@@ -77,7 +77,7 @@ const Button = ({
                   ? 'group-hover:text-white'
                   : isError
                     ? 'group-hover:text-white'
-                    : 'group-hover:text-blue-500'
+                    : 'group-hover:text-purple-600'
               ]
             : '',
           textClassName

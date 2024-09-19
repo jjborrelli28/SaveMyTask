@@ -1,5 +1,6 @@
 import MainLayout from '@/components/main-layout';
 import PrivateRoutes from '@/components/private-routes';
+import NotFoundPage from '@/pages/404-page';
 import Dashboard from '@/pages/dashboard';
 import Homepage from '@/pages/homepage';
 import MyAccount from '@/pages/my-account';
@@ -21,7 +22,8 @@ const Router = () => {
             { path: '/dashboard', element: <Dashboard /> },
             { path: '/my-account', element: <MyAccount /> }
           ]
-        }
+        },
+        { path: '*', element: <NotFoundPage /> }
       ]
     }
   ]);

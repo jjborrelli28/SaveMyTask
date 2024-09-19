@@ -42,7 +42,7 @@ const TaskCreatorForm = () => {
           value={value}
           onChange={handleChange}
           placeholder="What is your new task to save?"
-          className="placeholder:text-gray-500 overflow-hidden text-ellipsis border-b-2 border-blue-500 bg-transparent bg-white px-1 text-2xl outline-none focus:outline-none focus:ring-0"
+          className="placeholder:text-gray-500 overflow-hidden text-ellipsis border-b-2 border-purple-600 bg-transparent bg-white px-1 text-2xl outline-none focus:outline-none focus:ring-0"
         />
         <Button type="submit" isLoading={isPending}>
           Create task

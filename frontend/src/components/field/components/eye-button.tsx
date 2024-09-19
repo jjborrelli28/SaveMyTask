@@ -21,7 +21,7 @@ const EyeButton = ({
 
   return (
     <button
-      type="button"
+      aria-label="Password visibility button"
       tabIndex={-1}
       onClick={handleClick}
       className="z-10"
