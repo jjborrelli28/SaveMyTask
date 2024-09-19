@@ -1,10 +1,10 @@
-import MainLayout from '@components/main-layout';
-import PrivateRoutes from '@components/private-routes';
-import Dashboard from '@pages/dashboard';
-import Homepage from '@pages/homepage';
-import Login from '@pages/login';
-import MyAccount from '@pages/my-account';
-import SignUp from '@pages/sing-up';
+import MainLayout from '@/components/main-layout';
+import PrivateRoutes from '@/components/private-routes';
+import Dashboard from '@/pages/dashboard';
+import Homepage from '@/pages/homepage';
+import Login from '@/pages/login';
+import MyAccount from '@/pages/my-account';
+import SignUp from '@/pages/sing-up';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const Router = () => {

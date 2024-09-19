@@ -1,4 +1,4 @@
-import { useAuthentication } from '@context/authentication';
+import { useAuthentication } from '@/context/authentication';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 

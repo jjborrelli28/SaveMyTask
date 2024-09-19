@@ -1,4 +1,4 @@
-import useNavigateToDashboard from '@hooks/use-navigate-to-dashboard';
+import useNavigateToDashboard from '@/hooks/use-navigate-to-dashboard';
 import { useNavigate } from 'react-router-dom';
 import SignInForm from './components/login-form';
 

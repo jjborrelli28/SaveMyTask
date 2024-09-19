@@ -1,9 +1,9 @@
-import Spinner from '@components/spinner';
-import SubmitMessage from '@components/submit-message';
-import { initialQueryParams } from '@context/task-query-params';
-import getFilteredTasks from '@helpers/get-filtered-tasks';
-import { getTasks } from '@services/task';
-import { getUser } from '@services/user';
+import Spinner from '@/components/spinner';
+import SubmitMessage from '@/components/submit-message';
+import { initialQueryParams } from '@/context/task-query-params';
+import getFilteredTasks from '@/helpers/get-filtered-tasks';
+import { getTasks } from '@/services/task';
+import { getUser } from '@/services/user';
 import { useQuery } from '@tanstack/react-query';
 import { MdCircle } from 'react-icons/md';
 

@@ -1,11 +1,11 @@
-import Button from '@components/button';
-import Field from '@components/field';
-import SubmitMessage from '@components/submit-message';
-import { useAuthentication } from '@context/authentication';
-import useMutationUser from '@hooks/use-mutation-user';
+import Button from '@/components/button';
+import Field from '@/components/field';
+import SubmitMessage from '@/components/submit-message';
+import { useAuthentication } from '@/context/authentication';
+import useMutationUser from '@/hooks/use-mutation-user';
 import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { updateUserSchema } from '@validations/user';
+import { updateUserSchema } from '@/validations/user';
 import clsx from 'clsx';
 import { useState } from 'react';
 

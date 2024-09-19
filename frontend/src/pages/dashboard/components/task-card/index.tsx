@@ -1,6 +1,6 @@
-import SubmitMessage from '@components/submit-message';
-import { changeTaskState, getStateTask } from '@helpers/task';
-import useMutationTask from '@hooks/use-mutation-task';
+import SubmitMessage from '@/components/submit-message';
+import { changeTaskState, getStateTask } from '@/helpers/task';
+import useMutationTask from '@/hooks/use-mutation-task';
 import clsx from 'clsx';
 import React, {
   type ChangeEvent,
@@ -12,7 +12,7 @@ import React, {
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdCircle } from 'react-icons/md';
-import { type Task } from '../../../../types';
+import { type Task } from '@/types';
 import Accordion from './components/accordion';
 
 type TaskCardInputStates = {

@@ -1,8 +1,8 @@
-import { authenticationApi } from '@apis/index';
-import { handleError } from '@helpers/handle-error';
-import { showByConsole } from '@helpers/show-by-console';
+import { authenticationApi } from '@/apis/index';
+import { handleError } from '@/helpers/handle-error';
+import { showByConsole } from '@/helpers/show-by-console';
 import { AxiosResponse } from 'axios';
-import { GetAuthentication, GetAuthenticationResponse } from '../types';
+import { GetAuthentication, GetAuthenticationResponse } from '@/types';
 
 const getAuthentication: GetAuthentication = async () => {
   try {

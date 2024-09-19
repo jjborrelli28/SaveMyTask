@@ -1,11 +1,11 @@
-import Button from '@components/button';
-import Field, { type Fields } from '@components/field';
-import SubmitMessage from '@components/submit-message';
-import { useAuthentication } from '@context/authentication';
-import useMutationUser from '@hooks/use-mutation-user';
+import Button from '@/components/button';
+import Field, { type Fields } from '@/components/field';
+import SubmitMessage from '@/components/submit-message';
+import { useAuthentication } from '@/context/authentication';
+import useMutationUser from '@/hooks/use-mutation-user';
 import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { createUserSchema } from '@validations/user';
+import { createUserSchema } from '@/validations/user';
 import { useState } from 'react';
 import Confetti from 'react-confetti';
 

@@ -1,11 +1,11 @@
-import { createTask, deleteTask, updateTask } from '@services/task';
+import { createTask, deleteTask, updateTask } from '@/services/task';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   type CreateTaskResponse,
   type DeleteTaskResponse,
   type UpdateTaskParams,
   type UpdateTaskResponse
-} from '../types';
+} from '@/types';
 
 type ResponseFunctions<T> = {
   onSuccess?: (response: T) => void;

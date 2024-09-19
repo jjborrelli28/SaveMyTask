@@ -1,12 +1,12 @@
-import Button from '@components/button';
-import Field, { type Fields } from '@components/field';
-import SubmitMessage from '@components/submit-message';
-import { useAuthentication } from '@context/authentication';
-import { loginUser } from '@services/user';
+import Button from '@/components/button';
+import Field, { type Fields } from '@/components/field';
+import SubmitMessage from '@/components/submit-message';
+import { useAuthentication } from '@/context/authentication';
+import { loginUser } from '@/services/user';
 import { useForm } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { loginSchema } from '@validations/user';
+import { loginSchema } from '@/validations/user';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

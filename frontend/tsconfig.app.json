@@ -16,17 +16,7 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
-      "@apis/*": ["src/apis/*"],
-      "@assets/*": ["src/assets/*"],
-      "@components/*": ["src/components/*"],
-      "@context/*": ["src/context/*"],
-      "@helpers/*": ["src/helpers/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@pages/*": ["src/pages/*"],
-      "@router/*": ["src/router/*"],
-      "@services/*": ["src/services/*"],
-      "@types/*": ["src/types/*"],
-      "@validations/*": ["src/validations/*"]
+      "@/*": ["src/*"]
     },
     "strict": true,
     "noUnusedLocals": true,

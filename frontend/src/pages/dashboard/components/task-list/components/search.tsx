@@ -1,4 +1,4 @@
-import { useTaskQueryParams } from '@context/task-query-params';
+import { useTaskQueryParams } from '@/context/task-query-params';
 import debounce from 'lodash/debounce';
 import {
   type ChangeEvent,

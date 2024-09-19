@@ -1,6 +1,6 @@
-import formatLabel from '@helpers/format-label';
+import formatLabel from '@/helpers/format-label';
 
-import { type CreateUserFieldNames } from '@pages/sing-up/components/sign-up-form';
+import { type CreateUserFieldNames } from '@/pages/sing-up/components/sign-up-form';
 import { type MouseEvent } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import { type FieldKeys } from '..';

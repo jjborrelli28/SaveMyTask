@@ -1,10 +1,10 @@
-import { createUser, deleteUser, updateUser } from '@services/user';
+import { createUser, deleteUser, updateUser } from '@/services/user';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   type CreateUserResponse,
   type DeleteUserResponse,
   type UpdateUserResponse
-} from '../types';
+} from '@/types';
 
 type ResponseFunctions<T> = {
   onSuccess?: (response: T) => void;

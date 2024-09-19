@@ -1,6 +1,6 @@
-import Button from '@components/button';
-import SubmitMessage from '@components/submit-message';
-import useMutationTask from '@hooks/use-mutation-task';
+import Button from '@/components/button';
+import SubmitMessage from '@/components/submit-message';
+import useMutationTask from '@/hooks/use-mutation-task';
 import { type ChangeEvent, type FormEvent, useState } from 'react';
 
 const TaskCreatorForm = () => {

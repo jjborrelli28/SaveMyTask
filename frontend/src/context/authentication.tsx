@@ -1,6 +1,6 @@
-import { handleError } from '@helpers/handle-error';
-import getAuthentication from '@services/authentication';
-import { logoutUser } from '@services/user';
+import { handleError } from '@/helpers/handle-error';
+import getAuthentication from '@/services/authentication';
+import { logoutUser } from '@/services/user';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   createContext,

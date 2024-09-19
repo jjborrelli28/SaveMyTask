@@ -1,4 +1,4 @@
-import { TaskQueryParamsContextProvider } from '@context/task-query-params';
+import { TaskQueryParamsContextProvider } from '@/context/task-query-params';
 import { MdDashboard } from 'react-icons/md';
 import TaskCreatorForm from './components/task-creator-form';
 import TaskLisk from './components/task-list';

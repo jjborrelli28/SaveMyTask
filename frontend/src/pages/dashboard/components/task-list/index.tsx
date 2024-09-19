@@ -1,7 +1,7 @@
-import Spinner from '@components/spinner';
-import SubmitMessage from '@components/submit-message';
-import { useTaskQueryParams } from '@context/task-query-params';
-import { getTasks } from '@services/task';
+import Spinner from '@/components/spinner';
+import SubmitMessage from '@/components/submit-message';
+import { useTaskQueryParams } from '@/context/task-query-params';
+import { getTasks } from '@/services/task';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import { useEffect, useRef } from 'react';

@@ -1,6 +1,6 @@
-import { userApi } from '@apis/index';
-import { handleError } from '@helpers/handle-error';
-import { showByConsole } from '@helpers/show-by-console';
+import { userApi } from '@/apis/index';
+import { handleError } from '@/helpers/handle-error';
+import { showByConsole } from '@/helpers/show-by-console';
 import { type AxiosResponse } from 'axios';
 import {
   type LogoutUser,
@@ -14,7 +14,7 @@ import {
   type LoginUserResponse,
   type UpdateUser,
   type UpdateUserResponse
-} from '../types';
+} from '@/types';
 
 export const loginUser: LoginUser = async userData => {
   try {

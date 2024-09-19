@@ -1,6 +1,6 @@
-import { taskApi } from '@apis/index';
-import { handleError } from '@helpers/handle-error';
-import { showByConsole } from '@helpers/show-by-console';
+import { taskApi } from '@/apis/index';
+import { handleError } from '@/helpers/handle-error';
+import { showByConsole } from '@/helpers/show-by-console';
 import { type AxiosResponse } from 'axios';
 import {
   type CreateTask,
@@ -11,7 +11,7 @@ import {
   type GetTasksResponse,
   type UpdateTask,
   type UpdateTaskResponse
-} from '../types';
+} from '@/types';
 
 export const getTasks: GetTasks = async queries => {
   try {

@@ -1,5 +1,5 @@
-import { AuthenticationContextProvider } from '@context/authentication';
-import Router from '@router/index';
+import { AuthenticationContextProvider } from '@/context/authentication';
+import Router from '@/router/index';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const SaveMyTask = () => {

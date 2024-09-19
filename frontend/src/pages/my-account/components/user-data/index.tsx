@@ -1,13 +1,13 @@
-import Button from '@components/button';
-import Spinner from '@components/spinner';
-import SubmitMessage from '@components/submit-message';
-import formatLabel from '@helpers/format-label';
-import { getUser } from '@services/user';
+import Button from '@/components/button';
+import Spinner from '@/components/spinner';
+import SubmitMessage from '@/components/submit-message';
+import formatLabel from '@/helpers/format-label';
+import { getUser } from '@/services/user';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { LuAsterisk } from 'react-icons/lu';
-import { type User } from '../../../../types';
+import { type User } from '@/types';
 import ModalForm from './components/modal-form';
 
 export type FieldKeys = Exclude<keyof User, 'id' | 'created_at'>;

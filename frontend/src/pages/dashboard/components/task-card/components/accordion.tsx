@@ -1,8 +1,8 @@
-import { getStateTask } from '@helpers/task';
+import { getStateTask } from '@/helpers/task';
 import clsx from 'clsx';
 import moment from 'moment';
 import { type TaskCardAccordionStates } from '..';
-import { type Task } from '../../../../../types';
+import { type Task } from '@/types';
 
 type TaskCardAccordion = { data: Task; state: TaskCardAccordionStates };
 
