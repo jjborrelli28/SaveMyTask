@@ -86,10 +86,8 @@ Make sure you have the following installed:
 
     Once both the backend and frontend are running, open your browser and head to:
 
-
-        ```bash
         http://localhost:3000
-        ```
+        
     You should now see the SaveMyTask app running locally!
 
 ## Project Stack
